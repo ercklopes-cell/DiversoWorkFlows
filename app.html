@@ -451,13 +451,20 @@ input,textarea,select{font-family:var(--font);}
 .empty{text-align:center;padding:40px 20px;color:var(--muted);}
 .empty .e-icon{font-size:2.5rem;margin-bottom:10px;opacity:.3;}
 .empty p{font-size:.84rem;}
+
+/* ═══ AUTH — avatar e logout ═══ */
+.user-chip{display:flex;align-items:center;gap:7px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:999px;padding:4px 12px 4px 4px;}
+.user-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--neon-p);}
+.user-avatar-fallback{width:26px;height:26px;border-radius:50%;background:var(--neon-p);color:#000;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.user-name{font-size:.72rem;font-weight:600;color:var(--text);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{width:24px;height:24px;border-radius:50%;background:transparent;border:1px solid rgba(236,72,153,.4);color:var(--neon-m);font-size:.65rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);cursor:pointer;}
+.logout-btn:hover{background:rgba(236,72,153,.15);box-shadow:0 0 8px rgba(236,72,153,.4);}
 </style>
 </head>
 <body>
 
 <!-- ═══════ HEADER ═══════ -->
 <header id="header">
-  <!-- [MUDANÇA] Sem logo, só nome com glow neon -->
   <div class="logo-wrap" onclick="showPage('dashboard')">
     <div class="logo-name">
       Diverso WorkFlows
@@ -465,7 +472,8 @@ input,textarea,select{font-family:var(--font);}
     </div>
   </div>
   <div class="header-right">
-    <!-- [MUDANÇA 2] Botão Undo global + Ctrl+Z -->
+    <!-- Chip do usuário logado (preenchido pelo JS) -->
+    <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
     <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
@@ -681,7 +689,51 @@ const PRIORITY_COLORS = { alta:'#f87171','media-alta':'#fb923c',media:'#facc15',
 /* ═══════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   AUTENTICAÇÃO GOOGLE
+═══════════════════════════════════════════════ */
+
+// Retorna usuário logado (ou null)
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('diverso_user')); }
+  catch { return null; }
+}
+
+// Renderiza o chip de usuário no header
+function renderUserChip() {
+  const wrap = document.getElementById('user-chip-wrap');
+  if (!wrap) return;
+  const user = getUser();
+  if (!user) {
+    // Sem login: mostra link discreto de login
+    wrap.innerHTML = `<a href="index.html" style="font-size:.72rem;color:var(--muted);text-decoration:none;border:1px solid var(--border2);padding:5px 10px;border-radius:6px;transition:var(--transition);" onmouseover="this.style.color='var(--neon-p)'" onmouseout="this.style.color='var(--muted)'">Entrar com Google</a>`;
+    return;
+  }
+  // Com login: avatar + nome + botão sair
+  const initial = user.name ? user.name[0].toUpperCase() : '?';
+  const avatarHtml = user.picture
+    ? `<img class="user-avatar" src="${user.picture}" alt="${user.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  wrap.innerHTML = `
+    <div class="user-chip" title="${user.email}">
+      ${avatarHtml}
+      <div class="user-avatar-fallback" ${user.picture ? 'style="display:none"' : ''}>${initial}</div>
+      <span class="user-name">${user.name || user.email}</span>
+      <button class="logout-btn" onclick="logout()" title="Sair">✕</button>
+    </div>`;
+}
+
+// Logout: limpa sessão e volta pra landing
+function logout() {
+  if (!confirm('Sair da sua conta Google?')) return;
+  localStorage.removeItem('diverso_user');
+  window.location.href = 'index.html';
+}
+
 function init() {
+  // ═══ AUTH: carrega usuário e renderiza chip no header ═══
+  renderUserChip();
+
   const saved = localStorage.getItem('diverso_projects');
   if (saved) projects = JSON.parse(saved);
   // Migração de estrutura antiga

@@ -5,504 +5,219 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Diverso WorkFlows Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <style>
-
-/* ══════════════════════════════════════════
-   RESET + BASE
-══════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --np: #a78bfa;   /* neon roxo */
-  --nc: #22d3ee;   /* neon ciano */
-  --nm: #ec4899;   /* neon magenta */
-  --ng: #10b981;   /* neon verde */
-  --ny: #facc15;   /* neon amarelo */
-
-  --bg-deep:   #05020f;
-  --bg-mid:    #0d0520;
-  --bg-panel:  rgba(10, 4, 30, 0.82);
-  --border-n:  rgba(167,139,250,.25);
-
+  --np: #a78bfa;
+  --nc: #22d3ee;
+  --nm: #ec4899;
+  --ng: #10b981;
+  --ny: #facc15;
   --font-display: 'Orbitron', sans-serif;
   --font-body:    'DM Sans', sans-serif;
-
   --glow-p: 0 0 18px #a78bfa88, 0 0 40px #a78bfa33;
   --glow-c: 0 0 18px #22d3ee88, 0 0 40px #22d3ee33;
-  --glow-m: 0 0 18px #ec489988, 0 0 40px #ec489933;
-  --glow-g: 0 0 18px #10b98188, 0 0 40px #10b98133;
 }
+html, body { width:100%; height:100%; overflow:hidden; font-family:var(--font-body); background:#05020f; color:#e8e4ff; }
 
-html, body {
-  width: 100%; height: 100%;
-  overflow: hidden;
-  font-family: var(--font-body);
-  background: var(--bg-deep);
-  color: #e8e4ff;
-}
+/* ── SPLIT LAYOUT ── */
+.split { display:flex; width:100vw; height:100vh; position:relative; }
 
-/* ══════════════════════════════════════════
-   LAYOUT SPLIT
-══════════════════════════════════════════ */
-.split {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-}
-
-/* ══════════════════════════════════════════
-   LADO ESQUERDO — visual neon
-══════════════════════════════════════════ */
+/* ── LADO ESQUERDO ── */
 .left {
-  flex: 0 0 58%;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 52px;
-
-  /* fundo base */
+  flex:0 0 58%; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:48px 52px;
   background:
-    radial-gradient(ellipse at 30% 20%, #3b0f8033 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 75%, #0c4a6e44 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 50%, #1a003344 0%, transparent 70%),
-    linear-gradient(160deg, #0b0118 0%, #0d0520 50%, #04111f 100%);
+    radial-gradient(ellipse at 30% 20%,#3b0f8033 0%,transparent 55%),
+    radial-gradient(ellipse at 70% 75%,#0c4a6e44 0%,transparent 55%),
+    linear-gradient(160deg,#0b0118 0%,#0d0520 50%,#04111f 100%);
 }
-
-/* Grade de pontos sutil */
 .left::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(167,139,250,.18) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
-  z-index: 0;
+  content:''; position:absolute; inset:0;
+  background-image:radial-gradient(circle,rgba(167,139,250,.18) 1px,transparent 1px);
+  background-size:32px 32px; pointer-events:none; z-index:0;
 }
+.blobs { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+.left-content { position:relative; z-index:2; text-align:center; max-width:520px; }
 
-/* ── BLOBS SVG animados ── */
-.blobs {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* ── Conteúdo esquerdo ── */
-.left-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 520px;
-}
-
-/* Pílula de status */
 .pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(167,139,250,.12);
-  border: 1px solid rgba(167,139,250,.3);
-  border-radius: 999px;
-  padding: 5px 16px 5px 10px;
-  font-size: .7rem; font-weight: 500; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--np);
-  margin-bottom: 28px;
-  animation: fadeUp .8s ease both;
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(167,139,250,.12); border:1px solid rgba(167,139,250,.3);
+  border-radius:999px; padding:5px 16px 5px 10px;
+  font-size:.7rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--np);
+  margin-bottom:28px; animation:fadeUp .8s ease both;
 }
-.pill-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--ng);
-  box-shadow: 0 0 8px var(--ng);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .5; transform: scale(1.4); }
-}
+.pill-dot { width:7px; height:7px; border-radius:50%; background:var(--ng); box-shadow:0 0 8px var(--ng); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
 
-/* Título principal */
 .main-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: -.01em;
-  color: #f0eeff;
-  margin-bottom: 18px;
-  animation: fadeUp .9s .1s ease both;
+  font-family:var(--font-display); font-size:clamp(1.5rem,3.2vw,2.4rem);
+  font-weight:900; line-height:1.15; color:#f0eeff; margin-bottom:18px;
+  animation:fadeUp .9s .1s ease both;
 }
 .main-title .line-neon {
-  display: block;
-  background: linear-gradient(90deg, var(--np) 0%, var(--nc) 60%, var(--nm) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display:block;
+  background:linear-gradient(90deg,var(--np) 0%,var(--nc) 60%,var(--nm) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
+.slogan { font-size:clamp(.82rem,1.3vw,1rem); font-weight:300; line-height:1.65; color:#b0a8d0; max-width:400px; margin:0 auto 32px; animation:fadeUp .9s .2s ease both; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; animation:fadeUp .9s .3s ease both; }
+.chip { font-size:.65rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; padding:4px 12px; border-radius:999px; border:1px solid; }
+.chip-p { color:var(--np); border-color:rgba(167,139,250,.4); background:rgba(167,139,250,.08); }
+.chip-c { color:var(--nc); border-color:rgba(34,211,238,.4);  background:rgba(34,211,238,.08); }
+.chip-m { color:var(--nm); border-color:rgba(236,72,153,.4);  background:rgba(236,72,153,.08); }
+.chip-g { color:var(--ng); border-color:rgba(16,185,129,.4);  background:rgba(16,185,129,.08); }
 
-/* Slogan */
-.slogan {
-  font-size: clamp(.82rem, 1.3vw, 1rem);
-  font-weight: 300;
-  line-height: 1.65;
-  color: #b0a8d0;
-  max-width: 400px;
-  margin: 0 auto 32px;
-  animation: fadeUp .9s .2s ease both;
-}
-
-/* Chips de tecnologia */
-.chips {
-  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-  animation: fadeUp .9s .3s ease both;
-}
-.chip {
-  font-size: .65rem; font-weight: 600; letter-spacing: .05em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid;
-}
-.chip-p { color: var(--np); border-color: rgba(167,139,250,.4); background: rgba(167,139,250,.08); }
-.chip-c { color: var(--nc); border-color: rgba(34,211,238,.4);  background: rgba(34,211,238,.08); }
-.chip-m { color: var(--nm); border-color: rgba(236,72,153,.4);  background: rgba(236,72,153,.08); }
-.chip-g { color: var(--ng); border-color: rgba(16,185,129,.4);  background: rgba(16,185,129,.08); }
-
-/* ══════════════════════════════════════════
-   DIVISOR VERTICAL
-══════════════════════════════════════════ */
+/* ── DIVISOR ── */
 .divider {
-  position: absolute;
-  left: 58%;
-  top: 0; bottom: 0;
-  width: 1px;
-  z-index: 10;
-  background: linear-gradient(to bottom,
-    transparent 0%,
-    rgba(167,139,250,.5) 20%,
-    rgba(34,211,238,.7) 50%,
-    rgba(167,139,250,.5) 80%,
-    transparent 100%);
-  filter: drop-shadow(0 0 6px #a78bfa88);
+  position:absolute; left:58%; top:0; bottom:0; width:1px; z-index:10;
+  background:linear-gradient(to bottom,transparent 0%,rgba(167,139,250,.5) 20%,rgba(34,211,238,.7) 50%,rgba(167,139,250,.5) 80%,transparent 100%);
+  filter:drop-shadow(0 0 6px #a78bfa88);
 }
 
-/* ══════════════════════════════════════════
-   LADO DIREITO — painel
-══════════════════════════════════════════ */
+/* ── LADO DIREITO ── */
 .right {
-  flex: 0 0 42%;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 48px 44px;
+  flex:0 0 42%; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:48px 44px;
   background:
-    radial-gradient(ellipse at 80% 20%, rgba(167,139,250,.07) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 90%, rgba(34,211,238,.05) 0%, transparent 60%),
-    linear-gradient(180deg, #08041a 0%, #050210 100%);
+    radial-gradient(ellipse at 80% 20%,rgba(167,139,250,.07) 0%,transparent 60%),
+    radial-gradient(ellipse at 20% 90%,rgba(34,211,238,.05) 0%,transparent 60%),
+    linear-gradient(180deg,#08041a 0%,#050210 100%);
 }
+.right-content { position:relative; z-index:1; max-width:360px; }
 
-/* Ruído sutil no painel direito */
-.right::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity: .4;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.right-content {
-  position: relative;
-  z-index: 1;
-  max-width: 360px;
-}
-
-/* Saudação */
 .welcome-tag {
-  font-size: .68rem; font-weight: 600; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--nc);
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
-  animation: fadeUp .8s .15s ease both;
+  font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--nc);
+  margin-bottom:10px; display:flex; align-items:center; gap:8px; animation:fadeUp .8s .15s ease both;
 }
-.welcome-tag::before {
-  content: '';
-  display: inline-block;
-  width: 24px; height: 1px;
-  background: var(--nc);
-  box-shadow: 0 0 6px var(--nc);
-}
+.welcome-tag::before { content:''; display:inline-block; width:24px; height:1px; background:var(--nc); box-shadow:0 0 6px var(--nc); }
 
-.panel-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: #f0eeff;
-  margin-bottom: 14px;
-  animation: fadeUp .8s .2s ease both;
-}
+.panel-title { font-family:var(--font-display); font-size:clamp(1.1rem,2vw,1.5rem); font-weight:700; line-height:1.2; color:#f0eeff; margin-bottom:14px; animation:fadeUp .8s .2s ease both; }
+.panel-desc { font-size:.84rem; line-height:1.65; color:#9890b8; margin-bottom:24px; font-weight:300; animation:fadeUp .8s .25s ease both; }
+.sep { width:40px; height:2px; background:linear-gradient(90deg,var(--np),var(--nc)); border-radius:2px; margin-bottom:20px; box-shadow:0 0 8px var(--np); animation:fadeUp .8s .28s ease both; }
 
-.panel-desc {
-  font-size: .84rem;
-  line-height: 1.65;
-  color: #9890b8;
-  margin-bottom: 24px;
-  font-weight: 300;
-  animation: fadeUp .8s .25s ease both;
-}
+.features { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; animation:fadeUp .8s .32s ease both; }
+.features li { display:flex; align-items:flex-start; gap:10px; font-size:.78rem; line-height:1.5; color:#ccc4e8; }
+.feat-icon { flex-shrink:0; width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:.75rem; margin-top:1px; }
+.fi-p { background:rgba(167,139,250,.15); color:var(--np); }
+.fi-c { background:rgba(34,211,238,.12);  color:var(--nc); }
+.fi-m { background:rgba(236,72,153,.12);  color:var(--nm); }
+.fi-g { background:rgba(16,185,129,.12);  color:var(--ng); }
+.fi-y { background:rgba(250,204,21,.12);  color:var(--ny); }
 
-/* Separador */
-.sep {
-  width: 40px; height: 2px;
-  background: linear-gradient(90deg, var(--np), var(--nc));
-  border-radius: 2px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 8px var(--np);
-  animation: fadeUp .8s .28s ease both;
-}
+/* ── BOTÃO GOOGLE ── */
+.btn-google-wrap { animation:fadeUp .8s .36s ease both; margin-bottom:12px; }
 
-/* Lista de diferenciais */
-.features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 32px;
-  animation: fadeUp .8s .32s ease both;
+/* Container do botão Google customizado */
+.btn-google {
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  width:100%; padding:13px 24px; border-radius:10px;
+  font-family:var(--font-body); font-size:.88rem; font-weight:600;
+  cursor:pointer; border:1.5px solid rgba(167,139,250,.5);
+  background:rgba(167,139,250,.08);
+  color:#f0eeff;
+  box-shadow:0 0 16px rgba(167,139,250,.25);
+  transition:all .22s cubic-bezier(.4,0,.2,1);
+  position:relative; overflow:hidden;
 }
-.features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: .8rem;
-  line-height: 1.5;
-  color: #ccc4e8;
+.btn-google:hover {
+  transform:scale(1.035);
+  border-color:var(--np);
+  box-shadow:0 0 28px rgba(167,139,250,.5),0 0 60px rgba(167,139,250,.2);
+  background:rgba(167,139,250,.14);
 }
-.feat-icon {
-  flex-shrink: 0;
-  width: 22px; height: 22px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .75rem;
-  margin-top: 1px;
-}
-.fi-p { background: rgba(167,139,250,.15); color: var(--np); box-shadow: inset 0 0 6px rgba(167,139,250,.2); }
-.fi-c { background: rgba(34,211,238,.12);  color: var(--nc); box-shadow: inset 0 0 6px rgba(34,211,238,.15); }
-.fi-m { background: rgba(236,72,153,.12);  color: var(--nm); box-shadow: inset 0 0 6px rgba(236,72,153,.15); }
-.fi-g { background: rgba(16,185,129,.12);  color: var(--ng); box-shadow: inset 0 0 6px rgba(16,185,129,.15); }
-.fi-y { background: rgba(250,204,21,.12);  color: var(--ny); box-shadow: inset 0 0 6px rgba(250,204,21,.15); }
+.btn-google svg { flex-shrink:0; width:20px; height:20px; }
 
-/* Botão principal */
-.btn-main {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-family: var(--font-display);
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 1.5px solid var(--np);
-  background: rgba(167,139,250,.1);
-  color: #f0eeff;
-  box-shadow: 0 0 18px rgba(167,139,250,.35), inset 0 0 20px rgba(167,139,250,.06);
-  transition: all .22s cubic-bezier(.4,0,.2,1);
-  text-decoration: none;
-  margin-bottom: 14px;
-  animation: fadeUp .8s .38s ease both;
-  position: relative;
-  overflow: hidden;
+/* Botão secundário — entrar sem login */
+.btn-skip {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:11px 24px; border-radius:10px;
+  font-family:var(--font-body); font-size:.82rem; font-weight:500;
+  cursor:pointer; border:1px solid rgba(34,211,238,.25);
+  background:transparent; color:#9890b8;
+  transition:all .22s ease;
+  text-decoration:none; margin-bottom:14px;
+  animation:fadeUp .8s .4s ease both;
 }
-.btn-main::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(167,139,250,.15) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity .22s ease;
-}
-.btn-main:hover {
-  transform: scale(1.035);
-  border-color: var(--nc);
-  color: #fff;
-  box-shadow: 0 0 28px rgba(167,139,250,.55), 0 0 60px rgba(34,211,238,.2), inset 0 0 30px rgba(167,139,250,.1);
-}
-.btn-main:hover::before { opacity: 1; }
-.btn-arrow {
-  font-size: 1rem;
-  transition: transform .22s ease;
-}
-.btn-main:hover .btn-arrow { transform: translateX(4px); }
+.btn-skip:hover { color:var(--nc); border-color:var(--nc); box-shadow:0 0 14px rgba(34,211,238,.2); }
 
-/* Link secundário */
-.link-secondary {
-  text-align: center;
-  font-size: .74rem;
-  color: #6a6090;
-  animation: fadeUp .8s .42s ease both;
-}
-.link-secondary a {
-  color: var(--nc);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all .18s ease;
-}
-.link-secondary a:hover {
-  color: #fff;
-  text-shadow: 0 0 8px var(--nc);
-}
+.link-note { text-align:center; font-size:.68rem; color:#3d3660; animation:fadeUp .8s .44s ease both; line-height:1.5; }
 
-/* ══════════════════════════════════════════
-   FOOTER discreto
-══════════════════════════════════════════ */
-.footer {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: .62rem;
-  letter-spacing: .04em;
-  color: rgba(167,139,250,.35);
-  white-space: nowrap;
-  z-index: 20;
-  pointer-events: none;
+/* ── LOADING OVERLAY (pós-login) ── */
+#loading-overlay {
+  position:fixed; inset:0; background:#05020f;
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; gap:16px;
 }
+#loading-overlay.show { display:flex; }
+.loading-logo { font-family:var(--font-display); font-size:1.2rem; font-weight:900; color:var(--np); letter-spacing:.04em; }
+.loading-bar { width:200px; height:2px; background:#1a1040; border-radius:99px; overflow:hidden; }
+.loading-fill { height:100%; background:linear-gradient(90deg,var(--np),var(--nc)); border-radius:99px; animation:loadBar 1.2s ease forwards; }
+@keyframes loadBar { from{width:0} to{width:100%} }
+.loading-sub { font-size:.72rem; color:var(--np); opacity:.6; font-family:var(--font-display); letter-spacing:.06em; }
 
-/* ══════════════════════════════════════════
-   ANIMAÇÕES DE ENTRADA
-══════════════════════════════════════════ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── FOOTER ── */
+.footer { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); font-size:.62rem; letter-spacing:.04em; color:rgba(167,139,250,.3); white-space:nowrap; z-index:20; pointer-events:none; }
+
+/* ── ANIMAÇÕES ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── MOBILE ── */
+@media (max-width:768px) {
+  html,body{overflow:auto;}
+  .split{flex-direction:column;height:auto;min-height:100vh;}
+  .left{flex:none;min-height:48vh;padding:36px 24px;}
+  .right{flex:none;padding:32px 24px 64px;}
+  .divider{display:none;}
+  .right-content{max-width:100%;}
 }
-
-/* ══════════════════════════════════════════
-   MOBILE — empilhado vertical
-══════════════════════════════════════════ */
-@media (max-width: 768px) {
-  html, body { overflow: auto; }
-  .split { flex-direction: column; height: auto; min-height: 100vh; }
-  .left  { flex: none; min-height: 52vh; padding: 40px 28px; }
-  .right { flex: none; padding: 36px 28px 60px; }
-  .divider { display: none; }
-  .right-content { max-width: 100%; }
-  .main-title { font-size: clamp(1.3rem, 5vw, 1.8rem); }
-}
-
 </style>
 </head>
 <body>
 
+<!-- Loading overlay pós-login -->
+<div id="loading-overlay">
+  <div class="loading-logo">Diverso WorkFlows</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+  <div class="loading-sub">Entrando no app...</div>
+</div>
+
 <div class="split">
 
-  <!-- ══════════ LADO ESQUERDO ══════════ -->
+  <!-- ══ ESQUERDO ══ -->
   <section class="left">
-
-    <!-- Blobs SVG animados -->
     <svg class="blobs" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="blur-blob">
-          <feGaussianBlur stdDeviation="28"/>
-        </filter>
-        <filter id="blur-blob-sm">
-          <feGaussianBlur stdDeviation="18"/>
-        </filter>
-
-        <!-- Gradientes blobs -->
-        <radialGradient id="g1" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stop-color="#a78bfa" stop-opacity=".55"/>
-          <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="g2" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stop-color="#22d3ee" stop-opacity=".4"/>
-          <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="g3" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stop-color="#ec4899" stop-opacity=".3"/>
-          <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="g4" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stop-color="#10b981" stop-opacity=".3"/>
-          <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
-        </radialGradient>
+        <filter id="blur-blob"><feGaussianBlur stdDeviation="28"/></filter>
+        <filter id="blur-sm"><feGaussianBlur stdDeviation="18"/></filter>
+        <radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#a78bfa" stop-opacity=".55"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
+        <radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#22d3ee" stop-opacity=".4"/><stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+        <radialGradient id="g3" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ec4899" stop-opacity=".3"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0"/></radialGradient>
+        <radialGradient id="g4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#10b981" stop-opacity=".3"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></radialGradient>
       </defs>
-
-      <!-- Blob roxo grande — fundo -->
-      <ellipse cx="160" cy="200" rx="220" ry="200" fill="url(#g1)" filter="url(#blur-blob)">
-        <animate attributeName="cx" values="160;200;140;160" dur="12s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="200;240;180;200" dur="14s" repeatCount="indefinite"/>
-        <animate attributeName="rx" values="220;260;200;220" dur="10s" repeatCount="indefinite"/>
-      </ellipse>
-
-      <!-- Blob ciano — canto inferior direito -->
-      <ellipse cx="480" cy="520" rx="200" ry="180" fill="url(#g2)" filter="url(#blur-blob)">
-        <animate attributeName="cx" values="480;440;490;480" dur="15s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="520;480;540;520" dur="11s" repeatCount="indefinite"/>
-      </ellipse>
-
-      <!-- Blob magenta pequeno -->
-      <ellipse cx="420" cy="130" rx="130" ry="110" fill="url(#g3)" filter="url(#blur-blob-sm)">
-        <animate attributeName="cx" values="420;390;440;420" dur="9s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="130;160;110;130" dur="13s" repeatCount="indefinite"/>
-      </ellipse>
-
-      <!-- Blob verde — centro esquerdo -->
-      <ellipse cx="80" cy="500" rx="140" ry="120" fill="url(#g4)" filter="url(#blur-blob-sm)">
-        <animate attributeName="cx" values="80;110;70;80" dur="16s" repeatCount="indefinite"/>
-        <animate attributeName="cy" values="500;460;520;500" dur="12s" repeatCount="indefinite"/>
-      </ellipse>
-
-      <!-- Linhas neon decorativas — ondas -->
-      <g stroke="#a78bfa" stroke-width="1" fill="none" opacity=".18">
-        <path d="M0,340 Q150,290 300,340 Q450,390 600,340">
-          <animate attributeName="d"
-            values="M0,340 Q150,290 300,340 Q450,390 600,340;
-                    M0,340 Q150,370 300,330 Q450,310 600,340;
-                    M0,340 Q150,290 300,340 Q450,390 600,340"
-            dur="8s" repeatCount="indefinite"/>
-        </path>
-        <path d="M0,370 Q150,320 300,370 Q450,420 600,370" opacity=".12">
-          <animate attributeName="d"
-            values="M0,370 Q150,320 300,370 Q450,420 600,370;
-                    M0,370 Q150,400 300,360 Q450,340 600,370;
-                    M0,370 Q150,320 300,370 Q450,420 600,370"
-            dur="10s" repeatCount="indefinite"/>
-        </path>
+      <ellipse cx="160" cy="200" rx="220" ry="200" fill="url(#g1)" filter="url(#blur-blob)"><animate attributeName="cx" values="160;200;140;160" dur="12s" repeatCount="indefinite"/><animate attributeName="cy" values="200;240;180;200" dur="14s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="480" cy="520" rx="200" ry="180" fill="url(#g2)" filter="url(#blur-blob)"><animate attributeName="cx" values="480;440;490;480" dur="15s" repeatCount="indefinite"/><animate attributeName="cy" values="520;480;540;520" dur="11s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="420" cy="130" rx="130" ry="110" fill="url(#g3)" filter="url(#blur-sm)"><animate attributeName="cx" values="420;390;440;420" dur="9s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="80"  cy="500" rx="140" ry="120" fill="url(#g4)" filter="url(#blur-sm)"><animate attributeName="cx" values="80;110;70;80" dur="16s" repeatCount="indefinite"/></ellipse>
+      <g stroke="#a78bfa" stroke-width="1" fill="none" opacity=".15">
+        <path d="M0,340 Q150,290 300,340 Q450,390 600,340"><animate attributeName="d" values="M0,340 Q150,290 300,340 Q450,390 600,340;M0,340 Q150,370 300,330 Q450,310 600,340;M0,340 Q150,290 300,340 Q450,390 600,340" dur="8s" repeatCount="indefinite"/></path>
       </g>
-
-      <!-- Pontos flutuantes -->
-      <g fill="#a78bfa" opacity=".5">
-        <circle cx="50"  cy="80"  r="2"><animate attributeName="opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle>
-        <circle cx="540" cy="180" r="1.5"><animate attributeName="opacity" values=".3;.8;.3" dur="4s" repeatCount="indefinite"/></circle>
-        <circle cx="300" cy="60"  r="1.5"><animate attributeName="opacity" values=".4;.9;.4" dur="2.5s" repeatCount="indefinite"/></circle>
-      </g>
-      <g fill="#22d3ee" opacity=".5">
-        <circle cx="520" cy="620" r="2"><animate attributeName="opacity" values=".5;1;.5" dur="3.5s" repeatCount="indefinite"/></circle>
-        <circle cx="80"  cy="620" r="1.5"><animate attributeName="opacity" values=".3;.8;.3" dur="4.5s" repeatCount="indefinite"/></circle>
-      </g>
+      <g fill="#a78bfa" opacity=".5"><circle cx="50" cy="80" r="2"><animate attributeName="opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle><circle cx="540" cy="180" r="1.5"><animate attributeName="opacity" values=".3;.8;.3" dur="4s" repeatCount="indefinite"/></circle></g>
     </svg>
 
-    <!-- Conteúdo textual esquerdo -->
     <div class="left-content">
-      <div class="pill">
-        <span class="pill-dot"></span>
-        v2.0 — agora com IA integrada
-      </div>
-
+      <div class="pill"><span class="pill-dot"></span>v2.0 — agora com IA integrada</div>
       <h1 class="main-title">
         <span class="line-neon">Diverso WorkFlows</span>
         Management
       </h1>
-
-      <p class="slogan">
-        Organize suas ideias, refine prompts e transforme<br/>
-        projetos em realidade — sem perder o fio.
-      </p>
-
+      <p class="slogan">Organize suas ideias, refine prompts e transforme<br/>projetos em realidade — sem perder o fio.</p>
       <div class="chips">
         <span class="chip chip-p">Brainstorm</span>
         <span class="chip chip-c">Editor de Prompts</span>
@@ -510,101 +225,167 @@ html, body {
         <span class="chip chip-g">IA GPT-4</span>
       </div>
     </div>
-
   </section>
 
-  <!-- Divisor neon -->
   <div class="divider"></div>
 
-  <!-- ══════════ LADO DIREITO ══════════ -->
+  <!-- ══ DIREITO ══ -->
   <section class="right">
     <div class="right-content">
 
       <div class="welcome-tag">Bem-vindo</div>
-
-      <h2 class="panel-title">
-        Seu cérebro externo<br/>para criativos.
-      </h2>
-
-      <p class="panel-desc">
-        Brainstorm visual, editor de prompts com histórico, fluxograma automático e Kanban integrado — tudo simples, rápido e sem bagunça.
-      </p>
-
+      <h2 class="panel-title">Seu cérebro externo<br/>para criativos.</h2>
+      <p class="panel-desc">Brainstorm visual, editor de prompts com histórico, fluxograma automático e Kanban integrado — tudo simples, rápido e sem bagunça.</p>
       <div class="sep"></div>
 
       <ul class="features">
-        <li>
-          <span class="feat-icon fi-p">💡</span>
-          <span>Post-its conectáveis com <strong style="color:#d8b4fe">undo ilimitado</strong> e mapa visual de ideias</span>
-        </li>
-        <li>
-          <span class="feat-icon fi-c">✍️</span>
-          <span>Editor múltiplo de prompts com <strong style="color:#67e8f9">histórico de versões</strong></span>
-        </li>
-        <li>
-          <span class="feat-icon fi-m">🤖</span>
-          <span>Fluxograma e Kanban <strong style="color:#f9a8d4">automáticos via IA</strong> (GPT-4 Mini)</span>
-        </li>
-        <li>
-          <span class="feat-icon fi-g">📊</span>
-          <span>Dashboard com <strong style="color:#6ee7b7">prioridades e progresso</strong> por projeto</span>
-        </li>
-        <li>
-          <span class="feat-icon fi-y">🔒</span>
-          <span>100% local (localStorage) + exportar — <strong style="color:#fde68a">zero login obrigatório</strong></span>
-        </li>
+        <li><span class="feat-icon fi-p">💡</span><span>Post-its conectáveis com <strong style="color:#d8b4fe">undo ilimitado</strong></span></li>
+        <li><span class="feat-icon fi-c">✍️</span><span>Editor múltiplo de prompts com <strong style="color:#67e8f9">histórico de versões</strong></span></li>
+        <li><span class="feat-icon fi-m">🤖</span><span>Kanban e Fluxograma <strong style="color:#f9a8d4">automáticos via IA</strong></span></li>
+        <li><span class="feat-icon fi-g">📊</span><span>Dashboard com <strong style="color:#6ee7b7">prioridades e progresso</strong></span></li>
+        <li><span class="feat-icon fi-y">🔒</span><span>Dados locais + exportar — <strong style="color:#fde68a">sua conta Google protege</strong></span></li>
       </ul>
 
-      <a href="app.html" class="btn-main">
-        Acessar o App
-        <span class="btn-arrow">→</span>
+      <!-- Botão Entrar com Google -->
+      <div class="btn-google-wrap">
+        <button class="btn-google" id="btn-google-login" onclick="loginGoogle()">
+          <!-- Ícone oficial Google -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Entrar com Google
+        </button>
+      </div>
+
+      <!-- Entrar sem login (modo local) -->
+      <a href="app.html" class="btn-skip">
+        Continuar sem login →
       </a>
 
-      <p class="link-secondary">
-        Ainda não tem conta?
-        <a href="app.html">Cadastre-se gratuitamente</a>
+      <p class="link-note">
+        Ao entrar com Google, seus projetos ficam vinculados<br/>
+        à sua conta e protegidos por autenticação segura.
       </p>
 
     </div>
   </section>
-
 </div>
 
-<!-- Footer discreto -->
 <footer class="footer">
   Diverso Project © 2026 &nbsp;—&nbsp; Feito para criativos que pensam rápido
 </footer>
 
 <script>
-  // Efeito parallax suave nos blobs ao mover o mouse
-  const left = document.querySelector('.left');
-  const blobs = document.querySelector('.blobs');
+/* ═══════════════════════════════════════════════
+   CONFIGURAÇÃO GOOGLE OAUTH
+   Client ID do projeto Diverso WorkFlows
+═══════════════════════════════════════════════ */
+const GOOGLE_CLIENT_ID = '188450582951-k6ti5du7nv3513uk69p6erpd9s65hjv2.apps.googleusercontent.com';
 
-  left.addEventListener('mousemove', e => {
-    const rect  = left.getBoundingClientRect();
-    const cx    = (e.clientX - rect.left) / rect.width  - 0.5;
-    const cy    = (e.clientY - rect.top)  / rect.height - 0.5;
-    blobs.style.transform = `translate(${cx * 14}px, ${cy * 10}px)`;
-  });
-  left.addEventListener('mouseleave', () => {
-    blobs.style.transform = 'translate(0,0)';
-    blobs.style.transition = 'transform .6s ease';
-  });
-  left.addEventListener('mouseenter', () => {
-    blobs.style.transition = 'transform .12s ease';
+/* Inicializa Google Identity Services ao carregar */
+window.addEventListener('load', () => {
+  if (typeof google === 'undefined') return;
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleLogin,
+    auto_select: false,
+    cancel_on_tap_outside: true,
   });
 
-  // Efeito de brilho no botão ao passar o mouse
-  const btn = document.querySelector('.btn-main');
-  btn.addEventListener('mousemove', e => {
-    const r = btn.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1);
-    const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1);
-    btn.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(167,139,250,.22) 0%, rgba(167,139,250,.06) 60%)`;
+  // Verifica se já está logado — redireciona direto pro app
+  const user = getUser();
+  if (user) {
+    redirectToApp();
+  }
+});
+
+/* Callback após login Google bem-sucedido */
+function handleGoogleLogin(response) {
+  // Decodifica o JWT retornado pelo Google
+  const payload = parseJwt(response.credential);
+
+  // Salva dados do usuário no localStorage
+  const user = {
+    name:    payload.name,
+    email:   payload.email,
+    picture: payload.picture,
+    sub:     payload.sub,
+    token:   response.credential,
+    loginAt: new Date().toISOString()
+  };
+  localStorage.setItem('diverso_user', JSON.stringify(user));
+
+  // Mostra loading e redireciona
+  redirectToApp();
+}
+
+/* Botão manual de login */
+function loginGoogle() {
+  if (typeof google === 'undefined') {
+    alert('Erro: biblioteca do Google não carregou. Verifique sua conexão.');
+    return;
+  }
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // Fallback: abre popup de seleção de conta
+      google.accounts.id.renderButton(
+        document.getElementById('btn-google-login'),
+        { theme:'filled_black', size:'large', width:320 }
+      );
+    }
   });
-  btn.addEventListener('mouseleave', () => {
-    btn.style.background = 'rgba(167,139,250,.1)';
-  });
+}
+
+/* Redireciona para o app com loading animado */
+function redirectToApp() {
+  document.getElementById('loading-overlay').classList.add('show');
+  setTimeout(() => { window.location.href = 'app.html'; }, 1200);
+}
+
+/* Busca usuário salvo */
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('diverso_user')); }
+  catch { return null; }
+}
+
+/* Decodifica JWT do Google (sem verificação de assinatura — só frontend) */
+function parseJwt(token) {
+  const base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  return JSON.parse(atob(base64));
+}
+
+/* Parallax suave nos blobs */
+const leftSection = document.querySelector('.left');
+const blobs = document.querySelector('.blobs');
+leftSection.addEventListener('mousemove', e => {
+  const r = leftSection.getBoundingClientRect();
+  const cx = (e.clientX - r.left) / r.width  - 0.5;
+  const cy = (e.clientY - r.top)  / r.height - 0.5;
+  blobs.style.transform = `translate(${cx*14}px,${cy*10}px)`;
+});
+leftSection.addEventListener('mouseleave', () => {
+  blobs.style.transition = 'transform .6s ease';
+  blobs.style.transform  = 'translate(0,0)';
+});
+leftSection.addEventListener('mouseenter', () => {
+  blobs.style.transition = 'transform .12s ease';
+});
+
+/* Glow dinâmico no botão Google */
+const btnG = document.getElementById('btn-google-login');
+btnG.addEventListener('mousemove', e => {
+  const r = btnG.getBoundingClientRect();
+  const x = ((e.clientX-r.left)/r.width*100).toFixed(1);
+  const y = ((e.clientY-r.top)/r.height*100).toFixed(1);
+  btnG.style.background = `radial-gradient(circle at ${x}% ${y}%,rgba(167,139,250,.22) 0%,rgba(167,139,250,.06) 60%)`;
+});
+btnG.addEventListener('mouseleave', () => {
+  btnG.style.background = 'rgba(167,139,250,.08)';
+});
 </script>
 </body>
 </html>
