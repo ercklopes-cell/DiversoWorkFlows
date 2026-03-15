@@ -344,6 +344,64 @@ input,textarea,select{font-family:var(--font);}
 .history-item .h-date{font-size:.64rem;color:var(--muted);font-family:var(--mono);margin-bottom:2px;}
 .history-item .h-preview{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
+/* [CORREÇÃO EDITOR] Rodapé do editor com botão Gerar Prompt */
+.editor-block-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-top:1px solid var(--border);
+  background:var(--surface2);gap:10px;flex-wrap:wrap;
+}
+/* Botão Gerar Prompt — destaque neon ciano */
+.btn-gerar-prompt{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 20px;border-radius:var(--radius-sm);
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--neon-c);
+  background:rgba(34,211,238,.08);
+  color:var(--neon-c);
+  box-shadow:0 0 10px rgba(34,211,238,.25);
+  transition:var(--transition);white-space:nowrap;
+}
+.btn-gerar-prompt:hover{
+  background:rgba(34,211,238,.16);
+  box-shadow:var(--glow-c);
+  transform:scale(1.04);
+}
+.btn-gerar-prompt:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+/* Spinner pequeno dentro do botão */
+.prompt-btn-spinner{
+  width:13px;height:13px;
+  border:2px solid rgba(34,211,238,.3);
+  border-top-color:var(--neon-c);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  display:none;
+}
+/* Área da resposta gerada — aparece abaixo da textarea */
+.prompt-generated{
+  margin:0 14px 12px;
+  background:linear-gradient(135deg,#22d3ee08,#a78bfa08);
+  border:1px solid rgba(34,211,238,.3);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  font-family:var(--mono);font-size:.8rem;
+  color:var(--neon-c);line-height:1.7;
+  white-space:pre-wrap;display:none;
+  box-shadow:var(--glow-c);
+}
+.prompt-generated.show{display:block;animation:pageIn .3s ease;}
+.prompt-generated-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:8px;font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--neon-c);
+}
+.prompt-generated-text{color:var(--text);font-family:var(--mono);font-size:.8rem;line-height:1.7;white-space:pre-wrap;}
+.btn-usar-prompt{
+  padding:4px 12px;border-radius:6px;font-size:.7rem;font-weight:700;
+  background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.4);
+  color:var(--neon-c);cursor:pointer;transition:var(--transition);
+}
+.btn-usar-prompt:hover{background:rgba(34,211,238,.28);box-shadow:var(--glow-c);}
+
 /* ═══════════════════════════════════════════
    KANBAN NEON
 ═══════════════════════════════════════════ */
@@ -709,11 +767,10 @@ input,textarea,select{font-family:var(--font);}
       <div class="ai-box" id="ai-box-brainstorm"></div>
     </div>
 
-    <!-- TAB EDITOR — [MUDANÇA 3] múltiplos editores -->
+    <!-- TAB EDITOR — múltiplos editores, cada um com botão "Gerar Prompt" individual -->
     <div class="tab-panel" id="tab-editor">
       <div class="actions-bar" style="margin-bottom:14px;">
         <button class="btn btn-primary btn-sm" onclick="addEditor()">＋ Novo Editor</button>
-        <button class="btn btn-ai btn-sm" onclick="aiOrganize('editor')">✦ IA</button>
       </div>
       <div class="editors-list" id="editors-list"></div>
       <div class="ai-loading" id="ai-loading-editor"><div class="spinner"></div> Analisando…</div>
@@ -1268,31 +1325,86 @@ window.addEventListener('resize',()=>{ if(currentProjectId) drawConnections(); }
 /* ═══════════════════════════════════════════════
    [MUDANÇA 3] EDITOR — MÚLTIPLOS
 ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   [CORREÇÃO EDITOR] EDITOR DE PROMPT COM GERAÇÃO VIA IA
+   Estrutura: cabeçalho (título + ações) → textarea → botão Gerar Prompt
+              → área de resultado gerado → histórico de versões
+═══════════════════════════════════════════════ */
 function renderEditors() {
-  const p=getProject();
-  if(!p.editors||!p.editors.length){ p.editors=[{id:'e_0',title:'Prompt 1',draft:'',history:[]}]; save(); }
-  document.getElementById('editors-list').innerHTML = p.editors.map((ed,ei)=>`
-    <div class="editor-block">
+  const p = getProject();
+  if (!p.editors || !p.editors.length) {
+    p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+    save();
+  }
+  document.getElementById('editors-list').innerHTML = p.editors.map((ed, ei) => `
+    <div class="editor-block" id="edblock-${ei}">
+
+      <!-- Cabeçalho: título editável + ações -->
       <div class="editor-block-header">
-        <input class="editor-title-input" value="${esc(ed.title)}" onchange="updateEditorTitle(${ei},this.value)" placeholder="Título"/>
+        <input class="editor-title-input"
+          value="${esc(ed.title)}"
+          onchange="updateEditorTitle(${ei},this.value)"
+          placeholder="Título do Prompt"/>
         <div class="editor-block-actions">
-          <button class="btn btn-outline btn-xs" onclick="saveEditorVersion(${ei})">💾 v${(ed.history||[]).length+1}</button>
-          ${p.editors.length>1?`<button class="btn btn-danger btn-xs" onclick="deleteEditor(${ei})">✕</button>`:''}
+          <button class="btn btn-outline btn-xs"
+            onclick="saveEditorVersion(${ei})"
+            title="Salvar versão atual no histórico">
+            💾 v${(ed.history||[]).length + 1}
+          </button>
+          ${p.editors.length > 1
+            ? `<button class="btn btn-danger btn-xs" onclick="deleteEditor(${ei})" title="Remover este editor">✕</button>`
+            : ''}
         </div>
       </div>
-      <textarea class="prompt-area" id="prompt-${ei}" placeholder="Escreva seu prompt…"
+
+      <!-- Textarea: prompt cru ou texto de referência -->
+      <textarea
+        class="prompt-area"
+        id="prompt-${ei}"
+        placeholder="Cole aqui seu prompt cru, ideias soltas, instruções parciais ou qualquer texto que queira transformar em prompt perfeito para IA…"
         oninput="updateEditorDraft(${ei},this.value)"
         onfocus="pushUndo()"
-      >${esc(ed.draft||'')}</textarea>
-      ${(ed.history||[]).length?`
+      >${esc(ed.draft || '')}</textarea>
+
+      <!-- [CORREÇÃO EDITOR] Área do prompt gerado pela IA (oculta até gerar) -->
+      <div class="prompt-generated" id="prompt-generated-${ei}">
+        <div class="prompt-generated-header">
+          <span>✦ Prompt Gerado pela IA</span>
+          <button class="btn-usar-prompt" onclick="usarPromptGerado(${ei})"
+            title="Substituir textarea por este prompt gerado">
+            ✓ Usar este prompt
+          </button>
+        </div>
+        <div class="prompt-generated-text" id="prompt-generated-text-${ei}"></div>
+      </div>
+
+      <!-- Rodapé: botão Gerar Prompt + info -->
+      <div class="editor-block-footer">
+        <span style="font-size:.7rem;color:var(--muted);">
+          Digite texto bruto → a IA transforma em prompt de alta performance
+        </span>
+        <!-- [CORREÇÃO EDITOR] Botão principal Gerar Prompt -->
+        <button
+          class="btn-gerar-prompt"
+          id="btn-gerar-${ei}"
+          onclick="gerarPromptIA(${ei})"
+          title="Enviar para GPT-4o-mini e receber prompt otimizado">
+          <span class="prompt-btn-spinner" id="spinner-gerar-${ei}"></span>
+          ✦ Gerar Prompt
+        </button>
+      </div>
+
+      <!-- Histórico de versões salvas -->
+      ${(ed.history || []).length ? `
       <div class="editor-history">
         <h4>Histórico — ${ed.history.length} versão(ões)</h4>
-        ${ed.history.map((v,vi)=>`
+        ${ed.history.map((v, vi) => `
           <div class="history-item" onclick="loadEditorVersion(${ei},${vi})">
-            <div class="h-date">v${ed.history.length-vi} · ${v.date}</div>
-            <div class="h-preview">${esc(v.text.slice(0,80))}${v.text.length>80?'…':''}</div>
+            <div class="h-date">v${ed.history.length - vi} · ${v.date}</div>
+            <div class="h-preview">${esc(v.text.slice(0, 80))}${v.text.length > 80 ? '…' : ''}</div>
           </div>`).join('')}
-      </div>`:''}
+      </div>` : ''}
+
     </div>`).join('');
 }
 
@@ -1316,6 +1428,115 @@ function loadEditorVersion(ei,vi) {
   save(); renderEditors(); toast('Versão carregada');
 }
 function deleteEditor(ei) { pushUndo(); getProject().editors.splice(ei,1); save(); renderEditors(); }
+
+/* ═══════════════════════════════════════════════
+   [CORREÇÃO EDITOR] GERAR PROMPT COM IA
+   Envia o conteúdo da textarea para o GPT-4o-mini
+   com prompt de Prompt Engineering e exibe o resultado
+   otimizado abaixo da textarea, sem substituir ainda.
+   O usuário decide se quer "Usar este prompt" ou não.
+═══════════════════════════════════════════════ */
+async function gerarPromptIA(ei) {
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('⚠️ Configure a API Key em Configurações', 'error'); return; }
+
+  const p = getProject();
+  const ed = p.editors[ei];
+  const textoUsuario = (document.getElementById('prompt-'+ei)?.value || ed.draft || '').trim();
+  if (!textoUsuario) { toast('Escreva algo na textarea antes de gerar', 'error'); return; }
+
+  // UI: ativa loading
+  const btn = document.getElementById('btn-gerar-'+ei);
+  const spinner = document.getElementById('spinner-gerar-'+ei);
+  const areaGerada = document.getElementById('prompt-generated-'+ei);
+  const textoGerado = document.getElementById('prompt-generated-text-'+ei);
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+  if (areaGerada) areaGerada.classList.remove('show');
+
+  // Prompt fixo de Prompt Engineering
+  const promptFixo = `Você é um engenheiro especialista em Prompt Engineering. Pegue o texto abaixo (que pode ser cru, bagunçado ou com instruções parciais) e transforme em um prompt perfeito, organizado, claro, estruturado e de alta performance para IA (Claude, GPT, Grok etc.).
+
+Texto do usuário:
+${textoUsuario}
+
+Regras obrigatórias:
+- Estrutura clara: use seções como Contexto, Tarefa Principal, Regras, Formato de Saída, Exemplos (se aplicável).
+- Seja conciso, mas completo.
+- Use linguagem direta e imperativa.
+- Otimize para raciocínio passo a passo (chain-of-thought) quando fizer sentido.
+- Inclua placeholders úteis se necessário.
+- Retorne SOMENTE o prompt final pronto para copiar, sem explicações adicionais.`;
+
+  const ep = cfg.endpoint === 'openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+
+  try {
+    const res = await fetch(ep, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+cfg.apikey },
+      body: JSON.stringify({
+        model: cfg.model || 'gpt-4o-mini',
+        max_tokens: 1200,
+        messages: [
+          { role:'system', content:'Você é um especialista em Prompt Engineering. Retorne APENAS o prompt final, sem explicações, sem markdown extra.' },
+          { role:'user', content: promptFixo }
+        ]
+      })
+    });
+
+    if (!res.ok) {
+      const er = await res.json().catch(() => ({}));
+      throw new Error(er.error?.message || 'Erro HTTP ' + res.status);
+    }
+
+    const data = await res.json();
+    const promptGerado = data.choices[0].message.content.trim();
+
+    // Exibe o resultado gerado na área dedicada (sem sobrescrever a textarea ainda)
+    if (textoGerado) textoGerado.textContent = promptGerado;
+    if (areaGerada)  areaGerada.classList.add('show');
+
+    // Salva o prompt gerado temporariamente no editor (campo auxiliar)
+    p.editors[ei].promptGerado = promptGerado;
+    save();
+
+    toast('✓ Prompt gerado! Revise e clique em "Usar este prompt" para aplicar.');
+
+  } catch (err) {
+    toast('❌ Erro ao gerar: ' + err.message, 'error');
+  }
+
+  btn.disabled = false;
+  spinner.style.display = 'none';
+}
+
+/* [CORREÇÃO EDITOR] Aplica o prompt gerado na textarea e salva como nova versão */
+function usarPromptGerado(ei) {
+  const p = getProject();
+  const ed = p.editors[ei];
+  if (!ed.promptGerado) return;
+
+  pushUndo();
+
+  // Salva versão atual no histórico antes de substituir
+  if (ed.draft && ed.draft.trim()) {
+    ed.history = ed.history || [];
+    ed.history.unshift({
+      text: ed.draft,
+      date: new Date().toLocaleString('pt-BR') + ' (original)'
+    });
+  }
+
+  // Substitui o draft pelo prompt gerado
+  ed.draft = ed.promptGerado;
+  delete ed.promptGerado;
+  save();
+
+  renderEditors();
+  toast('✓ Prompt gerado aplicado! Versão original salva no histórico.');
+}
 
 /* ═══════════════════════════════════════════════
    KANBAN
