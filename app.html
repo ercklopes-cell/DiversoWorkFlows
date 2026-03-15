@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Diverso WorkFlows Management</title>
+
+<!-- [MUDANÇA 4] Nova fonte: Orbitron para logo neon + Inter para corpo -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<style>
+/* ═══════════════════════════════════════════════════
+   [MUDANÇA 4] TEMA DARK NEON FINTECH — padrão
+   Acentos: roxo #a78bfa | ciano #22d3ee | magenta #ec4899 | verde #10b981
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:        #05050f;
+  --bg2:       #0a0a1f;
+  --surface:   #0e0e22;
+  --surface2:  #13132e;
+  --border:    #1e1e42;
+  --border2:   #2a2a5a;
+  --text:      #e8e8ff;
+  --muted:     #5a5a8a;
+  --neon-p:    #a78bfa;
+  --neon-c:    #22d3ee;
+  --neon-m:    #ec4899;
+  --neon-g:    #10b981;
+  --accent:    #a78bfa;
+  --accent2:   #22d3ee;
+  --alta:      #f87171;
+  --media-alta:#fb923c;
+  --media:     #facc15;
+  --baixa:     #10b981;
+  --muito-baixa:#22d3ee;
+  --radius:    14px;
+  --radius-sm: 8px;
+  --header-h:  62px;
+  --font:      'Inter', sans-serif;
+  --mono:      'JetBrains Mono', monospace;
+  --transition:.18s cubic-bezier(.4,0,.2,1);
+  --glow-p: 0 0 12px #a78bfa66, 0 0 28px #a78bfa33;
+  --glow-c: 0 0 12px #22d3ee66, 0 0 28px #22d3ee33;
+  --glow-g: 0 0 12px #10b98166, 0 0 28px #10b98133;
+  --glow-m: 0 0 12px #ec489966, 0 0 28px #ec489933;
+}
+/* [MUDANÇA 4] Tema light alternativo */
+[data-theme="light"] {
+  --bg:#f4f4ff; --bg2:#eeeeff; --surface:#ffffff; --surface2:#f0f0fa;
+  --border:#dcdcf0; --border2:#c8c8e8; --text:#12123a; --muted:#7070a0;
+  --glow-p:0 0 8px #a78bfa44; --glow-c:0 0 8px #22d3ee44;
+  --glow-g:0 0 8px #10b98144; --glow-m:0 0 8px #ec489944;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font); background:var(--bg); color:var(--text); min-height:100vh;
+  /* [CORREÇÃO 3] Gradiente roxo removido — fundo sólido limpo */
+  transition:background var(--transition),color var(--transition);
+}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+button{cursor:pointer;font-family:var(--font);}
+input,textarea,select{font-family:var(--font);}
+
+/* ═══════════════════════════════════════════
+   [MUDANÇA: logo removida, só nome neon]
+   HEADER
+═══════════════════════════════════════════ */
+#header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:rgba(5,5,15,.88);
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;z-index:200;backdrop-filter:blur(16px);
+  box-shadow:0 1px 0 var(--border),0 4px 30px rgba(167,139,250,.06);
+}
+[data-theme="light"] #header{background:rgba(244,244,255,.92);}
+
+/* [CORREÇÃO 1] Nome sem glow excessivo — cor visível, sem text-shadow */
+.logo-wrap{display:flex;align-items:center;cursor:pointer;text-decoration:none;}
+.logo-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:.86rem;font-weight:900;letter-spacing:.04em;
+  color:#c4b5fd;
+  text-shadow:none;
+  white-space:nowrap;line-height:1.1;
+}
+.logo-sub{
+  display:block;font-size:.48rem;font-weight:400;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-top:3px;
+  font-family:var(--mono);text-shadow:none;
+}
+.header-right{display:flex;align-items:center;gap:7px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--radius-sm);
+  background:transparent;border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:var(--transition);font-size:.95rem;
+}
+.icon-btn:hover{border-color:var(--neon-p);color:var(--neon-p);box-shadow:var(--glow-p);transform:scale(1.05);}
+.icon-btn.active{background:#a78bfa22;color:var(--neon-p);border-color:var(--neon-p);box-shadow:var(--glow-p);}
+
+/* [MUDANÇA 2] Botão Undo no header */
+.undo-btn{
+  padding:6px 12px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:600;
+  background:transparent;border:1px solid var(--border2);color:var(--muted);
+  transition:var(--transition);display:flex;align-items:center;gap:5px;
+}
+.undo-btn:hover{border-color:var(--neon-c);color:var(--neon-c);box-shadow:var(--glow-c);transform:scale(1.04);}
+.undo-btn:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
+#app{padding-top:var(--header-h);min-height:100vh;}
+.page{display:none;padding:24px 20px;max-width:1120px;margin:0 auto;}
+.page.active{display:block;animation:pageIn .25s ease;}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.page-title{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px;}
+.page-sub{font-size:.82rem;color:var(--muted);margin-bottom:24px;}
+.section-label{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px;}
+
+/* ═══════════════════════════════════════════
+   [MUDANÇA 4] BOTÕES NEON COM GLOW
+═══════════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;border-radius:var(--radius-sm);
+  font-size:.82rem;font-weight:600;border:none;
+  transition:var(--transition);letter-spacing:.01em;
+}
+.btn-primary{background:transparent;color:var(--neon-p);border:1px solid var(--neon-p);box-shadow:0 0 10px #a78bfa33;}
+.btn-primary:hover{box-shadow:var(--glow-p);transform:scale(1.04);background:#a78bfa12;}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+.btn-outline:hover{border-color:var(--neon-c);color:var(--neon-c);box-shadow:var(--glow-c);transform:scale(1.03);}
+.btn-ghost{background:transparent;color:var(--muted);border:none;padding:7px 12px;}
+.btn-ghost:hover{color:var(--text);background:var(--surface2);}
+.btn-danger{background:transparent;color:var(--neon-m);border:1px solid #ec489966;}
+.btn-danger:hover{box-shadow:var(--glow-m);background:#ec489912;transform:scale(1.03);}
+.btn-ai{background:linear-gradient(135deg,#a78bfa18,#22d3ee18);color:var(--neon-p);border:1px solid #a78bfa44;font-size:.78rem;}
+.btn-ai:hover{background:linear-gradient(135deg,#a78bfa28,#22d3ee28);box-shadow:var(--glow-p);transform:scale(1.04);}
+.btn-sm{padding:5px 10px;font-size:.74rem;}
+.btn-xs{padding:3px 8px;font-size:.7rem;border-radius:6px;}
+.btn-full{width:100%;justify-content:center;}
+.btn-new-project{
+  width:100%;padding:16px;border-radius:var(--radius);
+  background:var(--surface);border:2px dashed var(--border2);
+  color:var(--muted);font-size:.9rem;font-weight:600;
+  transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:24px;
+}
+.btn-new-project:hover{border-color:var(--neon-p);color:var(--neon-p);box-shadow:var(--glow-p);background:var(--surface2);}
+
+/* ═══════════════════════════════════════════
+   FORMS
+═══════════════════════════════════════════ */
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:.74rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);
+  font-size:.88rem;outline:none;transition:var(--transition);
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--neon-p);box-shadow:0 0 0 3px #a78bfa18,var(--glow-p);}
+.form-select option{background:var(--surface);}
+.form-textarea{resize:vertical;min-height:120px;line-height:1.6;font-family:var(--mono);font-size:.82rem;}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD — CARDS
+═══════════════════════════════════════════ */
+.projects-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+@media(min-width:640px){.projects-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:960px){.projects-grid{grid-template-columns:repeat(3,1fr);}}
+
+.project-card{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:18px;transition:var(--transition);
+  position:relative;overflow:hidden;
+}
+.project-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(167,139,250,.15),var(--glow-p);border-color:var(--neon-p);}
+.project-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-color,var(--neon-p));
+  box-shadow:0 0 10px var(--card-color,var(--neon-p));
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.card-name-wrap{flex:1;margin-right:10px;}
+.card-name{font-size:1rem;font-weight:700;background:none;border:none;color:var(--text);width:100%;padding:0;outline:none;cursor:text;}
+.card-name:focus{border-bottom:1px solid var(--neon-p);}
+.card-date{font-size:.66rem;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+.card-actions{display:flex;gap:4px;}
+.card-del-btn{width:26px;height:26px;border-radius:6px;background:transparent;border:none;color:var(--muted);font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
+.card-del-btn:hover{color:var(--neon-m);text-shadow:var(--glow-m);}
+
+.color-picker-wrap{margin-bottom:12px;}
+.color-swatches{display:flex;gap:5px;flex-wrap:wrap;}
+.color-swatch{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:var(--transition);}
+.color-swatch:hover,.color-swatch.selected{border-color:#fff;transform:scale(1.25);}
+
+.priority-select-wrap{margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.priority-select{background:none;border:none;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;padding:0;outline:none;font-family:var(--font);}
+
+.progress-wrap{margin-bottom:14px;}
+.progress-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:5px;}
+.progress-track{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;transition:width .6s ease;background:var(--card-color,var(--neon-p));box-shadow:0 0 8px var(--card-color,var(--neon-p));}
+.progress-input{width:60px;background:none;border:none;color:var(--text);font-size:.72rem;font-weight:600;text-align:right;outline:none;cursor:pointer;font-family:var(--mono);}
+
+/* ═══════════════════════════════════════════
+   PROJETO INTERNO
+═══════════════════════════════════════════ */
+.project-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.back-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 12px;color:var(--muted);font-size:.8rem;font-weight:600;transition:var(--transition);}
+.back-btn:hover{color:var(--neon-c);border-color:var(--neon-c);box-shadow:var(--glow-c);}
+.project-header-info{flex:1;}
+.project-header-name{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;}
+.project-header-meta{font-size:.72rem;color:var(--muted);margin-top:2px;}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:22px;overflow-x:auto;}
+.tab-btn{padding:9px 14px;font-size:.8rem;font-weight:600;background:none;border:none;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:var(--transition);}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--neon-p);border-bottom-color:var(--neon-p);/* text-shadow removido */}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:pageIn .2s ease;}
+
+/* ═══════════════════════════════════════════
+   BRAINSTORM — POST-ITS E CANVAS
+═══════════════════════════════════════════ */
+.brainstorm-wrap{
+  position:relative;
+  /* [CORREÇÃO 3] Canvas branco puro — sem fundo roxo/escuro */
+  background:#fafafa;
+  border-radius:var(--radius);
+  padding:16px;
+  border:1px solid var(--border2);
+}
+[data-theme="light"] .brainstorm-wrap{ background:#f5f5f5; border-color:#ddd; }
+
+.connections-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible;}
+/* [CORREÇÃO 3] Linhas de conexão: glow MANTIDO — é o único lugar onde neon é permitido */
+.conn-line{stroke:#a78bfa;stroke-width:2.5;fill:none;opacity:.9;filter:drop-shadow(0 0 4px #a78bfaaa) drop-shadow(0 0 10px #a78bfa55);}
+
+.ideas-container{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:14px;margin-bottom:14px;position:relative;z-index:1;
+}
+
+/* ─────────────────────────────────────────────────────
+   [CORREÇÃO 2] POST-ITS: fundo claro colorido + texto escuro
+   Cada post-it recebe uma cor suave via --postit-bg (definida inline no JS)
+   Fallback: amarelo clássico de post-it
+───────────────────────────────────────────────────── */
+.idea-row{
+  position:relative;
+  /* [CORREÇÃO 2] Fundo claro — amarelo post-it padrão, sobrescrito por --postit-bg */
+  background:var(--postit-bg, #fff9c4);
+  border:1px solid rgba(0,0,0,.10);
+  border-radius:10px;
+  padding:14px 12px 12px;
+  transition:var(--transition);
+  /* [CORREÇÃO 2] Sombra suave estilo papel — sem glow roxo */
+  box-shadow:4px 4px 8px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.08);
+  cursor:grab;min-height:100px;
+}
+.idea-row:active{cursor:grabbing;}
+.idea-row:hover{
+  /* hover suave — leve elevação sem glow neon */
+  box-shadow:6px 6px 14px rgba(0,0,0,.18);
+  transform:translateY(-2px) rotate(.3deg);
+}
+.idea-row.dragging{opacity:.4;transform:rotate(3deg);}
+/* drag-over: borda ciano neon PERMITIDA (é interação, não texto) */
+.idea-row.drag-over{outline:2px solid var(--neon-c);outline-offset:2px;}
+.idea-row.connect-source{outline:2px solid var(--neon-p);outline-offset:2px;}
+
+/* [CORREÇÃO 2] Faixa colorida no topo — mantém identidade do post-it */
+.idea-row::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:var(--postit-stripe, #f9a825);
+  border-radius:10px 10px 0 0;
+  /* sem glow na faixa */
+  box-shadow:none;
+}
+
+/* Ponto de conexão — glow PERMITIDO (é botão interativo) */
+.connect-dot{
+  position:absolute;top:10px;right:10px;
+  width:11px;height:11px;border-radius:50%;
+  background:#ccc;border:2px solid #aaa;
+  cursor:pointer;transition:var(--transition);z-index:2;
+}
+.connect-dot:hover,.idea-row.connect-source .connect-dot{
+  background:var(--neon-p);border-color:var(--neon-p);
+  box-shadow:var(--glow-p);
+}
+
+/* [CORREÇÃO 2] Texto escuro nos post-its para legibilidade total */
+.idea-input{
+  width:100%;background:none;border:none;
+  color:#1a1a1a;  /* texto escuro fixo, independente do tema */
+  outline:none;font-size:.84rem;resize:none;overflow:hidden;
+  min-height:52px;line-height:1.6;font-family:var(--font);margin-top:4px;
+}
+.idea-actions{display:flex;gap:4px;margin-top:8px;justify-content:space-between;align-items:center;}
+/* [CORREÇÃO 2] Número do post-it com cor escura */
+.idea-index{font-size:.62rem;color:#666;font-family:var(--mono);}
+.idea-del{
+  background:none;border:none;
+  color:#999;
+  font-size:.8rem;padding:3px 6px;border-radius:4px;transition:var(--transition);
+}
+.idea-del:hover{color:#e53e3e;background:rgba(229,62,62,.1);}
+
+.actions-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+/* Hint modo conexão — glow PERMITIDO (é feedback interativo) */
+.connect-hint{
+  background:#22d3ee12;border:1px solid var(--neon-c);
+  border-radius:8px;padding:8px 14px;font-size:.78rem;
+  color:var(--neon-c);display:none;margin-bottom:12px;box-shadow:var(--glow-c);
+}
+.connect-hint.visible{display:flex;align-items:center;justify-content:space-between;animation:pageIn .2s ease;}
+
+/* ═══════════════════════════════════════════
+   [MUDANÇA 3] EDITOR — MÚLTIPLOS
+═══════════════════════════════════════════ */
+.editors-list{display:flex;flex-direction:column;gap:18px;margin-bottom:16px;}
+.editor-block{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;transition:var(--transition);}
+.editor-block:hover{border-color:#a78bfa44;}
+.editor-block-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);}
+.editor-title-input{flex:1;background:none;border:none;color:var(--text);font-size:.88rem;font-weight:700;outline:none;}
+.editor-title-input:focus{color:var(--neon-p);}
+.editor-block-actions{display:flex;gap:6px;align-items:center;}
+.prompt-area{width:100%;min-height:180px;background:transparent;border:none;padding:14px 16px;color:var(--text);font-family:var(--mono);font-size:.83rem;resize:vertical;outline:none;line-height:1.7;}
+.editor-history{padding:10px 14px;border-top:1px solid var(--border);max-height:160px;overflow-y:auto;}
+.editor-history h4{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;}
+.history-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:5px;cursor:pointer;transition:var(--transition);}
+.history-item:hover{border-color:var(--neon-p);}
+.history-item .h-date{font-size:.64rem;color:var(--muted);font-family:var(--mono);margin-bottom:2px;}
+.history-item .h-preview{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ═══════════════════════════════════════════
+   KANBAN NEON
+═══════════════════════════════════════════ */
+.kanban-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:640px){.kanban-board{grid-template-columns:1fr;}}
+.kanban-col{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:14px;min-height:240px;transition:var(--transition);}
+.kanban-col.drag-over-col{border-color:var(--neon-c);box-shadow:var(--glow-c);background:var(--surface2);}
+.kanban-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.kanban-col-title{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
+.col-todo  .kanban-col-title{color:var(--muted);}
+.col-doing .kanban-col-title{color:var(--media);/* text-shadow removido */}
+.col-done  .kanban-col-title{color:var(--neon-g);/* text-shadow removido */}
+.col-badge{font-size:.65rem;background:var(--border);color:var(--muted);padding:2px 7px;border-radius:99px;font-family:var(--mono);}
+.kanban-cards{display:flex;flex-direction:column;gap:7px;min-height:40px;}
+.kcard{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:11px 12px;cursor:grab;transition:var(--transition);}
+.kcard:hover{border-color:#a78bfa55;box-shadow:0 0 12px #a78bfa18;}
+.kcard.dragging{opacity:.25;transform:rotate(2deg);}
+.kcard.drag-over-card{border-color:var(--neon-c);box-shadow:var(--glow-c);}
+.kcard-title{font-size:.82rem;font-weight:600;margin-bottom:3px;}
+.kcard-desc{font-size:.73rem;color:var(--muted);line-height:1.4;}
+.kcard-footer{display:flex;gap:4px;align-items:center;justify-content:flex-end;margin-top:8px;border-top:1px solid var(--border);padding-top:7px;}
+.kcard-btn{width:24px;height:24px;border-radius:5px;border:none;display:flex;align-items:center;justify-content:center;font-size:.72rem;transition:var(--transition);background:transparent;}
+.kcard-up{color:var(--neon-g);border:1px solid #10b98144;}
+.kcard-up:hover{box-shadow:var(--glow-g);background:#10b98118;transform:scale(1.1);}
+.kcard-down{color:var(--media);border:1px solid #facc1544;}
+.kcard-down:hover{box-shadow:0 0 8px #facc1566;background:#facc1518;transform:scale(1.1);}
+.kcard-del-btn{color:var(--neon-m);border:1px solid #ec489944;}
+.kcard-del-btn:hover{box-shadow:var(--glow-m);background:#ec489918;transform:scale(1.1);}
+.new-card-row{margin-top:10px;}
+.new-card-title-input,.new-card-desc-input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 10px;color:var(--text);font-size:.8rem;outline:none;transition:border-color var(--transition);margin-bottom:4px;}
+.new-card-title-input:focus,.new-card-desc-input:focus{border-color:var(--neon-p);box-shadow:0 0 0 2px #a78bfa18;}
+
+/* ═══════════════════════════════════════════
+   FLUXOGRAMA NEON
+═══════════════════════════════════════════ */
+.flow-canvas{overflow-x:auto;padding:20px 0;}
+.flow-nodes{display:flex;align-items:center;flex-wrap:nowrap;min-width:max-content;}
+.flow-node-wrap{display:flex;align-items:center;}
+.flow-node{background:var(--surface);border:2px solid var(--border2);border-radius:var(--radius-sm);padding:14px 18px;text-align:center;min-width:100px;transition:var(--transition);}
+.flow-node.active{border-color:var(--neon-p);background:#a78bfa0a;box-shadow:var(--glow-p);}
+.flow-node .fn-emoji{font-size:1.2rem;display:block;margin-bottom:4px;}
+.flow-node .fn-label{font-size:.75rem;font-weight:600;}
+.flow-node .fn-step{font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+.flow-arrow-icon{color:var(--neon-p);font-size:1rem;padding:0 6px;text-shadow:var(--glow-p);}
+.flow-edit-row{margin-top:20px;}
+.flow-edit-row label{font-size:.74rem;color:var(--muted);display:block;margin-bottom:6px;font-weight:600;}
+.flow-edit-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 13px;color:var(--text);font-size:.82rem;outline:none;font-family:var(--mono);}
+.flow-edit-input:focus{border-color:var(--neon-p);box-shadow:var(--glow-p);}
+
+/* ═══════════════════════════════════════════
+   ARQUIVOS / PASTAS
+═══════════════════════════════════════════ */
+.folders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+.folder-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:14px;transition:var(--transition);}
+.folder-card:hover{border-color:#a78bfa55;box-shadow:0 0 16px #a78bfa18;transform:translateY(-1px);}
+.folder-icon{font-size:1.6rem;margin-bottom:8px;}
+.folder-name{font-size:.85rem;font-weight:600;margin-bottom:4px;}
+.folder-count{font-size:.7rem;color:var(--muted);font-family:var(--mono);}
+.folder-items{margin-top:8px;display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto;}
+.folder-item{font-size:.74rem;color:var(--muted);padding:3px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.folder-item-del{background:none;border:none;color:var(--border2);font-size:.7rem;cursor:pointer;}
+.folder-item-del:hover{color:var(--neon-m);}
+
+/* ═══════════════════════════════════════════
+   CONFIGURAÇÕES
+═══════════════════════════════════════════ */
+.settings-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+.settings-section h2{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;}
+.toggle-row span{font-size:.85rem;}
+.toggle{width:42px;height:23px;background:var(--border2);border-radius:99px;border:none;position:relative;transition:var(--transition);cursor:pointer;}
+.toggle::after{content:'';width:17px;height:17px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:var(--transition);}
+.toggle.on{background:var(--neon-p);box-shadow:var(--glow-p);}
+.toggle.on::after{left:22px;}
+
+/* ═══════════════════════════════════════════
+   AI BOX + SPINNER
+═══════════════════════════════════════════ */
+.ai-box{background:linear-gradient(135deg,#a78bfa0a,#22d3ee08);border:1px solid #a78bfa33;border-radius:var(--radius-sm);padding:14px;margin-top:12px;font-family:var(--mono);font-size:.78rem;color:var(--neon-c);line-height:1.6;display:none;white-space:pre-wrap;}
+.ai-box.show{display:block;animation:pageIn .3s ease;box-shadow:var(--glow-c);}
+.ai-loading{display:none;align-items:center;gap:8px;color:var(--neon-p);font-size:.8rem;margin-top:10px;}
+.ai-loading.show{display:flex;}
+.spinner{width:15px;height:15px;border:2px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════ */
+.modal-bg{position:fixed;inset:0;background:#00000090;backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;width:100%;max-width:400px;animation:pageIn .2s ease;box-shadow:0 20px 60px rgba(0,0,0,.5),var(--glow-p);}
+.modal h3{font-size:1.1rem;font-weight:700;margin-bottom:18px;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+#toast-wrap{position:fixed;bottom:20px;right:20px;z-index:400;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--surface);border:1px solid var(--neon-g);color:var(--neon-g);padding:10px 16px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;animation:toastIn .3s ease;max-width:300px;box-shadow:var(--glow-g);}
+.toast.error{border-color:var(--neon-m);color:var(--neon-m);box-shadow:var(--glow-m);}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty .e-icon{font-size:2.5rem;margin-bottom:10px;opacity:.3;}
+.empty p{font-size:.84rem;}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<header id="header">
+  <!-- [MUDANÇA] Sem logo, só nome com glow neon -->
+  <div class="logo-wrap" onclick="showPage('dashboard')">
+    <div class="logo-name">
+      Diverso WorkFlows
+      <span class="logo-sub">Management</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <!-- [MUDANÇA 2] Botão Undo global + Ctrl+Z -->
+    <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
+    <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
+  </div>
+</header>
+
+<div id="toast-wrap"></div>
+
+<!-- Modal novo projeto -->
+<div class="modal-bg" id="modal-new-project">
+  <div class="modal">
+    <h3>✦ Novo Projeto</h3>
+    <div class="form-group"><label>Nome do Projeto</label><input class="form-input" id="np-name" placeholder="Ex: App de Finanças"/></div>
+    <div class="form-group">
+      <label>Prioridade</label>
+      <select class="form-select" id="np-priority">
+        <option value="alta">🔴 Alta</option>
+        <option value="media-alta">🟠 Média-Alta</option>
+        <option value="media" selected>🟡 Média</option>
+        <option value="baixa">🟢 Baixa</option>
+        <option value="muito-baixa">🔵 Muito Baixa</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-project')">Cancelar</button>
+      <button class="btn btn-primary" onclick="createProject()">Criar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal nova pasta -->
+<div class="modal-bg" id="modal-new-folder">
+  <div class="modal">
+    <h3>📁 Nova Pasta</h3>
+    <div class="form-group"><label>Nome</label><input class="form-input" id="nf-name" placeholder="Ex: Referências"/></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-folder')">Cancelar</button>
+      <button class="btn btn-primary" onclick="createFolder()">Criar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ APP ═══════ -->
+<div id="app">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-title">Projetos</div>
+    <div class="page-sub" id="dash-sub">Carregando…</div>
+    <button class="btn-new-project" onclick="openModal('modal-new-project')"><span style="font-size:1.1rem;">＋</span> Novo Projeto</button>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+
+  <!-- PROJETO INTERNO -->
+  <div class="page" id="page-project">
+    <div class="project-header">
+      <button class="back-btn" onclick="backToDashboard()">← Voltar</button>
+      <div class="project-header-info">
+        <div class="project-header-name" id="pv-name"></div>
+        <div class="project-header-meta" id="pv-meta"></div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="brainstorm">💡 Brainstorm</button>
+      <button class="tab-btn" data-tab="editor">✍️ Editor</button>
+      <button class="tab-btn" data-tab="kanban">📋 Kanban</button>
+      <button class="tab-btn" data-tab="fluxo">🔀 Fluxo</button>
+      <button class="tab-btn" data-tab="arquivos">📁 Arquivos</button>
+    </div>
+
+    <!-- TAB BRAINSTORM -->
+    <div class="tab-panel active" id="tab-brainstorm">
+      <div class="actions-bar" style="margin-bottom:10px;">
+        <button class="btn btn-outline btn-sm" onclick="addIdea()">＋ Nova ideia</button>
+        <button class="btn btn-outline btn-sm" id="btn-connect-mode" onclick="toggleConnectMode()">🔗 Conectar</button>
+        <button class="btn btn-outline btn-sm" onclick="clearConnections()">✕ Conexões</button>
+        <button class="btn btn-ai btn-sm" onclick="aiOrganize('brainstorm')">✦ IA</button>
+      </div>
+      <!-- [MUDANÇA 1] Hint modo conexão -->
+      <div class="connect-hint" id="connect-hint">
+        <span>🔗 Clique no ponto <b>●</b> de dois post-its para conectá-los.</span>
+        <button onclick="toggleConnectMode()" style="background:none;border:none;color:var(--neon-m);cursor:pointer;font-size:.78rem;font-weight:700;">Cancelar</button>
+      </div>
+      <!-- [MUDANÇA 1] SVG de conexões sobre os post-its -->
+      <div class="brainstorm-wrap" id="brainstorm-wrap">
+        <svg class="connections-svg" id="connections-svg"></svg>
+        <div class="ideas-container" id="ideas-list"></div>
+      </div>
+      <div class="ai-loading" id="ai-loading-brainstorm"><div class="spinner"></div> Analisando…</div>
+      <div class="ai-box" id="ai-box-brainstorm"></div>
+    </div>
+
+    <!-- TAB EDITOR — [MUDANÇA 3] múltiplos editores -->
+    <div class="tab-panel" id="tab-editor">
+      <div class="actions-bar" style="margin-bottom:14px;">
+        <button class="btn btn-primary btn-sm" onclick="addEditor()">＋ Novo Editor</button>
+        <button class="btn btn-ai btn-sm" onclick="aiOrganize('editor')">✦ IA</button>
+      </div>
+      <div class="editors-list" id="editors-list"></div>
+      <div class="ai-loading" id="ai-loading-editor"><div class="spinner"></div> Analisando…</div>
+      <div class="ai-box" id="ai-box-editor"></div>
+    </div>
+
+    <!-- TAB KANBAN -->
+    <div class="tab-panel" id="tab-kanban">
+      <div class="actions-bar" style="margin-bottom:14px;">
+        <button class="btn btn-ai btn-sm" onclick="aiOrganize('kanban')">✦ IA</button>
+      </div>
+      <div class="kanban-board">
+        <div class="kanban-col col-todo" id="kcol-todo" ondragover="kColDragOver(event,'todo')" ondrop="kColDrop(event,'todo')" ondragleave="kColDragLeave(event)">
+          <div class="kanban-col-header"><span class="kanban-col-title">To-do</span><span class="col-badge" id="kcnt-todo">0</span></div>
+          <div class="kanban-cards" id="kcards-todo"></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-todo"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-todo"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('todo')">＋ Adicionar</button></div>
+        </div>
+        <div class="kanban-col col-doing" id="kcol-doing" ondragover="kColDragOver(event,'doing')" ondrop="kColDrop(event,'doing')" ondragleave="kColDragLeave(event)">
+          <div class="kanban-col-header"><span class="kanban-col-title">Fazendo</span><span class="col-badge" id="kcnt-doing">0</span></div>
+          <div class="kanban-cards" id="kcards-doing"></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-doing"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-doing"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('doing')">＋ Adicionar</button></div>
+        </div>
+        <div class="kanban-col col-done" id="kcol-done" ondragover="kColDragOver(event,'done')" ondrop="kColDrop(event,'done')" ondragleave="kColDragLeave(event)">
+          <div class="kanban-col-header"><span class="kanban-col-title">Feito</span><span class="col-badge" id="kcnt-done">0</span></div>
+          <div class="kanban-cards" id="kcards-done"></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-done"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-done"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('done')">＋ Adicionar</button></div>
+        </div>
+      </div>
+      <div class="ai-loading" id="ai-loading-kanban"><div class="spinner"></div> Analisando…</div>
+      <div class="ai-box" id="ai-box-kanban"></div>
+    </div>
+
+    <!-- TAB FLUXO -->
+    <div class="tab-panel" id="tab-fluxo">
+      <div class="actions-bar" style="margin-bottom:14px;"><button class="btn btn-ai btn-sm" onclick="aiOrganize('fluxo')">✦ IA</button></div>
+      <div class="flow-canvas"><div class="flow-nodes" id="flow-nodes"></div></div>
+      <div class="flow-edit-row">
+        <label>Editar etapas (separar com →)</label>
+        <input class="flow-edit-input" id="flow-edit" placeholder="Ideia → Refinamento → Projeto → Teste → Pronto" oninput="onFlowEdit()"/>
+      </div>
+      <div class="ai-loading" id="ai-loading-fluxo"><div class="spinner"></div> Analisando…</div>
+      <div class="ai-box" id="ai-box-fluxo"></div>
+    </div>
+
+    <!-- TAB ARQUIVOS -->
+    <div class="tab-panel" id="tab-arquivos">
+      <div class="actions-bar" style="margin-bottom:16px;"><button class="btn btn-outline btn-sm" onclick="openModal('modal-new-folder')">📁 Nova Pasta</button></div>
+      <div class="folders-grid" id="folders-grid"></div>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÕES -->
+  <div class="page" id="page-settings">
+    <div class="page-title">Configurações</div>
+    <div class="page-sub">Personalize o Diverso WorkFlows Management</div>
+    <div class="settings-section">
+      <h2>🔑 GitHub Models / OpenAI</h2>
+      <div class="form-group"><label>Token GitHub / API Key</label><input class="form-input" id="cfg-apikey" type="password" placeholder="ghp_... ou sk-..."/></div>
+      <div class="form-group">
+        <label>Modelo</label>
+        <select class="form-select" id="cfg-model">
+          <option value="gpt-4o-mini">gpt-4o-mini (recomendado)</option>
+          <option value="gpt-4o">gpt-4o</option>
+          <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+          <option value="meta-llama-3.1-70b-instruct">Meta-Llama-3.1-70B</option>
+          <option value="mistral-large">Mistral Large</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Endpoint</label>
+        <select class="form-select" id="cfg-endpoint">
+          <option value="github">GitHub Models (models.inference.ai.azure.com)</option>
+          <option value="openai">OpenAI (api.openai.com)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="saveConfig()">💾 Salvar</button>
+    </div>
+    <div class="settings-section">
+      <h2>🎨 Aparência</h2>
+      <div class="toggle-row"><span>Tema Claro</span><button class="toggle" id="dark-toggle" onclick="toggleThemeFromSettings()"></button></div>
+    </div>
+    <div class="settings-section">
+      <h2>🗄️ Dados</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="exportData()">⬇️ Exportar</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar tudo</button>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:10px;">Dados salvos localmente no navegador.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   ESTADO GLOBAL
+═══════════════════════════════════════════════ */
+let projects = [];
+let currentProjectId = null;
+let ideaDragging = null;
+let kDragging = { col:null, idx:null };
+
+// [MUDANÇA 1] Conexões entre post-its
+let connectMode = false;
+let connectSource = null;
+
+// [MUDANÇA 2] Undo stack (máx 10 snapshots por projeto)
+let undoStack = [];
+const UNDO_LIMIT = 10;
+
+const FLOW_DEFAULT = 'Ideia → Refinamento → Projeto → Teste → Pronto';
+const FLOW_EMOJIS  = ['💡','🔍','🛠️','🧪','✅','🚀','📦','🎯','🔧','📊'];
+const COLORS = ['#a78bfa','#22d3ee','#ec4899','#10b981','#f87171','#fb923c','#facc15','#38bdf8','#818cf8','#34d399'];
+const PRIORITY_COLORS = { alta:'#f87171','media-alta':'#fb923c',media:'#facc15',baixa:'#10b981','muito-baixa':'#22d3ee' };
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+function init() {
+  const saved = localStorage.getItem('diverso_projects');
+  if (saved) projects = JSON.parse(saved);
+  // Migração de estrutura antiga
+  projects.forEach(p => {
+    if (!p.editors)     p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+    if (!p.connections) p.connections = [];
+    if (!p.folders)     p.folders = [];
+  });
+
+  const theme = localStorage.getItem('diverso_theme') || 'dark';
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('theme-btn').textContent = '🌙';
+    const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.add('on');
+  }
+
+  const cfg = getConfig();
+  if (cfg.apikey)   document.getElementById('cfg-apikey').value   = cfg.apikey;
+  if (cfg.model)    document.getElementById('cfg-model').value    = cfg.model;
+  if (cfg.endpoint) document.getElementById('cfg-endpoint').value = cfg.endpoint;
+
+  renderDashboard();
+
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab))
+  );
+  document.querySelectorAll('.modal-bg').forEach(bg =>
+    bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('open'); })
+  );
+  updateUndoBtn();
+}
+
+/* ═══════════════════════════════════════════════
+   PERSISTÊNCIA
+═══════════════════════════════════════════════ */
+function save() { localStorage.setItem('diverso_projects', JSON.stringify(projects)); }
+function getConfig() { return JSON.parse(localStorage.getItem('diverso_config')||'{}'); }
+function saveConfig() {
+  localStorage.setItem('diverso_config', JSON.stringify({
+    apikey:   document.getElementById('cfg-apikey').value.trim(),
+    model:    document.getElementById('cfg-model').value,
+    endpoint: document.getElementById('cfg-endpoint').value
+  }));
+  toast('Configurações salvas ✓');
+}
+
+/* ═══════════════════════════════════════════════
+   [MUDANÇA 2] UNDO
+═══════════════════════════════════════════════ */
+function pushUndo() {
+  if (!currentProjectId) return;
+  undoStack.push(JSON.parse(JSON.stringify(getProject())));
+  if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+  updateUndoBtn();
+}
+function undoAction() {
+  if (!undoStack.length || !currentProjectId) return;
+  const snap = undoStack.pop();
+  const idx = projects.findIndex(p => p.id === currentProjectId);
+  if (idx === -1) return;
+  projects[idx] = snap;
+  save();
+  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow();
+  const p = getProject();
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  updateUndoBtn();
+  toast('↺ Desfeito');
+}
+function updateUndoBtn() {
+  const btn = document.getElementById('undo-btn');
+  if (btn) btn.disabled = undoStack.length === 0;
+}
+
+/* ═══════════════════════════════════════════════
+   NAVEGAÇÃO + TEMA
+═══════════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('settings-btn').classList.toggle('active', id==='settings');
+}
+function toggleSettings() {
+  showPage(document.getElementById('page-settings').classList.contains('active') ? 'dashboard' : 'settings');
+}
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('theme-btn').textContent = '☀️';
+    localStorage.setItem('diverso_theme','dark');
+    const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.remove('on');
+  } else {
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('theme-btn').textContent = '🌙';
+    localStorage.setItem('diverso_theme','light');
+    const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.add('on');
+  }
+}
+function toggleThemeFromSettings() { toggleTheme(); }
+
+/* MODAIS */
+function openModal(id)  { document.getElementById(id).classList.add('open'); const i=document.getElementById(id).querySelector('input'); if(i) setTimeout(()=>i.focus(),80); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════ */
+function renderDashboard() {
+  const grid = document.getElementById('projects-grid');
+  document.getElementById('dash-sub').textContent = projects.length
+    ? projects.length + ' projeto(s) ativo(s)'
+    : 'Nenhum projeto ainda.';
+
+  if (!projects.length) {
+    grid.innerHTML = '<div class="empty"><div class="e-icon">🗂️</div><p>Crie seu primeiro projeto!</p></div>';
+    return;
+  }
+  grid.innerHTML = projects.map(p => {
+    const cc = p.color || PRIORITY_COLORS[p.priority] || '#a78bfa';
+    const sw = COLORS.map(c => `<div class="color-swatch${p.color===c?' selected':''}" style="background:${c};box-shadow:0 0 6px ${c}66" onclick="setProjectColor('${p.id}','${c}',event)"></div>`).join('');
+    return `
+    <div class="project-card" style="--card-color:${cc}">
+      <div class="card-top">
+        <div class="card-name-wrap">
+          <input class="card-name" value="${esc(p.name)}" onchange="renameProject('${p.id}',this.value)" onclick="event.stopPropagation()"/>
+          <div class="card-date">${new Date(p.createdAt).toLocaleDateString('pt-BR')}</div>
+        </div>
+        <div class="card-actions"><button class="card-del-btn" onclick="deleteProject('${p.id}',event)">✕</button></div>
+      </div>
+      <div class="color-picker-wrap"><div class="section-label">Cor</div><div class="color-swatches">${sw}</div></div>
+      <div class="priority-select-wrap">
+        <div class="priority-dot" style="background:${PRIORITY_COLORS[p.priority]};box-shadow:0 0 6px ${PRIORITY_COLORS[p.priority]}"></div>
+        <select class="priority-select" onchange="setProjectPriority('${p.id}',this.value)" onclick="event.stopPropagation()">
+          <option value="alta"        ${p.priority==='alta'?'selected':''}>Alta</option>
+          <option value="media-alta"  ${p.priority==='media-alta'?'selected':''}>Média-Alta</option>
+          <option value="media"       ${p.priority==='media'?'selected':''}>Média</option>
+          <option value="baixa"       ${p.priority==='baixa'?'selected':''}>Baixa</option>
+          <option value="muito-baixa" ${p.priority==='muito-baixa'?'selected':''}>Muito Baixa</option>
+        </select>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-labels">
+          <span>Progresso</span>
+          <input class="progress-input" type="number" min="0" max="100" value="${p.progress||0}" onchange="setProgress('${p.id}',this.value)" onclick="event.stopPropagation()"/>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${p.progress||0}%"></div></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="openProject('${p.id}')">Abrir Projeto →</button>
+    </div>`;
+  }).join('');
+}
+
+function createProject() {
+  const name = document.getElementById('np-name').value.trim();
+  if (!name) { toast('Digite um nome!','error'); return; }
+  const pri = document.getElementById('np-priority').value;
+  projects.push({
+    id:'p_'+Date.now(), name, priority:pri, progress:0,
+    color:PRIORITY_COLORS[pri], ideas:[], connections:[],
+    editors:[{id:'e_0',title:'Prompt 1',draft:'',history:[]}],
+    kanban:{todo:[],doing:[],done:[]},
+    flow:FLOW_DEFAULT, folders:[], createdAt:new Date().toISOString()
+  });
+  save(); closeModal('modal-new-project');
+  document.getElementById('np-name').value = '';
+  renderDashboard(); toast('Projeto criado ✓');
+}
+function deleteProject(id,e) { e.stopPropagation(); if(!confirm('Excluir?')) return; projects=projects.filter(p=>p.id!==id); save(); renderDashboard(); }
+function renameProject(id,n)  { const p=projects.find(x=>x.id===id); if(p){p.name=n;save();} }
+function setProjectColor(id,c,e) { e.stopPropagation(); const p=projects.find(x=>x.id===id); if(p){p.color=c;save();renderDashboard();} }
+function setProjectPriority(id,v) { const p=projects.find(x=>x.id===id); if(p){p.priority=v;save();renderDashboard();} }
+function setProgress(id,v) { const p=projects.find(x=>x.id===id); if(p){p.progress=Math.min(100,Math.max(0,parseInt(v)||0));save();renderDashboard();} }
+
+/* ═══════════════════════════════════════════════
+   ABRIR PROJETO
+═══════════════════════════════════════════════ */
+function openProject(id) {
+  currentProjectId = id;
+  undoStack = []; updateUndoBtn();
+  const p = getProject();
+  if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
+  if (!p.connections) p.connections = [];
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  showPage('project');
+  switchTab('brainstorm');
+  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders();
+}
+function backToDashboard() { currentProjectId=null; showPage('dashboard'); renderDashboard(); }
+function getProject()      { return projects.find(p=>p.id===currentProjectId); }
+
+/* TABS */
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
+  if (name==='brainstorm') setTimeout(drawConnections, 100);
+}
+
+/* ═══════════════════════════════════════════════
+   [MUDANÇA 1] BRAINSTORM — POST-ITS + CONEXÕES SVG
+═══════════════════════════════════════════════ */
+// [CORREÇÃO 2] Paleta de cores suaves para post-its — estilo clássico
+const POSTIT_COLORS = [
+  { bg:'#fff9c4', stripe:'#f9a825' }, // amarelo clássico
+  { bg:'#e3f2fd', stripe:'#1e88e5' }, // azul claro
+  { bg:'#f3e5f5', stripe:'#8e24aa' }, // roxo claro
+  { bg:'#e8f5e9', stripe:'#43a047' }, // verde claro
+  { bg:'#fce4ec', stripe:'#e91e63' }, // rosa claro
+  { bg:'#fff3e0', stripe:'#fb8c00' }, // laranja claro
+  { bg:'#e0f7fa', stripe:'#00acc1' }, // ciano claro
+  { bg:'#ede7f6', stripe:'#5e35b1' }, // violeta claro
+];
+
+function renderBrainstorm() {
+  const p = getProject();
+  const list = document.getElementById('ideas-list');
+  if (!p.ideas.length) {
+    list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="e-icon">💡</div><p>Nenhuma ideia ainda!</p></div>';
+    drawConnections(); return;
+  }
+  list.innerHTML = p.ideas.map((idea,i) => {
+    // [CORREÇÃO 2] Cicla pelas cores suaves de post-it
+    const pc = POSTIT_COLORS[i % POSTIT_COLORS.length];
+    return `
+    <div class="idea-row" draggable="true" id="idea-${i}" data-idx="${i}"
+      style="--postit-bg:${pc.bg};--postit-stripe:${pc.stripe};"
+      ondragstart="ideaDragStart(event,${i})"
+      ondragover="ideaDragOver(event,${i})"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="ideaDrop(event,${i})">
+      <div class="idea-index">#${i+1}</div>
+      <div class="connect-dot" onclick="handleConnectDot(event,${i})" title="Conectar"></div>
+      <textarea class="idea-input" rows="2"
+        onchange="updateIdea(${i},this.value)"
+        oninput="autoH(this)"
+        onfocus="pushUndo()"
+      >${esc(idea)}</textarea>
+      <div class="idea-actions">
+        <span></span>
+        <button class="idea-del" onclick="deleteIdeaU(${i})">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.idea-input').forEach(autoH);
+  setTimeout(drawConnections, 80);
+}
+
+function autoH(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+function addIdea() {
+  pushUndo();
+  getProject().ideas.push('Nova ideia…');
+  save(); renderBrainstorm();
+  const rows = document.querySelectorAll('.idea-row');
+  const last = rows[rows.length-1];
+  if (last) { const ta=last.querySelector('.idea-input'); ta.focus(); ta.select(); }
+}
+function updateIdea(i,v) { getProject().ideas[i]=v; save(); }
+function deleteIdeaU(i) {
+  pushUndo();
+  const p=getProject();
+  p.ideas.splice(i,1);
+  p.connections = p.connections
+    .filter(c=>c[0]!==i&&c[1]!==i)
+    .map(c=>[c[0]>i?c[0]-1:c[0],c[1]>i?c[1]-1:c[1]]);
+  save(); renderBrainstorm();
+}
+
+// Drag post-its
+function ideaDragStart(e,i) { ideaDragging=i; e.currentTarget.classList.add('dragging'); }
+function ideaDragOver(e,i)  { e.preventDefault(); if(ideaDragging===i) return; e.currentTarget.classList.add('drag-over'); }
+function ideaDrop(e,i) {
+  e.preventDefault(); e.currentTarget.classList.remove('drag-over','dragging');
+  if (ideaDragging===null||ideaDragging===i) return;
+  pushUndo();
+  const p=getProject();
+  const item=p.ideas.splice(ideaDragging,1)[0];
+  p.ideas.splice(i,0,item);
+  const ri=(old,from,to)=>{
+    if(old===from) return to;
+    if(from<to){if(old>from&&old<=to) return old-1;}
+    else{if(old>=to&&old<from) return old+1;}
+    return old;
+  };
+  p.connections=p.connections.map(c=>[ri(c[0],ideaDragging,i),ri(c[1],ideaDragging,i)]);
+  save(); renderBrainstorm(); ideaDragging=null;
+}
+
+/* [MUDANÇA 1] Modo conectar */
+function toggleConnectMode() {
+  connectMode = !connectMode;
+  connectSource = null;
+  document.getElementById('connect-hint').classList.toggle('visible',connectMode);
+  const btn = document.getElementById('btn-connect-mode');
+  btn.style.borderColor = connectMode ? 'var(--neon-c)' : '';
+  btn.style.color       = connectMode ? 'var(--neon-c)' : '';
+  document.querySelectorAll('.idea-row').forEach(r=>r.classList.remove('connect-source'));
+}
+
+function handleConnectDot(e,idx) {
+  e.stopPropagation();
+  if (!connectMode) { toast('Ative 🔗 Conectar primeiro','error'); return; }
+  if (connectSource===null) {
+    connectSource=idx;
+    document.querySelectorAll('.idea-row').forEach(r=>r.classList.remove('connect-source'));
+    document.getElementById('idea-'+idx).classList.add('connect-source');
+    toast('Post-it #'+(idx+1)+' selecionado. Clique em outro ●');
+  } else {
+    if (idx===connectSource) { connectSource=null; document.querySelectorAll('.idea-row').forEach(r=>r.classList.remove('connect-source')); return; }
+    pushUndo();
+    const p=getProject();
+    const a=Math.min(connectSource,idx), b=Math.max(connectSource,idx);
+    if (!p.connections.some(c=>c[0]===a&&c[1]===b)) { p.connections.push([a,b]); save(); }
+    document.querySelectorAll('.idea-row').forEach(r=>r.classList.remove('connect-source'));
+    connectSource=null; drawConnections(); toast('Conexão criada ✓');
+  }
+}
+
+function clearConnections() {
+  pushUndo(); getProject().connections=[]; save(); drawConnections(); toast('Conexões limpas');
+}
+
+/* [MUDANÇA 1] Desenhar linhas SVG curvas entre post-its */
+function drawConnections() {
+  const svg  = document.getElementById('connections-svg'); if(!svg) return;
+  const p    = getProject(); if(!p||!p.connections||!p.connections.length){svg.innerHTML='';return;}
+  const wrap = document.getElementById('brainstorm-wrap'); if(!wrap) return;
+  const wR   = wrap.getBoundingClientRect();
+  let lines  = '';
+  p.connections.forEach(([a,b])=>{
+    const elA=document.getElementById('idea-'+a);
+    const elB=document.getElementById('idea-'+b);
+    if(!elA||!elB) return;
+    const rA=elA.getBoundingClientRect(), rB=elB.getBoundingClientRect();
+    const x1=rA.left-wR.left+rA.width/2, y1=rA.top-wR.top+rA.height/2;
+    const x2=rB.left-wR.left+rB.width/2, y2=rB.top-wR.top+rB.height/2;
+    const cx=(x1+x2)/2, cy=Math.min(y1,y2)-35;
+    lines+=`<path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" class="conn-line"/>`;
+  });
+  svg.innerHTML=lines;
+}
+window.addEventListener('resize',()=>{ if(currentProjectId) drawConnections(); });
+
+/* ═══════════════════════════════════════════════
+   [MUDANÇA 3] EDITOR — MÚLTIPLOS
+═══════════════════════════════════════════════ */
+function renderEditors() {
+  const p=getProject();
+  if(!p.editors||!p.editors.length){ p.editors=[{id:'e_0',title:'Prompt 1',draft:'',history:[]}]; save(); }
+  document.getElementById('editors-list').innerHTML = p.editors.map((ed,ei)=>`
+    <div class="editor-block">
+      <div class="editor-block-header">
+        <input class="editor-title-input" value="${esc(ed.title)}" onchange="updateEditorTitle(${ei},this.value)" placeholder="Título"/>
+        <div class="editor-block-actions">
+          <button class="btn btn-outline btn-xs" onclick="saveEditorVersion(${ei})">💾 v${(ed.history||[]).length+1}</button>
+          ${p.editors.length>1?`<button class="btn btn-danger btn-xs" onclick="deleteEditor(${ei})">✕</button>`:''}
+        </div>
+      </div>
+      <textarea class="prompt-area" id="prompt-${ei}" placeholder="Escreva seu prompt…"
+        oninput="updateEditorDraft(${ei},this.value)"
+        onfocus="pushUndo()"
+      >${esc(ed.draft||'')}</textarea>
+      ${(ed.history||[]).length?`
+      <div class="editor-history">
+        <h4>Histórico — ${ed.history.length} versão(ões)</h4>
+        ${ed.history.map((v,vi)=>`
+          <div class="history-item" onclick="loadEditorVersion(${ei},${vi})">
+            <div class="h-date">v${ed.history.length-vi} · ${v.date}</div>
+            <div class="h-preview">${esc(v.text.slice(0,80))}${v.text.length>80?'…':''}</div>
+          </div>`).join('')}
+      </div>`:''}
+    </div>`).join('');
+}
+
+function addEditor() {
+  pushUndo(); const p=getProject();
+  p.editors.push({id:'e_'+Date.now(),title:'Prompt '+(p.editors.length+1),draft:'',history:[]});
+  save(); renderEditors(); toast('Novo editor criado');
+}
+function updateEditorTitle(ei,v) { getProject().editors[ei].title=v; save(); }
+function updateEditorDraft(ei,v) { getProject().editors[ei].draft=v; save(); }
+function saveEditorVersion(ei) {
+  const p=getProject(); const ed=p.editors[ei];
+  if(!ed.draft.trim()){ toast('Escreva algo antes','error'); return; }
+  ed.history=ed.history||[];
+  ed.history.unshift({text:ed.draft,date:new Date().toLocaleString('pt-BR')});
+  save(); renderEditors(); toast('Versão salva ✓');
+}
+function loadEditorVersion(ei,vi) {
+  pushUndo(); const p=getProject();
+  p.editors[ei].draft=p.editors[ei].history[vi].text;
+  save(); renderEditors(); toast('Versão carregada');
+}
+function deleteEditor(ei) { pushUndo(); getProject().editors.splice(ei,1); save(); renderEditors(); }
+
+/* ═══════════════════════════════════════════════
+   KANBAN
+═══════════════════════════════════════════════ */
+function renderKanban() {
+  const p=getProject();
+  ['todo','doing','done'].forEach(col=>{
+    const cards=p.kanban[col]||[];
+    document.getElementById('kcnt-'+col).textContent=cards.length;
+    document.getElementById('kcards-'+col).innerHTML=cards.map((c,i)=>`
+      <div class="kcard" draggable="true"
+        ondragstart="kCardDragStart(event,'${col}',${i})"
+        ondragover="kCardDragOver(event)"
+        ondragleave="this.classList.remove('drag-over-card')"
+        ondrop="kCardDrop(event,'${col}',${i})">
+        <div class="kcard-title">${esc(c.title)}</div>
+        ${c.desc?`<div class="kcard-desc">${esc(c.desc)}</div>`:''}
+        <div class="kcard-footer">
+          <button class="kcard-btn kcard-up"      onclick="kCardMove('${col}',${i},-1)">↑</button>
+          <button class="kcard-btn kcard-down"     onclick="kCardMove('${col}',${i},1)">↓</button>
+          <button class="kcard-btn kcard-del-btn"  onclick="kCardDel('${col}',${i})">🗑</button>
+        </div>
+      </div>`).join('');
+  });
+}
+function addKCard(col) {
+  const title=document.getElementById('nct-'+col).value.trim();
+  if(!title){toast('Digite um título','error');return;}
+  pushUndo();
+  const desc=document.getElementById('ncd-'+col).value.trim();
+  getProject().kanban[col].push({title,desc,id:'k_'+Date.now()});
+  document.getElementById('nct-'+col).value='';
+  document.getElementById('ncd-'+col).value='';
+  save(); renderKanban();
+}
+function kCardDel(col,i)  { pushUndo(); getProject().kanban[col].splice(i,1); save(); renderKanban(); }
+function kCardMove(col,i,d) {
+  const p=getProject(); const ni=i+d;
+  if(ni<0||ni>=p.kanban[col].length) return;
+  pushUndo(); [p.kanban[col][i],p.kanban[col][ni]]=[p.kanban[col][ni],p.kanban[col][i]];
+  save(); renderKanban();
+}
+function kCardDragStart(e,col,i) { kDragging={col,idx:i}; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function kCardDragOver(e)        { e.preventDefault(); e.currentTarget.classList.add('drag-over-card'); }
+function kCardDrop(e,tc,ti) {
+  e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('drag-over-card');
+  if(!kDragging.col) return; pushUndo();
+  const p=getProject(); const card=p.kanban[kDragging.col].splice(kDragging.idx,1)[0];
+  p.kanban[tc].splice(ti,0,card); save(); renderKanban(); kDragging={col:null,idx:null};
+}
+function kColDragOver(e,col)  { e.preventDefault(); document.getElementById('kcol-'+col).classList.add('drag-over-col'); }
+function kColDragLeave(e)     { e.currentTarget.classList.remove('drag-over-col'); }
+function kColDrop(e,col) {
+  e.preventDefault(); document.getElementById('kcol-'+col).classList.remove('drag-over-col');
+  if(!kDragging.col||kDragging.col===col) return; pushUndo();
+  const p=getProject(); const card=p.kanban[kDragging.col].splice(kDragging.idx,1)[0];
+  p.kanban[col].push(card); save(); renderKanban(); kDragging={col:null,idx:null};
+}
+
+/* ═══════════════════════════════════════════════
+   FLUXOGRAMA
+═══════════════════════════════════════════════ */
+function renderFlow() {
+  const p=getProject(); const s=p.flow||FLOW_DEFAULT;
+  document.getElementById('flow-edit').value=s; drawFlow(s);
+}
+function drawFlow(str) {
+  const steps=str.split('→').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('flow-nodes').innerHTML=steps.map((s,i)=>`
+    <div class="flow-node-wrap">
+      <div class="flow-node ${i===0?'active':''}">
+        <span class="fn-emoji">${FLOW_EMOJIS[i%FLOW_EMOJIS.length]}</span>
+        <div class="fn-label">${esc(s)}</div>
+        <div class="fn-step">Etapa ${i+1}</div>
+      </div>
+      ${i<steps.length-1?'<div class="flow-arrow-icon">→</div>':''}
+    </div>`).join('');
+}
+function onFlowEdit() { const v=document.getElementById('flow-edit').value; drawFlow(v); getProject().flow=v; save(); }
+
+/* ═══════════════════════════════════════════════
+   ARQUIVOS / PASTAS
+═══════════════════════════════════════════════ */
+function renderFolders() {
+  const p=getProject(); const g=document.getElementById('folders-grid');
+  if(!p.folders||!p.folders.length){g.innerHTML='<div class="empty"><div class="e-icon">📁</div><p>Nenhuma pasta ainda.</p></div>';return;}
+  g.innerHTML=p.folders.map((f,fi)=>`
+    <div class="folder-card">
+      <div class="folder-icon">📁</div>
+      <div class="folder-name">${esc(f.name)}</div>
+      <div class="folder-count">${f.items.length} item(s)</div>
+      <div class="folder-items">
+        ${f.items.map((item,ii)=>`<div class="folder-item"><span>${esc(item)}</span><button class="folder-item-del" onclick="deleteFolderItem(${fi},${ii})">✕</button></div>`).join('')}
+      </div>
+      <div style="margin-top:8px;display:flex;gap:5px;">
+        <input style="flex:1;font-size:.74rem;padding:5px 8px;background:var(--bg);border:1px solid var(--border2);border-radius:5px;color:var(--text);outline:none;" placeholder="Adicionar…" id="fi-${fi}" onkeydown="addFolderItem(event,${fi})"/>
+        <button class="btn btn-outline btn-xs" onclick="addFolderItemBtn(${fi})">+</button>
+      </div>
+      <button style="margin-top:6px;width:100%;" class="btn btn-danger btn-xs" onclick="deleteFolder(${fi})">Excluir</button>
+    </div>`).join('');
+}
+function createFolder() {
+  const name=document.getElementById('nf-name').value.trim(); if(!name) return;
+  const p=getProject(); p.folders=p.folders||[]; p.folders.push({name,items:[]});
+  save(); renderFolders(); closeModal('modal-new-folder'); document.getElementById('nf-name').value='';
+}
+function addFolderItem(e,fi)  { if(e.key!=='Enter') return; addFolderItemBtn(fi); }
+function addFolderItemBtn(fi) {
+  const inp=document.getElementById('fi-'+fi); const v=inp.value.trim(); if(!v) return;
+  getProject().folders[fi].items.push(v); inp.value=''; save(); renderFolders();
+}
+function deleteFolderItem(fi,ii) { getProject().folders[fi].items.splice(ii,1); save(); renderFolders(); }
+function deleteFolder(fi) { if(!confirm('Excluir pasta?')) return; getProject().folders.splice(fi,1); save(); renderFolders(); }
+
+/* ═══════════════════════════════════════════════
+   INTEGRAÇÃO COM IA
+═══════════════════════════════════════════════ */
+async function aiOrganize(module) {
+  const cfg=getConfig();
+  if(!cfg.apikey){toast('⚠️ Configure a API Key em Configurações','error');return;}
+  const p=getProject(); let content='';
+  if(module==='brainstorm') content='Ideias: '+p.ideas.join(' | ');
+  else if(module==='editor') content='Prompts: '+(p.editors||[]).map((e,i)=>`[${e.title}]: ${e.draft||'(vazio)'}`).join(' / ');
+  else if(module==='kanban') content=`Kanban — Todo: ${p.kanban.todo.map(c=>c.title).join(',')} | Fazendo: ${p.kanban.doing.map(c=>c.title).join(',')} | Feito: ${p.kanban.done.map(c=>c.title).join(',')}`;
+  else if(module==='fluxo') content='Fluxo: '+(p.flow||FLOW_DEFAULT);
+
+  const prompt=`Analise: "${content}". Retorne SOMENTE JSON sem markdown: {"tituloProjeto":"string","prioridade":"alta|media-alta|media|baixa|muito-baixa","progresso":0,"kanban":{"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},"fluxo":"e1 → e2","resumo":"texto"}`;
+  setAILoading(module,true); hideAIBox(module);
+  const ep=cfg.endpoint==='openai'?'https://api.openai.com/v1/chat/completions':'https://models.inference.ai.azure.com/chat/completions';
+  try {
+    const res=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body:JSON.stringify({model:cfg.model||'gpt-4o-mini',max_tokens:900,
+        messages:[{role:'system',content:'Especialista em projetos. Responda APENAS JSON.'},{role:'user',content:prompt}]})});
+    if(!res.ok){const er=await res.json().catch(()=>({}));throw new Error(er.error?.message||'Erro '+res.status);}
+    const data=await res.json();
+    const json=JSON.parse(data.choices[0].message.content.trim().replace(/```json|```/g,'').trim());
+    pushUndo();
+    if(json.tituloProjeto) p.name=json.tituloProjeto;
+    if(json.prioridade)    p.priority=json.prioridade;
+    if(typeof json.progresso==='number') p.progress=Math.min(100,Math.max(0,json.progresso));
+    if(json.fluxo) p.flow=json.fluxo;
+    if(json.kanban){['todo','doing','done'].forEach(col=>{if(json.kanban[col]){const novos=json.kanban[col].filter(nc=>!p.kanban[col].find(ec=>ec.title===nc.title));p.kanban[col]=[...p.kanban[col],...novos];}});}
+    save();
+    document.getElementById('pv-name').textContent=p.name;
+    document.getElementById('pv-meta').textContent=`Prioridade: ${p.priority} · ${p.progress}% concluído`;
+    renderKanban(); renderFlow();
+    showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n🔀 ${json.fluxo||p.flow}\n\n💬 ${json.resumo||''}`);
+  } catch(err) { showAIBox(module,'❌ Erro: '+err.message); }
+  setAILoading(module,false);
+}
+function setAILoading(m,v){const el=document.getElementById('ai-loading-'+m);if(el)el.classList.toggle('show',v);}
+function showAIBox(m,t){const el=document.getElementById('ai-box-'+m);if(el){el.textContent=t;el.classList.add('show');}}
+function hideAIBox(m){const el=document.getElementById('ai-box-'+m);if(el)el.classList.remove('show');}
+
+/* ═══════════════════════════════════════════════
+   EXPORTAR / RESETAR
+═══════════════════════════════════════════════ */
+function exportData() {
+  const b=new Blob([JSON.stringify({projects,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='diverso-backup.json'; a.click(); toast('Exportado ✓');
+}
+function confirmReset() {
+  if(!confirm('Apagar tudo?')) return;
+  localStorage.removeItem('diverso_projects'); localStorage.removeItem('diverso_config');
+  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Resetado');
+}
+
+/* UTILITÁRIOS */
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function toast(msg,type='success') {
+  const w=document.getElementById('toast-wrap');
+  const t=document.createElement('div'); t.className='toast'+(type==='error'?' error':''); t.textContent=msg;
+  w.appendChild(t); setTimeout(()=>t.remove(),2800);
+}
+
+// Esc fecha modais | Ctrl+Z = undo
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoAction();}
+});
+
+init();
+</script>
+</body>
+</html>
