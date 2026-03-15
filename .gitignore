@@ -1,14 +1,8 @@
-# Sistema
 .DS_Store
 Thumbs.db
-
-# Editor
 .vscode/
-.idea/
-
-# Logs
 *.log
-
-# Env (nunca subir chaves reais)
 .env
 .env.local
+# NUNCA suba o arquivo de credenciais do Google!
+client_secret*.json

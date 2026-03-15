@@ -459,6 +459,100 @@ input,textarea,select{font-family:var(--font);}
 .user-name{font-size:.72rem;font-weight:600;color:var(--text);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .logout-btn{width:24px;height:24px;border-radius:50%;background:transparent;border:1px solid rgba(236,72,153,.4);color:var(--neon-m);font-size:.65rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);cursor:pointer;}
 .logout-btn:hover{background:rgba(236,72,153,.15);box-shadow:0 0 8px rgba(236,72,153,.4);}
+
+/* [CORREÇÃO 5] Botão Sair no header */
+.btn-logout-header{
+  padding:6px 12px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:600;
+  background:transparent;border:1px solid rgba(236,72,153,.4);color:var(--neon-m);
+  transition:var(--transition);display:flex;align-items:center;gap:5px;
+}
+.btn-logout-header:hover{box-shadow:var(--glow-m);background:#ec489918;transform:scale(1.04);}
+
+/* [CORREÇÃO 4] Botão Organizar Tudo com IA no header */
+.btn-organize-all{
+  padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;
+  background:linear-gradient(135deg,#a78bfa22,#22d3ee18);
+  border:1px solid #a78bfa55;color:var(--neon-p);
+  transition:var(--transition);display:flex;align-items:center;gap:6px;
+}
+.btn-organize-all:hover{box-shadow:var(--glow-p);background:linear-gradient(135deg,#a78bfa33,#22d3ee28);transform:scale(1.04);}
+
+/* [CORREÇÃO 1] Barra de geração de brainstorm com IA */
+.brainstorm-generate-bar{
+  display:flex;gap:10px;align-items:center;margin-bottom:14px;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:12px 14px;
+}
+.brainstorm-idea-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-size:.88rem;font-family:var(--font);
+}
+.brainstorm-idea-input::placeholder{color:var(--muted);}
+.btn-generate-ai{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  padding:9px 18px;border-radius:var(--radius-sm);font-size:.82rem;font-weight:700;
+  background:linear-gradient(135deg,#a78bfa,#22d3ee);color:#fff;border:none;
+  box-shadow:0 0 18px #a78bfa55;transition:var(--transition);white-space:nowrap;
+}
+.btn-generate-ai:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
+.btn-generate-ai:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.gen-spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+
+/* [CORREÇÃO 2] Fluxograma interativo */
+.flow-interactive-wrap{
+  position:relative;background:#fafafa;border:1px solid var(--border2);
+  border-radius:var(--radius);padding:20px;min-height:220px;overflow:auto;
+}
+[data-theme="light"] .flow-interactive-wrap{background:#f5f5f5;}
+.flow-arrows-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible;}
+.flow-arrow-line{stroke:var(--neon-p);stroke-width:2;fill:none;marker-end:url(#arrowhead);filter:drop-shadow(0 0 4px #a78bfaaa);}
+.flow-boxes-grid{display:flex;flex-wrap:wrap;gap:14px;position:relative;z-index:1;}
+
+/* Caixas interativas do fluxo */
+.flow-box{
+  background:#fff;border:2px solid #e0e0e0;border-radius:10px;
+  padding:12px 16px;min-width:140px;max-width:180px;cursor:pointer;
+  transition:all .18s ease;box-shadow:2px 2px 8px rgba(0,0,0,.1);
+  position:relative;user-select:none;
+}
+.flow-box:hover{transform:translateY(-2px);box-shadow:4px 4px 14px rgba(0,0,0,.15);}
+.flow-box.status-todo{border-color:#94a3b8;}
+.flow-box.status-doing{border-color:#facc15;box-shadow:2px 2px 8px rgba(250,204,21,.3);}
+.flow-box.status-done{border-color:#10b981;box-shadow:2px 2px 8px rgba(16,185,129,.3);}
+/* Caixa atual em destaque neon */
+.flow-box.is-current{border-color:var(--neon-p);box-shadow:0 0 16px #a78bfa55,0 0 32px #a78bfa22;animation:currentPulse 2s ease-in-out infinite;}
+@keyframes currentPulse{0%,100%{box-shadow:0 0 16px #a78bfa55}50%{box-shadow:0 0 28px #a78bfa88,0 0 50px #a78bfa44;}}
+.flow-box.flow-arrow-src{outline:2px solid var(--neon-c);outline-offset:2px;}
+.flow-box-status-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  padding:2px 7px;border-radius:99px;margin-bottom:6px;
+}
+.badge-todo{background:#f1f5f9;color:#64748b;}
+.badge-doing{background:#fef9c3;color:#a16207;}
+.badge-done{background:#dcfce7;color:#15803d;}
+.badge-current{background:#ede9fe;color:#7c3aed;}
+.flow-box-title{font-size:.84rem;font-weight:700;color:#1a1a2e;margin-bottom:3px;}
+.flow-box-desc{font-size:.72rem;color:#666;line-height:1.4;}
+.flow-box-num{position:absolute;top:6px;right:8px;font-size:.6rem;color:#aaa;font-family:var(--mono);}
+
+/* Hint modo seta */
+.flow-arrow-hint{
+  background:#a78bfa12;border:1px solid var(--neon-p);
+  border-radius:8px;padding:8px 14px;font-size:.78rem;
+  color:var(--neon-p);display:none;margin-bottom:12px;box-shadow:var(--glow-p);
+}
+.flow-arrow-hint.visible{display:flex;align-items:center;justify-content:space-between;animation:pageIn .2s ease;}
+
+/* [CORREÇÃO 3] Barra de progresso do fluxo */
+.flow-progress-bar-wrap{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:14px;
+}
+.flow-progress-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.flow-progress-track{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-bottom:5px;}
+.flow-progress-fill{height:100%;border-radius:99px;transition:width .5s ease;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));box-shadow:0 0 8px var(--neon-p);}
+.flow-progress-sub{font-size:.68rem;color:var(--muted);font-family:var(--mono);}
 </style>
 </head>
 <body>
@@ -475,12 +569,51 @@ input,textarea,select{font-family:var(--font);}
     <!-- Chip do usuário logado (preenchido pelo JS) -->
     <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
+    <!-- [CORREÇÃO 4] Botão Organizar Tudo com IA — só aparece dentro de um projeto -->
+    <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
     <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
+    <!-- [CORREÇÃO 5] Botão Sair visível no header -->
+    <button class="btn-logout-header" onclick="logout()" title="Sair da conta">🚪 Sair</button>
   </div>
 </header>
 
 <div id="toast-wrap"></div>
+
+<!-- [CORREÇÃO 4] Modal: resultado IA global com botão Aplicar -->
+<div class="modal-bg" id="modal-ia-global">
+  <div class="modal" style="max-width:560px;">
+    <h3>✦ Sugestões da IA</h3>
+    <div id="ia-global-result" style="font-family:var(--mono);font-size:.8rem;color:var(--neon-c);line-height:1.7;max-height:320px;overflow-y:auto;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:14px;margin-bottom:16px;white-space:pre-wrap;"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-ia-global')">Ignorar</button>
+      <button class="btn btn-primary" id="btn-aplicar-ia" onclick="aplicarSugestoesIA()">✓ Aplicar Sugestões</button>
+    </div>
+  </div>
+</div>
+
+<!-- [CORREÇÃO 2] Modal: editar caixa do fluxograma -->
+<div class="modal-bg" id="modal-flow-box">
+  <div class="modal">
+    <h3>✏️ Editar Etapa</h3>
+    <input type="hidden" id="fbox-editing-id"/>
+    <div class="form-group"><label>Título</label><input class="form-input" id="fbox-title" placeholder="Ex: Planejamento"/></div>
+    <div class="form-group"><label>Descrição</label><input class="form-input" id="fbox-desc" placeholder="Descrição curta (opcional)"/></div>
+    <div class="form-group">
+      <label>Status</label>
+      <select class="form-select" id="fbox-status">
+        <option value="todo">📋 To-do</option>
+        <option value="doing">⚡ Em andamento</option>
+        <option value="done">✅ Concluído</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteFlowBox()">🗑 Excluir</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-flow-box')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveFlowBox()">Salvar</button>
+    </div>
+  </div>
+</div>
 
 <!-- Modal novo projeto -->
 <div class="modal-bg" id="modal-new-project">
@@ -546,11 +679,21 @@ input,textarea,select{font-family:var(--font);}
 
     <!-- TAB BRAINSTORM -->
     <div class="tab-panel active" id="tab-brainstorm">
+
+      <!-- [CORREÇÃO 1] Campo de ideia principal + botão Gerar Brainstorm com IA -->
+      <div class="brainstorm-generate-bar">
+        <input class="brainstorm-idea-input" id="brainstorm-main-idea"
+          placeholder="Digite sua ideia principal aqui para gerar post-its com IA…"/>
+        <button class="btn btn-generate-ai" onclick="gerarBrainstormIA()">
+          <span id="gen-spinner" class="gen-spinner" style="display:none"></span>
+          ✦ Gerar Brainstorm com IA
+        </button>
+      </div>
+
       <div class="actions-bar" style="margin-bottom:10px;">
-        <button class="btn btn-outline btn-sm" onclick="addIdea()">＋ Nova ideia</button>
+        <button class="btn btn-outline btn-sm" onclick="addIdea()">＋ Nova ideia manual</button>
         <button class="btn btn-outline btn-sm" id="btn-connect-mode" onclick="toggleConnectMode()">🔗 Conectar</button>
         <button class="btn btn-outline btn-sm" onclick="clearConnections()">✕ Conexões</button>
-        <button class="btn btn-ai btn-sm" onclick="aiOrganize('brainstorm')">✦ IA</button>
       </div>
       <!-- [MUDANÇA 1] Hint modo conexão -->
       <div class="connect-hint" id="connect-hint">
@@ -562,7 +705,7 @@ input,textarea,select{font-family:var(--font);}
         <svg class="connections-svg" id="connections-svg"></svg>
         <div class="ideas-container" id="ideas-list"></div>
       </div>
-      <div class="ai-loading" id="ai-loading-brainstorm"><div class="spinner"></div> Analisando…</div>
+      <div class="ai-loading" id="ai-loading-brainstorm"><div class="spinner"></div> Gerando post-its…</div>
       <div class="ai-box" id="ai-box-brainstorm"></div>
     </div>
 
@@ -603,13 +746,33 @@ input,textarea,select{font-family:var(--font);}
       <div class="ai-box" id="ai-box-kanban"></div>
     </div>
 
-    <!-- TAB FLUXO -->
+    <!-- TAB FLUXO — [CORREÇÃO 2] Fluxograma interativo com caixas, setas e status -->
     <div class="tab-panel" id="tab-fluxo">
-      <div class="actions-bar" style="margin-bottom:14px;"><button class="btn btn-ai btn-sm" onclick="aiOrganize('fluxo')">✦ IA</button></div>
-      <div class="flow-canvas"><div class="flow-nodes" id="flow-nodes"></div></div>
-      <div class="flow-edit-row">
-        <label>Editar etapas (separar com →)</label>
-        <input class="flow-edit-input" id="flow-edit" placeholder="Ideia → Refinamento → Projeto → Teste → Pronto" oninput="onFlowEdit()"/>
+      <div class="actions-bar" style="margin-bottom:14px;">
+        <button class="btn btn-primary btn-sm" onclick="addFlowBox()">＋ Adicionar Caixa</button>
+        <button class="btn btn-outline btn-sm" id="btn-flow-arrow" onclick="toggleFlowArrowMode()">→ Criar Seta</button>
+        <button class="btn btn-outline btn-sm" onclick="clearFlowArrows()">✕ Setas</button>
+      </div>
+      <!-- Hint modo seta -->
+      <div class="flow-arrow-hint" id="flow-arrow-hint">
+        <span>→ Clique em duas caixas em sequência para criar uma seta entre elas.</span>
+        <button onclick="toggleFlowArrowMode()" style="background:none;border:none;color:var(--neon-m);cursor:pointer;font-size:.78rem;font-weight:700;">Cancelar</button>
+      </div>
+      <!-- [CORREÇÃO 3] Barra de progresso automática baseada no fluxo -->
+      <div class="flow-progress-bar-wrap" id="flow-progress-wrap">
+        <div class="flow-progress-label">
+          <span>Progresso do Projeto</span>
+          <span id="flow-progress-pct">0%</span>
+        </div>
+        <div class="flow-progress-track">
+          <div class="flow-progress-fill" id="flow-progress-fill" style="width:0%"></div>
+        </div>
+        <div class="flow-progress-sub" id="flow-progress-sub">0 de 0 etapas concluídas</div>
+      </div>
+      <!-- Canvas das caixas interativas -->
+      <div class="flow-interactive-wrap" id="flow-interactive-wrap">
+        <svg class="flow-arrows-svg" id="flow-arrows-svg"></svg>
+        <div class="flow-boxes-grid" id="flow-boxes-grid"></div>
       </div>
       <div class="ai-loading" id="ai-loading-fluxo"><div class="spinner"></div> Analisando…</div>
       <div class="ai-box" id="ai-box-fluxo"></div>
@@ -926,13 +1089,28 @@ function openProject(id) {
   const p = getProject();
   if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
   if (!p.connections) p.connections = [];
+  if (!p.folders)     p.folders     = [];
+  // [CORREÇÃO 2] Migra fluxo antigo para flowBoxes se necessário
+  if (!p.flowBoxes) {
+    const steps = (p.flow || FLOW_DEFAULT).split('→').map(s=>s.trim()).filter(Boolean);
+    p.flowBoxes = steps.map((s,i) => ({ id:'fb_'+i, title:s, desc:'', status: i===0?'doing':'todo' }));
+    p.flowArrows = [];
+    save();
+  }
   document.getElementById('pv-name').textContent = p.name;
   document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  // [CORREÇÃO 4] Mostra botão Organizar com IA
+  document.getElementById('btn-organize-all').style.display = 'flex';
   showPage('project');
   switchTab('brainstorm');
   renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders();
 }
-function backToDashboard() { currentProjectId=null; showPage('dashboard'); renderDashboard(); }
+function backToDashboard() {
+  currentProjectId=null;
+  // [CORREÇÃO 4] Esconde botão Organizar ao sair do projeto
+  document.getElementById('btn-organize-all').style.display = 'none';
+  showPage('dashboard'); renderDashboard();
+}
 function getProject()      { return projects.find(p=>p.id===currentProjectId); }
 
 /* TABS */
@@ -1198,25 +1376,324 @@ function kColDrop(e,col) {
 }
 
 /* ═══════════════════════════════════════════════
-   FLUXOGRAMA
+   [CORREÇÃO 2] FLUXOGRAMA INTERATIVO
 ═══════════════════════════════════════════════ */
+let flowArrowMode = false;
+let flowArrowSource = null;
+let pendingIASuggestions = null; // [CORREÇÃO 4]
+
+const STATUS_LABEL = { todo:'📋 To-do', doing:'⚡ Em andamento', done:'✅ Concluído' };
+const STATUS_BADGE = { todo:'badge-todo', doing:'badge-doing', done:'badge-done' };
+
 function renderFlow() {
-  const p=getProject(); const s=p.flow||FLOW_DEFAULT;
-  document.getElementById('flow-edit').value=s; drawFlow(s);
+  const p = getProject();
+  if (!p.flowBoxes) {
+    // Migração: converte fluxo antigo (string) em caixas
+    const steps = (p.flow || 'Ideia → Refinamento → Projeto → Teste → Pronto')
+      .split('→').map(s=>s.trim()).filter(Boolean);
+    p.flowBoxes = steps.map((s,i) => ({
+      id: 'fb_'+i, title: s, desc: '', status: i===0 ? 'doing' : 'todo'
+    }));
+    p.flowArrows = [];
+    save();
+  }
+  renderFlowBoxes();
+  updateProgressFromFlow();
 }
-function drawFlow(str) {
-  const steps=str.split('→').map(s=>s.trim()).filter(Boolean);
-  document.getElementById('flow-nodes').innerHTML=steps.map((s,i)=>`
-    <div class="flow-node-wrap">
-      <div class="flow-node ${i===0?'active':''}">
-        <span class="fn-emoji">${FLOW_EMOJIS[i%FLOW_EMOJIS.length]}</span>
-        <div class="fn-label">${esc(s)}</div>
-        <div class="fn-step">Etapa ${i+1}</div>
-      </div>
-      ${i<steps.length-1?'<div class="flow-arrow-icon">→</div>':''}
-    </div>`).join('');
+
+function renderFlowBoxes() {
+  const p = getProject();
+  const boxes = p.flowBoxes || [];
+  const grid = document.getElementById('flow-boxes-grid');
+  if (!boxes.length) {
+    grid.innerHTML = '<div class="empty"><div class="e-icon">🔀</div><p>Nenhuma etapa. Clique em + Adicionar Caixa.</p></div>';
+    document.getElementById('flow-arrows-svg').innerHTML = '';
+    return;
+  }
+  // Encontra a caixa "atual" — primeira que não está concluída
+  const currentIdx = boxes.findIndex(b => b.status !== 'done');
+  grid.innerHTML = boxes.map((b, i) => {
+    const isCurrent = i === currentIdx;
+    const badgeClass = isCurrent ? 'badge-current' : STATUS_BADGE[b.status];
+    const badgeLabel = isCurrent ? '▶ Atual' : STATUS_LABEL[b.status];
+    return `
+    <div class="flow-box status-${b.status} ${isCurrent?'is-current':''}" id="fbox-${b.id}"
+      onclick="clickFlowBox('${b.id}')">
+      <span class="flow-box-num">#${i+1}</span>
+      <div class="flow-box-status-badge ${badgeClass}">${badgeLabel}</div>
+      <div class="flow-box-title">${esc(b.title)}</div>
+      ${b.desc ? `<div class="flow-box-desc">${esc(b.desc)}</div>` : ''}
+    </div>`;
+  }).join('');
+  setTimeout(drawFlowArrows, 60);
 }
-function onFlowEdit() { const v=document.getElementById('flow-edit').value; drawFlow(v); getProject().flow=v; save(); }
+
+function clickFlowBox(id) {
+  if (flowArrowMode) {
+    handleFlowArrowClick(id);
+    return;
+  }
+  // Abre modal de edição
+  const p = getProject();
+  const box = p.flowBoxes.find(b => b.id === id);
+  if (!box) return;
+  document.getElementById('fbox-editing-id').value = id;
+  document.getElementById('fbox-title').value = box.title;
+  document.getElementById('fbox-desc').value = box.desc || '';
+  document.getElementById('fbox-status').value = box.status;
+  openModal('modal-flow-box');
+}
+
+function saveFlowBox() {
+  pushUndo();
+  const p = getProject();
+  const id = document.getElementById('fbox-editing-id').value;
+  const box = p.flowBoxes.find(b => b.id === id);
+  if (!box) return;
+  box.title  = document.getElementById('fbox-title').value.trim() || box.title;
+  box.desc   = document.getElementById('fbox-desc').value.trim();
+  box.status = document.getElementById('fbox-status').value;
+  save(); closeModal('modal-flow-box');
+  renderFlowBoxes();
+  // [CORREÇÃO 3] Atualiza progresso ao mudar status
+  updateProgressFromFlow();
+}
+
+function deleteFlowBox() {
+  pushUndo();
+  const p = getProject();
+  const id = document.getElementById('fbox-editing-id').value;
+  p.flowBoxes = p.flowBoxes.filter(b => b.id !== id);
+  p.flowArrows = (p.flowArrows||[]).filter(a => a[0]!==id && a[1]!==id);
+  save(); closeModal('modal-flow-box');
+  renderFlowBoxes(); updateProgressFromFlow();
+}
+
+function addFlowBox() {
+  pushUndo();
+  const p = getProject();
+  p.flowBoxes = p.flowBoxes || [];
+  p.flowBoxes.push({ id:'fb_'+Date.now(), title:'Nova etapa', desc:'', status:'todo' });
+  save(); renderFlowBoxes(); updateProgressFromFlow();
+  toast('Etapa adicionada — clique para editar');
+}
+
+// Modo seta
+function toggleFlowArrowMode() {
+  flowArrowMode = !flowArrowMode;
+  flowArrowSource = null;
+  document.getElementById('flow-arrow-hint').classList.toggle('visible', flowArrowMode);
+  const btn = document.getElementById('btn-flow-arrow');
+  btn.style.borderColor = flowArrowMode ? 'var(--neon-p)' : '';
+  btn.style.color = flowArrowMode ? 'var(--neon-p)' : '';
+  document.querySelectorAll('.flow-box').forEach(b => b.classList.remove('flow-arrow-src'));
+}
+
+function handleFlowArrowClick(id) {
+  if (!flowArrowSource) {
+    flowArrowSource = id;
+    document.querySelectorAll('.flow-box').forEach(b => b.classList.remove('flow-arrow-src'));
+    document.getElementById('fbox-'+id).classList.add('flow-arrow-src');
+    toast('Caixa de origem selecionada. Clique na caixa destino.');
+  } else {
+    if (id === flowArrowSource) { flowArrowSource=null; document.querySelectorAll('.flow-box').forEach(b=>b.classList.remove('flow-arrow-src')); return; }
+    pushUndo();
+    const p = getProject();
+    p.flowArrows = p.flowArrows || [];
+    const exists = p.flowArrows.some(a => a[0]===flowArrowSource && a[1]===id);
+    if (!exists) { p.flowArrows.push([flowArrowSource, id]); save(); }
+    document.querySelectorAll('.flow-box').forEach(b => b.classList.remove('flow-arrow-src'));
+    flowArrowSource = null;
+    drawFlowArrows();
+    toast('Seta criada ✓');
+    toggleFlowArrowMode();
+  }
+}
+
+function clearFlowArrows() {
+  pushUndo();
+  const p = getProject(); p.flowArrows = []; save(); drawFlowArrows(); toast('Setas removidas');
+}
+
+// Desenha setas SVG entre caixas
+function drawFlowArrows() {
+  const svg = document.getElementById('flow-arrows-svg'); if (!svg) return;
+  const p = getProject();
+  const arrows = p.flowArrows || [];
+  if (!arrows.length) { svg.innerHTML = '<defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a78bfa" filter="url(#glow-arrow)"/></marker><filter id="glow-arrow"><feGaussianBlur stdDeviation="2" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter></defs>'; return; }
+  const wrap = document.getElementById('flow-interactive-wrap');
+  const wR = wrap.getBoundingClientRect();
+  let lines = '<defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a78bfa"/></marker></defs>';
+  arrows.forEach(([aId, bId]) => {
+    const elA = document.getElementById('fbox-'+aId);
+    const elB = document.getElementById('fbox-'+bId);
+    if (!elA || !elB) return;
+    const rA = elA.getBoundingClientRect(), rB = elB.getBoundingClientRect();
+    const x1 = rA.right - wR.left, y1 = rA.top - wR.top + rA.height/2;
+    const x2 = rB.left - wR.left, y2 = rB.top - wR.top + rB.height/2;
+    lines += `<path d="M${x1},${y1} C${x1+40},${y1} ${x2-40},${y2} ${x2},${y2}" class="flow-arrow-line"/>`;
+  });
+  svg.innerHTML = lines;
+}
+window.addEventListener('resize', () => { if (currentProjectId) drawFlowArrows(); });
+
+/* ═══════════════════════════════════════════════
+   [CORREÇÃO 3] PROGRESSO AUTOMÁTICO PELO FLUXO
+═══════════════════════════════════════════════ */
+function updateProgressFromFlow() {
+  const p = getProject();
+  const boxes = p.flowBoxes || [];
+  if (!boxes.length) return;
+  const done = boxes.filter(b => b.status === 'done').length;
+  const pct = Math.round(done / boxes.length * 100);
+  // Atualiza no projeto
+  p.progress = pct;
+  save();
+  // Atualiza barra no módulo fluxo
+  const fill = document.getElementById('flow-progress-fill');
+  const pctEl = document.getElementById('flow-progress-pct');
+  const sub = document.getElementById('flow-progress-sub');
+  if (fill) fill.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (sub) sub.textContent = `${done} de ${boxes.length} etapa(s) concluída(s)`;
+  // Atualiza meta no header do projeto
+  const metaEl = document.getElementById('pv-meta');
+  if (metaEl) metaEl.textContent = `Prioridade: ${p.priority} · ${pct}% concluído`;
+  // Atualiza dashboard (sem re-renderizar tudo)
+  renderDashboard();
+}
+
+/* ═══════════════════════════════════════════════
+   [CORREÇÃO 1] GERAR BRAINSTORM COM IA
+═══════════════════════════════════════════════ */
+async function gerarBrainstormIA() {
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('⚠️ Configure a API Key em Configurações', 'error'); return; }
+  const mainIdea = document.getElementById('brainstorm-main-idea').value.trim();
+  if (!mainIdea) { toast('Digite uma ideia principal primeiro', 'error'); return; }
+
+  const btn = document.querySelector('.btn-generate-ai');
+  const spinner = document.getElementById('gen-spinner');
+  btn.disabled = true; spinner.style.display = 'inline-block';
+  setAILoading('brainstorm', true); hideAIBox('brainstorm');
+
+  const prompt = `Gere exatamente 5 post-its complementares para esta ideia principal: "${mainIdea}". Cada post-it deve ter título curto e descrição de 1 linha. Retorne SOMENTE JSON sem markdown: [{"titulo":"string","descricao":"string"},...]`;
+  const ep = cfg.endpoint==='openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://models.inference.ai.azure.com/chat/completions';
+
+  try {
+    const res = await fetch(ep, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({ model: cfg.model||'gpt-4o-mini', max_tokens: 600,
+        messages: [
+          {role:'system', content:'Você é um especialista em brainstorming criativo. Responda APENAS com JSON válido, sem markdown.'},
+          {role:'user', content: prompt}
+        ]})
+    });
+    if (!res.ok) { const er=await res.json().catch(()=>({})); throw new Error(er.error?.message||'Erro '+res.status); }
+    const data = await res.json();
+    const text = data.choices[0].message.content.trim().replace(/```json|```/g,'').trim();
+    const postits = JSON.parse(text);
+    // Adiciona os 5 post-its ao projeto
+    pushUndo();
+    const p = getProject();
+    postits.forEach(pi => p.ideas.push(`${pi.titulo}: ${pi.descricao}`));
+    save(); renderBrainstorm();
+    document.getElementById('brainstorm-main-idea').value = '';
+    toast(`✓ ${postits.length} post-its gerados pela IA!`);
+  } catch (err) {
+    showAIBox('brainstorm', '❌ Erro: ' + err.message);
+  }
+  btn.disabled = false; spinner.style.display = 'none';
+  setAILoading('brainstorm', false);
+}
+
+/* ═══════════════════════════════════════════════
+   [CORREÇÃO 4] ORGANIZAR TUDO COM IA — só quando pedido
+═══════════════════════════════════════════════ */
+async function organizarTudoIA() {
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('⚠️ Configure a API Key em Configurações', 'error'); return; }
+  const p = getProject();
+  const content = {
+    brainstorm: p.ideas.join(' | '),
+    editor: (p.editors||[]).map(e=>`[${e.title}]: ${e.draft||'(vazio)'}`).join(' / '),
+    kanban: `Todo: ${p.kanban.todo.map(c=>c.title).join(',')} | Fazendo: ${p.kanban.doing.map(c=>c.title).join(',')} | Feito: ${p.kanban.done.map(c=>c.title).join(',')}`,
+    fluxo: (p.flowBoxes||[]).map(b=>`${b.title}(${b.status})`).join(' → ')
+  };
+  const prompt = `Analise este projeto completo:
+Brainstorm: ${content.brainstorm}
+Editor: ${content.editor}
+Kanban: ${content.kanban}
+Fluxo: ${content.fluxo}
+
+Retorne SOMENTE JSON sem markdown:
+{
+  "resumo": "análise geral em 2-3 linhas",
+  "prioridade": "alta|media-alta|media|baixa|muito-baixa",
+  "sugestoes": ["sugestão 1","sugestão 2","sugestão 3"],
+  "kanbanSugerido": {"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},
+  "conexoesIdeias": [[0,1],[1,2]],
+  "observacoes": "texto livre"
+}`;
+
+  const btnOrg = document.getElementById('btn-organize-all');
+  btnOrg.textContent = '⏳ Analisando…'; btnOrg.disabled = true;
+  const ep = cfg.endpoint==='openai' ? 'https://api.openai.com/v1/chat/completions' : 'https://models.inference.ai.azure.com/chat/completions';
+  try {
+    const res = await fetch(ep, { method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body:JSON.stringify({model:cfg.model||'gpt-4o-mini',max_tokens:1000,
+        messages:[
+          {role:'system',content:'Especialista em gestão de projetos. Responda APENAS JSON válido.'},
+          {role:'user',content:prompt}
+        ]})
+    });
+    if (!res.ok) { const er=await res.json().catch(()=>({})); throw new Error(er.error?.message||'Erro '+res.status); }
+    const data = await res.json();
+    const json = JSON.parse(data.choices[0].message.content.trim().replace(/```json|```/g,'').trim());
+    pendingIASuggestions = json;
+    // Monta texto legível para o modal
+    let texto = `📊 ANÁLISE GERAL\n${json.resumo}\n\n`;
+    texto += `🎯 Prioridade sugerida: ${json.prioridade}\n\n`;
+    texto += `💡 SUGESTÕES\n${(json.sugestoes||[]).map((s,i)=>`${i+1}. ${s}`).join('\n')}\n\n`;
+    if (json.observacoes) texto += `📝 OBSERVAÇÕES\n${json.observacoes}`;
+    document.getElementById('ia-global-result').textContent = texto;
+    openModal('modal-ia-global');
+  } catch (err) {
+    toast('❌ Erro: ' + err.message, 'error');
+  }
+  btnOrg.textContent = '✦ Organizar com IA'; btnOrg.disabled = false;
+}
+
+// Aplica sugestões da IA após confirmação
+function aplicarSugestoesIA() {
+  if (!pendingIASuggestions) return;
+  pushUndo();
+  const p = getProject();
+  const json = pendingIASuggestions;
+  if (json.prioridade) p.priority = json.prioridade;
+  if (json.kanbanSugerido) {
+    ['todo','doing','done'].forEach(col => {
+      if (json.kanbanSugerido[col]) {
+        const novos = json.kanbanSugerido[col].filter(nc => !p.kanban[col].find(ec => ec.title===nc.title));
+        p.kanban[col] = [...p.kanban[col], ...novos];
+      }
+    });
+  }
+  if (json.conexoesIdeias && Array.isArray(json.conexoesIdeias)) {
+    json.conexoesIdeias.forEach(([a,b]) => {
+      if (!p.connections.some(c=>c[0]===a&&c[1]===b)) p.connections.push([a,b]);
+    });
+  }
+  save();
+  renderKanban(); renderBrainstorm(); renderFlow();
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  closeModal('modal-ia-global');
+  pendingIASuggestions = null;
+  toast('✓ Sugestões da IA aplicadas!');
+}
 
 /* ═══════════════════════════════════════════════
    ARQUIVOS / PASTAS
