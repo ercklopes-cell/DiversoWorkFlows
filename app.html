@@ -705,8 +705,9 @@ function renderUserChip() {
   if (!wrap) return;
   const user = getUser();
   if (!user) {
-    // Sem login: mostra link discreto de login
-    wrap.innerHTML = `<a href="index.html" style="font-size:.72rem;color:var(--muted);text-decoration:none;border:1px solid var(--border2);padding:5px 10px;border-radius:6px;transition:var(--transition);" onmouseover="this.style.color='var(--neon-p)'" onmouseout="this.style.color='var(--muted)'">Entrar com Google</a>`;
+    // Sem login: não deve chegar aqui (auth guard redireciona antes)
+    // Mas por segurança, redireciona
+    window.location.replace('index.html');
     return;
   }
   // Com login: avatar + nome + botão sair
@@ -731,6 +732,14 @@ function logout() {
 }
 
 function init() {
+  // ═══ AUTH GUARD: redireciona para login se não autenticado ═══
+  const user = getUser();
+  if (!user) {
+    // Sem sessão Google — volta obrigatoriamente para a landing/login
+    window.location.replace('index.html');
+    return;
+  }
+
   // ═══ AUTH: carrega usuário e renderiza chip no header ═══
   renderUserChip();
 

@@ -134,18 +134,17 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:var(--font-bo
 }
 .btn-google svg { flex-shrink:0; width:20px; height:20px; }
 
-/* Botão secundário — entrar sem login */
-.btn-skip {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  width:100%; padding:11px 24px; border-radius:10px;
-  font-family:var(--font-body); font-size:.82rem; font-weight:500;
-  cursor:pointer; border:1px solid rgba(34,211,238,.25);
-  background:transparent; color:#9890b8;
-  transition:all .22s ease;
-  text-decoration:none; margin-bottom:14px;
+/* Nota de novo usuário */
+.new-user-note {
+  font-size:.75rem; line-height:1.6; color:#7a7099;
+  text-align:center; margin-bottom:12px;
+  padding:10px 14px;
+  border:1px solid rgba(167,139,250,.15);
+  border-radius:8px;
+  background:rgba(167,139,250,.05);
   animation:fadeUp .8s .4s ease both;
 }
-.btn-skip:hover { color:var(--nc); border-color:var(--nc); box-shadow:0 0 14px rgba(34,211,238,.2); }
+.new-user-icon { color:var(--np); margin-right:4px; }
 
 .link-note { text-align:center; font-size:.68rem; color:#3d3660; animation:fadeUp .8s .44s ease both; line-height:1.5; }
 
@@ -246,10 +245,9 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:var(--font-bo
         <li><span class="feat-icon fi-y">🔒</span><span>Dados locais + exportar — <strong style="color:#fde68a">sua conta Google protege</strong></span></li>
       </ul>
 
-      <!-- Botão Entrar com Google -->
+      <!-- Botão Entrar com Google — ÚNICO acesso permitido -->
       <div class="btn-google-wrap">
         <button class="btn-google" id="btn-google-login" onclick="loginGoogle()">
-          <!-- Ícone oficial Google -->
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -260,14 +258,15 @@ html, body { width:100%; height:100%; overflow:hidden; font-family:var(--font-bo
         </button>
       </div>
 
-      <!-- Entrar sem login (modo local) -->
-      <a href="app.html" class="btn-skip">
-        Continuar sem login →
-      </a>
+      <!-- Novo usuário: cadastro automático via Google na 1ª vez -->
+      <p class="new-user-note">
+        <span class="new-user-icon">✦</span>
+        Primeira vez? Seu cadastro é criado automaticamente<br/>
+        ao entrar com sua conta Google.
+      </p>
 
       <p class="link-note">
-        Ao entrar com Google, seus projetos ficam vinculados<br/>
-        à sua conta e protegidos por autenticação segura.
+        🔒 Acesso exclusivo via Google — seguro e sem senhas.
       </p>
 
     </div>
