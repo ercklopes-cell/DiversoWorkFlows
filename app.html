@@ -611,7 +611,58 @@ input,textarea,select{font-family:var(--font);}
 .flow-progress-track{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-bottom:5px;}
 .flow-progress-fill{height:100%;border-radius:99px;transition:width .5s ease;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));box-shadow:0 0 8px var(--neon-p);}
 .flow-progress-sub{font-size:.68rem;color:var(--muted);font-family:var(--mono);}
+/* ═══ GERENCIADOR DE FERRAMENTAS ═══ */
+.tools-topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;}
+.tools-search-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 12px;flex:1;min-width:200px;}
+.tools-search-input{background:none;border:none;outline:none;color:var(--text);font-size:.85rem;width:100%;}
+.tools-search-input::placeholder{color:var(--muted);}
+.tools-filter-select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;color:var(--text);font-size:.8rem;outline:none;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.tool-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:16px;transition:var(--transition);cursor:pointer;position:relative;overflow:hidden;}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tool-color,var(--neon-p));box-shadow:0 0 8px var(--tool-color,var(--neon-p));}
+.tool-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(167,139,250,.14);border-color:var(--neon-p);}
+.tool-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.tool-card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:var(--surface2);flex-shrink:0;}
+.tool-card-info{flex:1;margin-left:10px;}
+.tool-card-name{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:2px;}
+.tool-card-desc{font-size:.73rem;color:var(--muted);}
+.tool-category-badge{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:99px;white-space:nowrap;}
+.cat-Design{background:rgba(236,72,153,.12);color:var(--neon-m);}
+.cat-Banco-de-Dados{background:rgba(34,211,238,.12);color:var(--neon-c);}
+.cat-IA{background:rgba(167,139,250,.12);color:var(--neon-p);}
+.cat-Desenvolvimento{background:rgba(16,185,129,.12);color:var(--neon-g);}
+.cat-Marketing{background:rgba(250,204,21,.12);color:var(--media);}
+.cat-Produtividade{background:rgba(251,146,60,.12);color:var(--media-alta);}
+.cat-Finanças{background:rgba(52,211,153,.12);color:#34d399;}
+.cat-Outro{background:rgba(90,90,138,.15);color:var(--muted);}
+.tool-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.tool-card-email{font-size:.7rem;color:var(--muted);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;}
+.tool-has-badge{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.tool-has-item{font-size:.62rem;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--muted);}
+.tool-has-item.has-pass{background:rgba(16,185,129,.12);color:var(--neon-g);}
+.tool-has-item.has-notes{background:rgba(167,139,250,.12);color:var(--neon-p);}
+.tool-has-item.has-url{background:rgba(34,211,238,.12);color:var(--neon-c);}
+.view-tool-row{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
+.view-tool-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+.view-tool-value{font-size:.85rem;color:var(--text);font-family:var(--mono);word-break:break-all;}
+.view-tool-pass{display:flex;align-items:center;gap:8px;}
+.view-tool-pass-text{flex:1;font-family:var(--mono);font-size:.83rem;color:var(--neon-g);}
+.btn-copy{padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:600;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--neon-c);cursor:pointer;transition:var(--transition);}
+.btn-copy:hover{background:rgba(34,211,238,.22);}
+.view-tool-notes{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1.6;white-space:pre-wrap;max-height:160px;overflow-y:auto;}
+.tool-url-link{color:var(--neon-c);text-decoration:none;font-size:.8rem;}
+.tool-url-link:hover{text-decoration:underline;}
+.settings-data-block{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:12px 0;}
+.settings-data-label{display:flex;align-items:flex-start;gap:12px;flex:1;}
+/* ═══ LOGOUT HEADER ═══ */
+.btn-logout-header{padding:6px 12px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:600;background:transparent;border:1px solid rgba(236,72,153,.4);color:var(--neon-m);transition:var(--transition);display:flex;align-items:center;gap:5px;}
+.btn-logout-header:hover{box-shadow:var(--glow-m);background:#ec489918;transform:scale(1.04);}
+/* ═══ BTN ORGANIZE ALL ═══ */
+.btn-organize-all{padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);display:flex;align-items:center;gap:6px;}
+.btn-organize-all:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
 </style>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -624,14 +675,12 @@ input,textarea,select{font-family:var(--font);}
     </div>
   </div>
   <div class="header-right">
-    <!-- Chip do usuário logado (preenchido pelo JS) -->
+    <span id="sync-status" style="font-size:.66rem;font-family:var(--mono);color:var(--muted);min-width:68px;text-align:right;">💾 Local</span>
     <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
-    <!-- [CORREÇÃO 4] Botão Organizar Tudo com IA — só aparece dentro de um projeto -->
     <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
     <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
-    <!-- [CORREÇÃO 5] Botão Sair visível no header -->
     <button class="btn-logout-header" onclick="logout()" title="Sair da conta">🚪 Sair</button>
   </div>
 </header>
@@ -733,6 +782,7 @@ input,textarea,select{font-family:var(--font);}
       <button class="tab-btn" data-tab="kanban">📋 Kanban</button>
       <button class="tab-btn" data-tab="fluxo">🔀 Fluxo</button>
       <button class="tab-btn" data-tab="arquivos">📁 Arquivos</button>
+      <button class="tab-btn" data-tab="ferramentas">🔧 Ferramentas</button>
     </div>
 
     <!-- TAB BRAINSTORM -->
@@ -840,12 +890,38 @@ input,textarea,select{font-family:var(--font);}
       <div class="actions-bar" style="margin-bottom:16px;"><button class="btn btn-outline btn-sm" onclick="openModal('modal-new-folder')">📁 Nova Pasta</button></div>
       <div class="folders-grid" id="folders-grid"></div>
     </div>
+
+    <!-- TAB FERRAMENTAS -->
+    <div class="tab-panel" id="tab-ferramentas">
+      <div class="tools-topbar">
+        <div class="tools-search-wrap">
+          <span>🔍</span>
+          <input class="tools-search-input" id="tools-search" placeholder="Buscar ferramenta…" oninput="renderTools()"/>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <select class="tools-filter-select" id="tools-filter-cat" onchange="renderTools()">
+            <option value="">Todas as categorias</option>
+            <option value="Design">🎨 Design</option>
+            <option value="Banco de Dados">🗄️ Banco de Dados</option>
+            <option value="IA">🤖 IA</option>
+            <option value="Desenvolvimento">💻 Desenvolvimento</option>
+            <option value="Marketing">📣 Marketing</option>
+            <option value="Produtividade">⚡ Produtividade</option>
+            <option value="Finanças">💰 Finanças</option>
+            <option value="Outro">📦 Outro</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="openModalNewTool()">＋ Nova Ferramenta</button>
+        </div>
+      </div>
+      <div class="tools-grid" id="tools-grid"></div>
+    </div>
   </div>
 
   <!-- CONFIGURAÇÕES -->
   <div class="page" id="page-settings">
     <div class="page-title">Configurações</div>
     <div class="page-sub">Personalize o Diverso WorkFlows Management</div>
+
     <div class="settings-section">
       <h2>🔑 GitHub Models / OpenAI</h2>
       <div class="form-group"><label>Token GitHub / API Key</label><input class="form-input" id="cfg-apikey" type="password" placeholder="ghp_... ou sk-..."/></div>
@@ -868,23 +944,193 @@ input,textarea,select{font-family:var(--font);}
       </div>
       <button class="btn btn-primary" onclick="saveConfig()">💾 Salvar</button>
     </div>
+
     <div class="settings-section">
       <h2>🎨 Aparência</h2>
       <div class="toggle-row"><span>Tema Claro</span><button class="toggle" id="dark-toggle" onclick="toggleThemeFromSettings()"></button></div>
     </div>
+
     <div class="settings-section">
-      <h2>🗄️ Dados</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <h2>🗄️ Dados &amp; Backup</h2>
+      <!-- Exportar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span style="font-size:1.3rem;">⬇️</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;">Exportar Backup</div>
+            <div style="font-size:.74rem;color:var(--muted);">Baixa um JSON com todos os projetos, ferramentas, ideias, kanban e prompts.</div>
+          </div>
+        </div>
         <button class="btn btn-outline btn-sm" onclick="exportData()">⬇️ Exportar</button>
-        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar tudo</button>
       </div>
-      <div style="font-size:.74rem;color:var(--muted);margin-top:10px;">Dados salvos localmente no navegador.</div>
+      <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+      <!-- Importar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span style="font-size:1.3rem;">⬆️</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;">Importar Backup</div>
+            <div style="font-size:.74rem;color:var(--muted);">Restaura projetos de um JSON exportado. Mescla sem duplicar.</div>
+          </div>
+        </div>
+        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+          ⬆️ Importar
+          <input type="file" accept=".json" onchange="importData(event)" style="display:none;"/>
+        </label>
+      </div>
+      <div id="import-result" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.78rem;line-height:1.5;white-space:pre-line;"></div>
+      <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+      <!-- Resetar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span style="font-size:1.3rem;">🗑️</span>
+          <div>
+            <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;">Resetar tudo</div>
+            <div style="font-size:.74rem;color:var(--muted);">Apaga permanentemente todos os projetos e dados.</div>
+          </div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+        ☁️ Sincronização automática com Supabase &nbsp;·&nbsp; <span id="sync-info">—</span>
+      </div>
     </div>
   </div>
 
 </div>
 
+<!-- MODAIS FERRAMENTAS -->
+<div class="modal-bg" id="modal-new-tool">
+  <div class="modal" style="max-width:480px;">
+    <h3 id="modal-tool-title">🔧 Nova Ferramenta</h3>
+    <input type="hidden" id="tool-editing-id"/>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group" style="margin:0;"><label>Nome</label><input class="form-input" id="tool-name" placeholder="Ex: Canva"/></div>
+      <div class="form-group" style="margin:0;">
+        <label>Categoria</label>
+        <select class="form-select" id="tool-category">
+          <option value="Design">🎨 Design</option>
+          <option value="Banco de Dados">🗄️ Banco de Dados</option>
+          <option value="IA">🤖 IA</option>
+          <option value="Desenvolvimento">💻 Desenvolvimento</option>
+          <option value="Marketing">📣 Marketing</option>
+          <option value="Produtividade">⚡ Produtividade</option>
+          <option value="Finanças">💰 Finanças</option>
+          <option value="Outro">📦 Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:12px;"><label>Descrição</label><input class="form-input" id="tool-desc" placeholder="Ex: Editor de imagens e design"/></div>
+    <div class="form-group"><label>URL / Site</label><input class="form-input" id="tool-url" placeholder="https://canva.com" type="url"/></div>
+    <div class="form-group"><label>E-mail da conta</label><input class="form-input" id="tool-email" placeholder="seu@email.com"/></div>
+    <div class="form-group">
+      <label>Senha / Token / API Key <span style="font-size:.65rem;color:var(--muted);">🔒 oculto</span></label>
+      <div style="position:relative;">
+        <input class="form-input" id="tool-password" type="password" placeholder="Cole aqui a senha ou chave" style="padding-right:44px;"/>
+        <button type="button" onclick="toggleToolPass('tool-password',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;">👁</button>
+      </div>
+    </div>
+    <div class="form-group"><label>Notas / Informações extras</label><textarea class="form-input" id="tool-notes" rows="3" placeholder="Chaves de API, instruções de acesso…" style="resize:vertical;font-family:var(--mono);font-size:.8rem;"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-new-tool')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveTool()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-view-tool">
+  <div class="modal" style="max-width:480px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <h3 id="view-tool-name"></h3>
+      <span id="view-tool-badge" class="tool-category-badge"></span>
+    </div>
+    <div id="view-tool-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteTool()">🗑 Excluir</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-view-tool')">Fechar</button>
+      <button class="btn btn-primary btn-sm" onclick="editTool()">✏️ Editar</button>
+    </div>
+  </div>
+</div>
+
 <script>
+/* ═══════════════════════════════════════════════
+   SUPABASE
+═══════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://lmwjkmtdyalqvloudlla.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxtd2prbXRkeWFscXZsb3VkbGxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NDQ2MzMsImV4cCI6MjA4OTEyMDYzM30.e4D-Cm2QJ2dxqtdoNUBMPq2sD5WbCo4eKYCxmYR36qE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let syncTimeout = null;
+
+function isLocalEnv() {
+  return window.location.protocol === 'file:' || ['localhost','127.0.0.1'].includes(window.location.hostname);
+}
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-status'); if (!el) return;
+  const m = { saving:['⏳ Salvando…','var(--media)'], saved:['☁️ Salvo','var(--neon-g)'], error:['⚠️ Erro sync','var(--neon-m)'], offline:['💾 Local','var(--muted)'] };
+  const s = m[state]||m.saved; el.textContent=s[0]; el.style.color=s[1];
+}
+async function loadFromCloud() {
+  const user = getUser(); if (!user) return;
+  if (isLocalEnv()) { setSyncStatus('offline'); return; }
+  setSyncStatus('saving');
+  try {
+    const { data, error } = await sb.from('diverso_projects').select('id,data,updated_at').eq('user_id', user.sub).order('updated_at',{ascending:false});
+    if (error) throw error;
+    if (data && data.length > 0) {
+      projects = data.map(r => ({...r.data, _db_id: r.id}));
+      migrateProjects();
+      localStorage.setItem('diverso_projects', JSON.stringify(projects));
+    } else {
+      const local = localStorage.getItem('diverso_projects');
+      if (local) { projects = JSON.parse(local); migrateProjects(); await saveAllToCloud(); }
+    }
+    setSyncStatus('saved');
+  } catch(e) {
+    console.warn('Cloud offline:', e.message);
+    const local = localStorage.getItem('diverso_projects');
+    if (local) { projects = JSON.parse(local); migrateProjects(); }
+    setSyncStatus('offline');
+  }
+  renderDashboard();
+  const si = document.getElementById('sync-info');
+  if (si) si.textContent = new Date().toLocaleTimeString('pt-BR');
+}
+async function saveProjectToCloud(project) {
+  const user = getUser(); if (!user || isLocalEnv()) return;
+  setSyncStatus('saving');
+  try {
+    if (project._db_id) {
+      const {error} = await sb.from('diverso_projects').update({data:project}).eq('id',project._db_id).eq('user_id',user.sub);
+      if (error) throw error;
+    } else {
+      const {data,error} = await sb.from('diverso_projects').insert({user_id:user.sub,user_email:user.email,data:project}).select('id').single();
+      if (error) throw error;
+      const idx = projects.findIndex(p=>p.id===project.id);
+      if (idx!==-1) { projects[idx]._db_id=data.id; localStorage.setItem('diverso_projects',JSON.stringify(projects)); }
+    }
+    setSyncStatus('saved');
+  } catch(e) { console.warn('Save cloud error:',e.message); setSyncStatus('error'); }
+}
+async function deleteProjectFromCloud(dbId) {
+  const user=getUser(); if (!user||!dbId||isLocalEnv()) return;
+  try { await sb.from('diverso_projects').delete().eq('id',dbId).eq('user_id',user.sub); } catch(e){}
+}
+async function saveAllToCloud() { for (const p of projects) await saveProjectToCloud(p); }
+
+function migrateProjects() {
+  projects.forEach(p => {
+    if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
+    if (!p.connections) p.connections = [];
+    if (!p.folders)     p.folders     = [];
+    if (!p.tools)       p.tools       = [];
+    if (!p.flowBoxes)   p.flowBoxes   = [];
+    if (!p.flowArrows)  p.flowArrows  = [];
+    if (!p.kanban)      p.kanban      = {todo:[],doing:[],done:[]};
+    if (!p.ideas)       p.ideas       = [];
+  });
+}
+
 /* ═══════════════════════════════════════════════
    ESTADO GLOBAL
 ═══════════════════════════════════════════════ */
@@ -951,26 +1197,20 @@ function logout() {
   window.location.href = 'index.html';
 }
 
-function init() {
-  // ═══ AUTH GUARD: redireciona para login se não autenticado ═══
-  const user = getUser();
-  if (!user) {
-    // Sem sessão Google — volta obrigatoriamente para a landing/login
-    window.location.replace('index.html');
-    return;
-  }
+let previousPage = 'dashboard';
 
-  // ═══ AUTH: carrega usuário e renderiza chip no header ═══
+function init() {
+  const user = getUser();
+  // Bypass auth guard em ambiente local (file://)
+  if (!user && !isLocalEnv()) { window.location.replace('index.html'); return; }
+  if (!user && isLocalEnv()) {
+    localStorage.setItem('diverso_user', JSON.stringify({name:'Usuário Local',email:'local@teste.com',picture:'',sub:'local_test',loginAt:new Date().toISOString()}));
+  }
   renderUserChip();
 
-  const saved = localStorage.getItem('diverso_projects');
-  if (saved) projects = JSON.parse(saved);
-  // Migração de estrutura antiga
-  projects.forEach(p => {
-    if (!p.editors)     p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
-    if (!p.connections) p.connections = [];
-    if (!p.folders)     p.folders = [];
-  });
+  // Carrega cache local imediatamente
+  const local = localStorage.getItem('diverso_projects');
+  if (local) { try { projects = JSON.parse(local); migrateProjects(); } catch(e){} }
 
   const theme = localStorage.getItem('diverso_theme') || 'dark';
   if (theme === 'light') {
@@ -978,27 +1218,30 @@ function init() {
     document.getElementById('theme-btn').textContent = '🌙';
     const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.add('on');
   }
-
   const cfg = getConfig();
   if (cfg.apikey)   document.getElementById('cfg-apikey').value   = cfg.apikey;
   if (cfg.model)    document.getElementById('cfg-model').value    = cfg.model;
   if (cfg.endpoint) document.getElementById('cfg-endpoint').value = cfg.endpoint;
 
   renderDashboard();
-
-  document.querySelectorAll('.tab-btn').forEach(btn =>
-    btn.addEventListener('click', () => switchTab(btn.dataset.tab))
-  );
-  document.querySelectorAll('.modal-bg').forEach(bg =>
-    bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('open'); })
-  );
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+  document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('open'); }));
   updateUndoBtn();
+
+  // Carrega da nuvem em background
+  loadFromCloud();
 }
 
 /* ═══════════════════════════════════════════════
    PERSISTÊNCIA
 ═══════════════════════════════════════════════ */
-function save() { localStorage.setItem('diverso_projects', JSON.stringify(projects)); }
+function save() {
+  localStorage.setItem('diverso_projects', JSON.stringify(projects));
+  if (isLocalEnv()) return;
+  clearTimeout(syncTimeout);
+  const target = currentProjectId ? projects.find(p=>p.id===currentProjectId) : null;
+  syncTimeout = setTimeout(() => target ? saveProjectToCloud(target) : saveAllToCloud(), 800);
+}
 function getConfig() { return JSON.parse(localStorage.getItem('diverso_config')||'{}'); }
 function saveConfig() {
   localStorage.setItem('diverso_config', JSON.stringify({
@@ -1044,9 +1287,19 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('settings-btn').classList.toggle('active', id==='settings');
+  const ob = document.getElementById('btn-organize-all');
+  if (ob) ob.style.display = (id==='project') ? 'flex' : 'none';
 }
 function toggleSettings() {
-  showPage(document.getElementById('page-settings').classList.contains('active') ? 'dashboard' : 'settings');
+  const open = document.getElementById('page-settings').classList.contains('active');
+  if (open) {
+    showPage(previousPage);
+  } else {
+    for (const pg of ['dashboard','project']) {
+      if (document.getElementById('page-'+pg)?.classList.contains('active')) { previousPage=pg; break; }
+    }
+    showPage('settings');
+  }
 }
 function toggleTheme() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -1125,13 +1378,20 @@ function createProject() {
     color:PRIORITY_COLORS[pri], ideas:[], connections:[],
     editors:[{id:'e_0',title:'Prompt 1',draft:'',history:[]}],
     kanban:{todo:[],doing:[],done:[]},
-    flow:FLOW_DEFAULT, folders:[], createdAt:new Date().toISOString()
+    flow:FLOW_DEFAULT, flowBoxes:[], flowArrows:[],
+    tools:[], folders:[],
+    createdAt:new Date().toISOString()
   });
   save(); closeModal('modal-new-project');
   document.getElementById('np-name').value = '';
   renderDashboard(); toast('Projeto criado ✓');
 }
-function deleteProject(id,e) { e.stopPropagation(); if(!confirm('Excluir?')) return; projects=projects.filter(p=>p.id!==id); save(); renderDashboard(); }
+function deleteProject(id,e) {
+  e.stopPropagation(); if(!confirm('Excluir este projeto?')) return;
+  const p = projects.find(x=>x.id===id);
+  if (p && p._db_id) deleteProjectFromCloud(p._db_id);
+  projects=projects.filter(p=>p.id!==id); save(); renderDashboard();
+}
 function renameProject(id,n)  { const p=projects.find(x=>x.id===id); if(p){p.name=n;save();} }
 function setProjectColor(id,c,e) { e.stopPropagation(); const p=projects.find(x=>x.id===id); if(p){p.color=c;save();renderDashboard();} }
 function setProjectPriority(id,v) { const p=projects.find(x=>x.id===id); if(p){p.priority=v;save();renderDashboard();} }
@@ -1144,37 +1404,37 @@ function openProject(id) {
   currentProjectId = id;
   undoStack = []; updateUndoBtn();
   const p = getProject();
+  // Migração completa de estrutura
   if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
   if (!p.connections) p.connections = [];
   if (!p.folders)     p.folders     = [];
-  // [CORREÇÃO 2] Migra fluxo antigo para flowBoxes se necessário
+  if (!p.tools)       p.tools       = [];
   if (!p.flowBoxes) {
-    const steps = (p.flow || FLOW_DEFAULT).split('→').map(s=>s.trim()).filter(Boolean);
-    p.flowBoxes = steps.map((s,i) => ({ id:'fb_'+i, title:s, desc:'', status: i===0?'doing':'todo' }));
-    p.flowArrows = [];
-    save();
+    const steps = (p.flow||FLOW_DEFAULT).split('→').map(s=>s.trim()).filter(Boolean);
+    p.flowBoxes = steps.map((s,i)=>({id:'fb_'+i,title:s,desc:'',status:i===0?'doing':'todo'}));
+    p.flowArrows = []; save();
   }
   document.getElementById('pv-name').textContent = p.name;
   document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
-  // [CORREÇÃO 4] Mostra botão Organizar com IA
-  document.getElementById('btn-organize-all').style.display = 'flex';
+  previousPage = 'project';
   showPage('project');
   switchTab('brainstorm');
-  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders();
+  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders(); renderTools();
 }
 function backToDashboard() {
-  currentProjectId=null;
-  // [CORREÇÃO 4] Esconde botão Organizar ao sair do projeto
-  document.getElementById('btn-organize-all').style.display = 'none';
+  currentProjectId = null;
+  previousPage = 'dashboard';
   showPage('dashboard'); renderDashboard();
 }
-function getProject()      { return projects.find(p=>p.id===currentProjectId); }
+function getProject() { return projects.find(p=>p.id===currentProjectId); }
 
 /* TABS */
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
-  if (name==='brainstorm') setTimeout(drawConnections, 100);
+  if (name==='brainstorm')  setTimeout(drawConnections, 100);
+  if (name==='ferramentas') renderTools();
+  if (name==='fluxo')       setTimeout(drawFlowArrows, 100);
 }
 
 /* ═══════════════════════════════════════════════
@@ -1991,16 +2251,205 @@ function showAIBox(m,t){const el=document.getElementById('ai-box-'+m);if(el){el.
 function hideAIBox(m){const el=document.getElementById('ai-box-'+m);if(el)el.classList.remove('show');}
 
 /* ═══════════════════════════════════════════════
-   EXPORTAR / RESETAR
+   EXPORTAR / IMPORTAR / RESETAR
 ═══════════════════════════════════════════════ */
 function exportData() {
-  const b=new Blob([JSON.stringify({projects,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='diverso-backup.json'; a.click(); toast('Exportado ✓');
+  const obj = {
+    app:'Diverso WorkFlows Management',
+    exportedAt: new Date().toLocaleString('pt-BR'),
+    totalProjects: projects.length,
+    projects: projects.map(p=>({...p}))
+  };
+  const blob = new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `diverso-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('⬇️ Backup exportado!');
 }
+
+function importData(event) {
+  const file = event.target.files[0]; if (!file) return;
+  event.target.value = '';
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const raw = JSON.parse(e.target.result);
+      const incoming = Array.isArray(raw) ? raw : Array.isArray(raw.projects) ? raw.projects : null;
+      if (!incoming || !incoming.length) { showImportResult('error','❌ Arquivo inválido ou sem projetos.'); return; }
+      let adicionados=0, atualizados=0;
+      incoming.forEach(proj => {
+        if (!proj.id || !proj.name) return;
+        // Garante estrutura mínima
+        ['editors','connections','folders','tools','flowBoxes','flowArrows','ideas'].forEach(k => { if(!proj[k]) proj[k]=[]; });
+        if (!proj.kanban) proj.kanban={todo:[],doing:[],done:[]};
+        delete proj.totalTools; delete proj.totalIdeas; delete proj.kanbanTotal;
+        const idx = projects.findIndex(p=>p.id===proj.id);
+        if (idx!==-1) { const dbId=projects[idx]._db_id; projects[idx]={...proj,_db_id:dbId}; atualizados++; }
+        else { delete proj._db_id; projects.push(proj); adicionados++; }
+      });
+      localStorage.setItem('diverso_projects',JSON.stringify(projects));
+      if (!isLocalEnv()) await saveAllToCloud();
+      renderDashboard();
+      showImportResult('success',`✅ Importação concluída!\n• ${adicionados} projeto(s) novo(s)\n• ${atualizados} atualizado(s)\n• Total: ${projects.length} projeto(s)`);
+    } catch(err) {
+      showImportResult('error','❌ Erro: '+err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function showImportResult(type, msg) {
+  const el = document.getElementById('import-result'); if (!el) return;
+  el.style.display='block';
+  el.style.background = type==='success' ? 'rgba(16,185,129,.1)' : 'rgba(236,72,153,.1)';
+  el.style.border      = type==='success' ? '1px solid rgba(16,185,129,.4)' : '1px solid rgba(236,72,153,.4)';
+  el.style.color       = type==='success' ? 'var(--neon-g)' : 'var(--neon-m)';
+  el.textContent = msg;
+  setTimeout(()=>{ el.style.display='none'; }, 6000);
+}
+
 function confirmReset() {
-  if(!confirm('Apagar tudo?')) return;
+  if (!confirm('Apagar TODOS os dados? Isso não pode ser desfeito.')) return;
   localStorage.removeItem('diverso_projects'); localStorage.removeItem('diverso_config');
-  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Resetado');
+  const user=getUser();
+  if (user && !isLocalEnv()) sb.from('diverso_projects').delete().eq('user_id',user.sub).then(()=>{});
+  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Dados apagados.');
+}
+
+/* ═══════════════════════════════════════════════
+   GERENCIADOR DE FERRAMENTAS
+═══════════════════════════════════════════════ */
+const CAT_META = {
+  'Design':         {color:'#ec4899',emoji:'🎨'},
+  'Banco de Dados': {color:'#22d3ee',emoji:'🗄️'},
+  'IA':             {color:'#a78bfa',emoji:'🤖'},
+  'Desenvolvimento':{color:'#10b981',emoji:'💻'},
+  'Marketing':      {color:'#facc15',emoji:'📣'},
+  'Produtividade':  {color:'#fb923c',emoji:'⚡'},
+  'Finanças':       {color:'#34d399',emoji:'💰'},
+  'Outro':          {color:'#5a5a8a',emoji:'📦'},
+};
+let viewingToolId = null;
+
+function renderTools() {
+  const p = getProject(); if (!p) return;
+  p.tools = p.tools||[];
+  const grid  = document.getElementById('tools-grid'); if (!grid) return;
+  const query = (document.getElementById('tools-search')?.value||'').toLowerCase();
+  const cat   = document.getElementById('tools-filter-cat')?.value||'';
+  let list = p.tools;
+  if (query) list = list.filter(t=>t.name.toLowerCase().includes(query)||(t.desc||'').toLowerCase().includes(query));
+  if (cat)   list = list.filter(t=>t.category===cat);
+  if (!list.length) {
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="e-icon">🔧</div><p>${p.tools.length?'Nenhuma ferramenta encontrada.':'Nenhuma ferramenta ainda.<br/>Clique em <strong>+ Nova Ferramenta</strong>.'}</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(t=>{
+    const m=CAT_META[t.category]||CAT_META['Outro'];
+    const catCls='cat-'+(t.category||'Outro').replace(/\s+/g,'-');
+    return `<div class="tool-card" style="--tool-color:${m.color}" onclick="openToolView('${t.id}')">
+      <div class="tool-card-header">
+        <div class="tool-card-icon">${m.emoji}</div>
+        <div class="tool-card-info">
+          <div class="tool-card-name">${esc(t.name)}</div>
+          <div class="tool-card-desc">${esc(t.desc||'Sem descrição')}</div>
+        </div>
+        <span class="tool-category-badge ${catCls}">${esc(t.category||'Outro')}</span>
+      </div>
+      <div class="tool-has-badge">
+        ${t.url?'<span class="tool-has-item has-url">🔗 URL</span>':''}
+        ${t.password?'<span class="tool-has-item has-pass">🔒 Senha/Key</span>':''}
+        ${t.notes?'<span class="tool-has-item has-notes">📝 Notas</span>':''}
+      </div>
+      <div class="tool-card-footer">
+        <span class="tool-card-email">${esc(t.email||'—')}</span>
+        <div style="display:flex;gap:5px;">
+          <button style="background:none;border:none;font-size:.85rem;cursor:pointer;padding:3px 5px;border-radius:5px;" onclick="event.stopPropagation();editToolById('${t.id}')" title="Editar">✏️</button>
+          <button style="background:none;border:none;font-size:.85rem;cursor:pointer;padding:3px 5px;border-radius:5px;" onclick="event.stopPropagation();deleteToolById('${t.id}')" title="Excluir">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openToolView(id) {
+  const p=getProject(); const t=p.tools.find(x=>x.id===id); if(!t) return;
+  viewingToolId=id;
+  const m=CAT_META[t.category]||CAT_META['Outro'];
+  const catCls='cat-'+(t.category||'Outro').replace(/\s+/g,'-');
+  document.getElementById('view-tool-name').textContent=m.emoji+' '+t.name;
+  document.getElementById('view-tool-badge').textContent=t.category||'Outro';
+  document.getElementById('view-tool-badge').className='tool-category-badge '+catCls;
+  let html='';
+  if(t.desc)  html+=`<div class="view-tool-row"><div class="view-tool-label">Descrição</div><div class="view-tool-value">${esc(t.desc)}</div></div>`;
+  if(t.url)   html+=`<div class="view-tool-row"><div class="view-tool-label">URL</div><a class="tool-url-link" href="${esc(t.url)}" target="_blank">${esc(t.url)}</a></div>`;
+  if(t.email) html+=`<div class="view-tool-row"><div class="view-tool-label">E-mail</div><div class="view-tool-pass"><span class="view-tool-pass-text" style="color:var(--text)">${esc(t.email)}</span><button class="btn-copy" onclick="copyText('${esc(t.email)}')">Copiar</button></div></div>`;
+  if(t.password) html+=`<div class="view-tool-row"><div class="view-tool-label">Senha / Token / API Key 🔒</div><div class="view-tool-pass"><span class="view-tool-pass-text" id="vt-pass">••••••••••</span><button class="btn-copy" onclick="toggleViewPass('${esc(t.password)}')">👁 Ver</button><button class="btn-copy" onclick="copyText('${esc(t.password)}')">Copiar</button></div></div>`;
+  if(t.notes) html+=`<div class="view-tool-row"><div class="view-tool-label">Notas</div><div class="view-tool-notes">${esc(t.notes)}</div></div>`;
+  document.getElementById('view-tool-body').innerHTML=html||'<p style="color:var(--muted);font-size:.82rem">Nenhum dado adicional.</p>';
+  openModal('modal-view-tool');
+}
+
+function toggleViewPass(plain) {
+  const el=document.getElementById('vt-pass'); if(!el) return;
+  el.textContent=el.textContent==='••••••••••'?plain:'••••••••••';
+  el.style.color=el.textContent===plain?'var(--neon-g)':'';
+}
+function copyText(txt) {
+  navigator.clipboard.writeText(txt).then(()=>toast('📋 Copiado!')).catch(()=>toast('Erro ao copiar','error'));
+}
+function toggleToolPass(inputId,btn) {
+  const i=document.getElementById(inputId);
+  i.type=i.type==='password'?'text':'password';
+  btn.textContent=i.type==='password'?'👁':'🙈';
+}
+function openModalNewTool() {
+  document.getElementById('modal-tool-title').textContent='🔧 Nova Ferramenta';
+  document.getElementById('tool-editing-id').value='';
+  ['tool-name','tool-desc','tool-url','tool-email','tool-password','tool-notes'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('tool-category').value='Outro';
+  openModal('modal-new-tool');
+}
+function saveTool() {
+  const name=document.getElementById('tool-name').value.trim();
+  if(!name){toast('Digite o nome da ferramenta','error');return;}
+  pushUndo();
+  const p=getProject(); p.tools=p.tools||[];
+  const editId=document.getElementById('tool-editing-id').value;
+  const td={
+    id:editId||'tool_'+Date.now(),name,
+    category:document.getElementById('tool-category').value,
+    desc:document.getElementById('tool-desc').value.trim(),
+    url:document.getElementById('tool-url').value.trim(),
+    email:document.getElementById('tool-email').value.trim(),
+    password:document.getElementById('tool-password').value,
+    notes:document.getElementById('tool-notes').value.trim(),
+    updatedAt:new Date().toISOString()
+  };
+  if(editId){const idx=p.tools.findIndex(t=>t.id===editId);if(idx!==-1)p.tools[idx]=td;}
+  else p.tools.push(td);
+  save(); renderTools(); closeModal('modal-new-tool');
+  toast(editId?'✓ Ferramenta atualizada!':'✓ Ferramenta adicionada!');
+}
+function editTool()       { if(!viewingToolId) return; closeModal('modal-view-tool'); editToolById(viewingToolId); }
+function editToolById(id) {
+  const p=getProject(); const t=p.tools.find(x=>x.id===id); if(!t) return;
+  document.getElementById('modal-tool-title').textContent='✏️ Editar Ferramenta';
+  document.getElementById('tool-editing-id').value=t.id;
+  document.getElementById('tool-name').value=t.name||'';
+  document.getElementById('tool-category').value=t.category||'Outro';
+  document.getElementById('tool-desc').value=t.desc||'';
+  document.getElementById('tool-url').value=t.url||'';
+  document.getElementById('tool-email').value=t.email||'';
+  document.getElementById('tool-password').value=t.password||'';
+  document.getElementById('tool-notes').value=t.notes||'';
+  openModal('modal-new-tool');
+}
+function deleteTool()       { if(!viewingToolId) return; deleteToolById(viewingToolId); closeModal('modal-view-tool'); }
+function deleteToolById(id) {
+  if(!confirm('Excluir esta ferramenta?')) return;
+  pushUndo(); const p=getProject(); p.tools=p.tools.filter(t=>t.id!==id); save(); renderTools();
 }
 
 /* UTILITÁRIOS */

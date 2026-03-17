@@ -1,4 +1,11 @@
 {
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "routes": [
+    { "src": "/app", "dest": "/app.html" },
+    { "src": "/", "dest": "/index.html" }
+  ]
 }

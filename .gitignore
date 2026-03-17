@@ -3,6 +3,4 @@ Thumbs.db
 .vscode/
 *.log
 .env
-.env.local
-# NUNCA suba o arquivo de credenciais do Google!
 client_secret*.json
