@@ -611,115 +611,20 @@ input,textarea,select{font-family:var(--font);}
 .flow-progress-track{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-bottom:5px;}
 .flow-progress-fill{height:100%;border-radius:99px;transition:width .5s ease;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));box-shadow:0 0 8px var(--neon-p);}
 .flow-progress-sub{font-size:.68rem;color:var(--muted);font-family:var(--mono);}
-/* ═══════════════════════════════════════════
-   GERENCIADOR DE FERRAMENTAS
-═══════════════════════════════════════════ */
-
-/* Barra de busca + filtro */
-.tools-topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;}
-.tools-search-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 12px;flex:1;min-width:200px;}
-.tools-search-icon{font-size:.9rem;flex-shrink:0;}
-.tools-search-input{background:none;border:none;outline:none;color:var(--text);font-size:.85rem;width:100%;}
-.tools-search-input::placeholder{color:var(--muted);}
-.tools-filter-select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;color:var(--text);font-size:.8rem;outline:none;cursor:pointer;}
-.tools-filter-select:focus{border-color:var(--neon-p);}
-
-/* Grid de ferramentas */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-
-/* Card de ferramenta */
-.tool-card{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:var(--radius);padding:16px;
-  transition:var(--transition);cursor:pointer;position:relative;overflow:hidden;
-}
-.tool-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:var(--tool-color,var(--neon-p));
-  box-shadow:0 0 8px var(--tool-color,var(--neon-p));
-}
-.tool-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(167,139,250,.14);border-color:var(--neon-p);}
-
-.tool-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-.tool-card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:var(--surface2);flex-shrink:0;}
-.tool-card-info{flex:1;margin-left:10px;}
-.tool-card-name{font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:2px;}
-.tool-card-desc{font-size:.73rem;color:var(--muted);line-height:1.4;}
-
-.tool-category-badge{
-  font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-  padding:3px 9px;border-radius:99px;white-space:nowrap;
-}
-.cat-Design         {background:rgba(236,72,153,.12);  color:var(--neon-m);}
-.cat-Banco-de-Dados {background:rgba(34,211,238,.12);  color:var(--neon-c);}
-.cat-IA             {background:rgba(167,139,250,.12); color:var(--neon-p);}
-.cat-Desenvolvimento{background:rgba(16,185,129,.12);  color:var(--neon-g);}
-.cat-Marketing      {background:rgba(250,204,21,.12);  color:var(--media);}
-.cat-Produtividade  {background:rgba(251,146,60,.12);  color:var(--media-alta);}
-.cat-Finanças       {background:rgba(52,211,153,.12);  color:#34d399;}
-.cat-Outro          {background:rgba(90,90,138,.15);   color:var(--muted);}
-
-.tool-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
-.tool-card-email{font-size:.7rem;color:var(--muted);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px;}
-.tool-card-actions{display:flex;gap:5px;}
-.tool-action-btn{background:none;border:none;font-size:.85rem;cursor:pointer;padding:3px 5px;border-radius:5px;transition:var(--transition);}
-.tool-action-btn:hover{background:var(--surface2);}
-
-/* Indicadores de presença de dados */
-.tool-has-badge{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
-.tool-has-item{font-size:.62rem;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--muted);}
-.tool-has-item.has-pass{background:rgba(16,185,129,.12);color:var(--neon-g);}
-.tool-has-item.has-notes{background:rgba(167,139,250,.12);color:var(--neon-p);}
-.tool-has-item.has-url{background:rgba(34,211,238,.12);color:var(--neon-c);}
-
-/* Modal detalhes */
-.view-tool-row{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
-.view-tool-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
-.view-tool-value{font-size:.85rem;color:var(--text);font-family:var(--mono);word-break:break-all;}
-.view-tool-pass{display:flex;align-items:center;gap:8px;}
-.view-tool-pass-text{flex:1;font-family:var(--mono);font-size:.83rem;color:var(--neon-g);}
-.btn-copy{padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:600;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--neon-c);cursor:pointer;transition:var(--transition);}
-.btn-copy:hover{background:rgba(34,211,238,.22);box-shadow:var(--glow-c);}
-.view-tool-notes{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--mono);font-size:.78rem;color:var(--text);line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:160px;overflow-y:auto;}
-
-/* URL clicável */
-.tool-url-link{color:var(--neon-c);text-decoration:none;font-size:.8rem;}
-.tool-url-link:hover{text-decoration:underline;}
-
-/* ═══════════════════════════════════════════
-   CONFIGURAÇÕES — Seção de Dados & Backup
-═══════════════════════════════════════════ */
-.settings-data-block{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:16px;padding:14px 0;flex-wrap:wrap;
-}
-.settings-data-label{display:flex;align-items:flex-start;gap:12px;flex:1;}
-.settings-data-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
-.settings-data-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;}
-.settings-data-desc{font-size:.74rem;color:var(--muted);line-height:1.5;}
-.settings-data-divider{height:1px;background:var(--border);margin:4px 0;}
-
-/* Resultado da importação */
-#import-result.ok   {background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--neon-g);}
-#import-result.error{background:rgba(236,72,153,.12); border:1px solid rgba(236,72,153,.3); color:var(--neon-m);}
 </style>
-<!-- Supabase SDK — sincronização em nuvem -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <!-- ═══════ HEADER ═══════ -->
 <header id="header">
-  <div class="logo-wrap" onclick="goHome()">
+  <div class="logo-wrap" onclick="showPage('dashboard')">
     <div class="logo-name">
       Diverso WorkFlows
       <span class="logo-sub">Management</span>
     </div>
   </div>
   <div class="header-right">
-    <!-- Indicador de sincronização Supabase -->
-    <span id="sync-status" style="font-size:.68rem;font-family:var(--mono);color:var(--muted);min-width:70px;text-align:right;">☁️ Salvo</span>
-    <!-- Chip do usuário logado -->
+    <!-- Chip do usuário logado (preenchido pelo JS) -->
     <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
     <!-- [CORREÇÃO 4] Botão Organizar Tudo com IA — só aparece dentro de um projeto -->
@@ -802,93 +707,6 @@ input,textarea,select{font-family:var(--font);}
   </div>
 </div>
 
-<!-- ═══ MODAL NOVA/EDITAR FERRAMENTA ═══ -->
-<div class="modal-bg" id="modal-new-tool">
-  <div class="modal" style="max-width:480px;">
-    <h3 id="modal-tool-title">🔧 Nova Ferramenta</h3>
-    <input type="hidden" id="tool-editing-id"/>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="form-group" style="margin:0;">
-        <label>Nome</label>
-        <input class="form-input" id="tool-name" placeholder="Ex: Canva"/>
-      </div>
-      <div class="form-group" style="margin:0;">
-        <label>Categoria</label>
-        <select class="form-select" id="tool-category">
-          <option value="Design">🎨 Design</option>
-          <option value="Banco de Dados">🗄️ Banco de Dados</option>
-          <option value="IA">🤖 IA</option>
-          <option value="Desenvolvimento">💻 Desenvolvimento</option>
-          <option value="Marketing">📣 Marketing</option>
-          <option value="Produtividade">⚡ Produtividade</option>
-          <option value="Finanças">💰 Finanças</option>
-          <option value="Outro">📦 Outro</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group" style="margin-top:12px;">
-      <label>Descrição</label>
-      <input class="form-input" id="tool-desc" placeholder="Ex: Editor de imagens e design"/>
-    </div>
-
-    <div class="form-group">
-      <label>URL / Site</label>
-      <input class="form-input" id="tool-url" placeholder="https://canva.com" type="url"/>
-    </div>
-
-    <div class="form-group">
-      <label>E-mail da conta</label>
-      <input class="form-input" id="tool-email" placeholder="seu@email.com"/>
-    </div>
-
-    <div class="form-group">
-      <label>
-        Senha / Token / API Key
-        <span style="font-size:.65rem;color:var(--muted);margin-left:6px;">
-          🔒 oculto por padrão
-        </span>
-      </label>
-      <div style="position:relative;">
-        <input class="form-input" id="tool-password" type="password"
-          placeholder="Cole aqui a senha ou chave"
-          style="padding-right:44px;"/>
-        <button type="button" onclick="toggleToolPass('tool-password',this)"
-          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;">👁</button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Notas / Informações extras</label>
-      <textarea class="form-input" id="tool-notes" rows="3"
-        placeholder="Cole aqui chaves de API, notas importantes, instruções de acesso…"
-        style="resize:vertical;line-height:1.5;font-family:var(--mono);font-size:.8rem;"></textarea>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-new-tool')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveTool()">💾 Salvar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ MODAL VER FERRAMENTA (detalhes com senhas visíveis) ═══ -->
-<div class="modal-bg" id="modal-view-tool">
-  <div class="modal" style="max-width:480px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-      <h3 id="view-tool-name" style="font-size:1.1rem;"></h3>
-      <span id="view-tool-badge" class="tool-category-badge"></span>
-    </div>
-    <div id="view-tool-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-danger btn-sm" onclick="deleteTool()">🗑 Excluir</button>
-      <button class="btn btn-outline" onclick="closeModal('modal-view-tool')">Fechar</button>
-      <button class="btn btn-primary btn-sm" onclick="editTool()">✏️ Editar</button>
-    </div>
-  </div>
-</div>
-
 <!-- ═══════ APP ═══════ -->
 <div id="app">
 
@@ -915,7 +733,6 @@ input,textarea,select{font-family:var(--font);}
       <button class="tab-btn" data-tab="kanban">📋 Kanban</button>
       <button class="tab-btn" data-tab="fluxo">🔀 Fluxo</button>
       <button class="tab-btn" data-tab="arquivos">📁 Arquivos</button>
-      <button class="tab-btn" data-tab="ferramentas">🔧 Ferramentas</button>
     </div>
 
     <!-- TAB BRAINSTORM -->
@@ -1023,40 +840,7 @@ input,textarea,select{font-family:var(--font);}
       <div class="actions-bar" style="margin-bottom:16px;"><button class="btn btn-outline btn-sm" onclick="openModal('modal-new-folder')">📁 Nova Pasta</button></div>
       <div class="folders-grid" id="folders-grid"></div>
     </div>
-
-    <!-- ═══ TAB FERRAMENTAS — Gerenciador de Apps e Ferramentas ═══ -->
-    <div class="tab-panel" id="tab-ferramentas">
-
-      <!-- Barra de ações -->
-      <div class="tools-topbar">
-        <div class="tools-search-wrap">
-          <span class="tools-search-icon">🔍</span>
-          <input class="tools-search-input" id="tools-search"
-            placeholder="Buscar ferramenta…"
-            oninput="renderTools()"/>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <select class="tools-filter-select" id="tools-filter-cat" onchange="renderTools()">
-            <option value="">Todas as categorias</option>
-            <option value="Design">🎨 Design</option>
-            <option value="Banco de Dados">🗄️ Banco de Dados</option>
-            <option value="IA">🤖 IA</option>
-            <option value="Desenvolvimento">💻 Desenvolvimento</option>
-            <option value="Marketing">📣 Marketing</option>
-            <option value="Produtividade">⚡ Produtividade</option>
-            <option value="Finanças">💰 Finanças</option>
-            <option value="Outro">📦 Outro</option>
-          </select>
-          <button class="btn btn-primary btn-sm" onclick="openModal_newTool()">
-            ＋ Nova Ferramenta
-          </button>
-        </div>
-      </div>
-
-      <!-- Grid de ferramentas -->
-      <div class="tools-grid" id="tools-grid"></div>
-
-    </div>
+  </div>
 
   <!-- CONFIGURAÇÕES -->
   <div class="page" id="page-settings">
@@ -1089,218 +873,18 @@ input,textarea,select{font-family:var(--font);}
       <div class="toggle-row"><span>Tema Claro</span><button class="toggle" id="dark-toggle" onclick="toggleThemeFromSettings()"></button></div>
     </div>
     <div class="settings-section">
-      <h2>🗄️ Dados &amp; Backup</h2>
-
-      <!-- Exportar -->
-      <div class="settings-data-block">
-        <div class="settings-data-label">
-          <span class="settings-data-icon">⬇️</span>
-          <div>
-            <div class="settings-data-title">Exportar Backup</div>
-            <div class="settings-data-desc">Baixa um arquivo JSON com todos os seus projetos, ferramentas, ideias, kanban e prompts.</div>
-          </div>
-        </div>
+      <h2>🗄️ Dados</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-outline btn-sm" onclick="exportData()">⬇️ Exportar</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar tudo</button>
       </div>
-
-      <div class="settings-data-divider"></div>
-
-      <!-- Importar -->
-      <div class="settings-data-block">
-        <div class="settings-data-label">
-          <span class="settings-data-icon">⬆️</span>
-          <div>
-            <div class="settings-data-title">Importar Backup</div>
-            <div class="settings-data-desc">Restaura projetos a partir de um arquivo JSON exportado anteriormente. Os dados existentes serão mesclados.</div>
-          </div>
-        </div>
-        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
-          ⬆️ Importar
-          <input type="file" id="import-file-input" accept=".json"
-            onchange="importData(event)"
-            style="display:none;"/>
-        </label>
-      </div>
-
-      <!-- Resultado da importação -->
-      <div id="import-result" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.78rem;line-height:1.5;"></div>
-
-      <div class="settings-data-divider"></div>
-
-      <!-- Resetar -->
-      <div class="settings-data-block">
-        <div class="settings-data-label">
-          <span class="settings-data-icon">🗑️</span>
-          <div>
-            <div class="settings-data-title">Resetar tudo</div>
-            <div class="settings-data-desc">Apaga permanentemente todos os projetos e dados, local e na nuvem.</div>
-          </div>
-        </div>
-        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar</button>
-      </div>
-
-      <div style="font-size:.72rem;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
-        ☁️ Sincronização automática com Supabase ativa &nbsp;·&nbsp; <span id="sync-info">—</span>
-      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:10px;">Dados salvos localmente no navegador.</div>
     </div>
   </div>
 
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════
-   SUPABASE — Configuração de nuvem
-   Projeto: stepbook / Diverso WorkFlows Management
-═══════════════════════════════════════════════ */
-const SUPABASE_URL  = 'https://lmwjkmtdyalqvloudlla.supabase.co';
-const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxtd2prbXRkeWFscXZsb3VkbGxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NDQ2MzMsImV4cCI6MjA4OTEyMDYzM30.e4D-Cm2QJ2dxqtdoNUBMPq2sD5WbCo4eKYCxmYR36qE';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* ─── CAMADA DE SYNC ───────────────────────────
-   Estratégia: localStorage como cache local rápido
-   + Supabase como fonte de verdade na nuvem.
-   - Ao abrir: carrega da nuvem, atualiza localStorage
-   - Ao salvar: salva local imediatamente + envia nuvem em background
-   - Se offline: funciona só local, sincroniza ao reconectar
-────────────────────────────────────────────── */
-
-// Indicador visual de sincronização
-let syncTimeout = null;
-
-function showSyncStatus(state) {
-  let el = document.getElementById('sync-status');
-  if (!el) return;
-  const map = {
-    saving:  { text:'⏳ Salvando…',  color:'var(--media)' },
-    saved:   { text:'☁️ Salvo',       color:'var(--neon-g)' },
-    error:   { text:'⚠️ Erro sync',   color:'var(--neon-m)' },
-    offline: { text:'📴 Offline',     color:'var(--muted)'  },
-  };
-  const s = map[state] || map.saved;
-  el.textContent = s.text;
-  el.style.color = s.color;
-}
-
-// Carrega projetos da nuvem (chamado no init)
-async function loadFromCloud() {
-  const user = getUser();
-  if (!user) return;
-
-  // Se rodando localmente (file://), pula Supabase e usa só localStorage
-  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  if (isLocal) {
-    showSyncStatus('offline');
-    const el = document.getElementById('sync-status');
-    if (el) { el.textContent = '💾 Modo local'; el.style.color = 'var(--muted)'; }
-    return;
-  }
-
-  showSyncStatus('saving');
-  try {
-    const { data, error } = await sb
-      .from('diverso_projects')
-      .select('id, data, updated_at')
-      .eq('user_id', user.sub)
-      .order('updated_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      // Converte registros Supabase → array de projetos
-      projects = data.map(row => ({ ...row.data, _db_id: row.id }));
-      // Migração completa de estrutura
-      projects.forEach(p => {
-        if (!p.editors)     p.editors     = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
-        if (!p.connections) p.connections = [];
-        if (!p.folders)     p.folders     = [];
-        if (!p.flowBoxes)   p.flowBoxes   = [];
-        if (!p.flowArrows)  p.flowArrows  = [];
-        if (!p.tools)       p.tools       = []; // Fix: garante ferramentas
-        if (!p.kanban)      p.kanban      = { todo:[], doing:[], done:[] };
-        if (!p.ideas)       p.ideas       = [];
-      });
-      // Atualiza cache local
-      localStorage.setItem('diverso_projects', JSON.stringify(projects));
-    } else {
-      // Nuvem vazia — tenta migrar do localStorage para a nuvem
-      const local = localStorage.getItem('diverso_projects');
-      if (local) {
-        projects = JSON.parse(local);
-        await saveAllToCloud(); // faz upload inicial
-      }
-    }
-    showSyncStatus('saved');
-  } catch (err) {
-    console.warn('Supabase offline, usando cache local:', err.message);
-    // Fallback para localStorage
-    const local = localStorage.getItem('diverso_projects');
-    if (local) projects = JSON.parse(local);
-    showSyncStatus('offline');
-  }
-  renderDashboard();
-}
-
-// Salva um projeto específico na nuvem (upsert)
-async function saveProjectToCloud(project) {
-  const user = getUser();
-  if (!user) return;
-  showSyncStatus('saving');
-  try {
-    const payload = {
-      user_id:    user.sub,
-      user_email: user.email,
-      data:       project,
-    };
-    if (project._db_id) {
-      // Atualiza registro existente
-      const { error } = await sb
-        .from('diverso_projects')
-        .update({ data: project })
-        .eq('id', project._db_id)
-        .eq('user_id', user.sub);
-      if (error) throw error;
-    } else {
-      // Insere novo e salva o ID retornado
-      const { data, error } = await sb
-        .from('diverso_projects')
-        .insert(payload)
-        .select('id')
-        .single();
-      if (error) throw error;
-      // Guarda o _db_id no projeto local
-      const idx = projects.findIndex(p => p.id === project.id);
-      if (idx !== -1) projects[idx]._db_id = data.id;
-      localStorage.setItem('diverso_projects', JSON.stringify(projects));
-    }
-    showSyncStatus('saved');
-  } catch (err) {
-    console.warn('Erro ao salvar na nuvem:', err.message);
-    showSyncStatus('error');
-  }
-}
-
-// Deleta projeto da nuvem
-async function deleteProjectFromCloud(dbId) {
-  if (!dbId) return;
-  const user = getUser();
-  if (!user) return;
-  try {
-    await sb.from('diverso_projects')
-      .delete()
-      .eq('id', dbId)
-      .eq('user_id', user.sub);
-  } catch (err) {
-    console.warn('Erro ao deletar da nuvem:', err.message);
-  }
-}
-
-// Upload inicial de todos os projetos locais para a nuvem
-async function saveAllToCloud() {
-  for (const p of projects) {
-    await saveProjectToCloud(p);
-  }
-}
-
 /* ═══════════════════════════════════════════════
    ESTADO GLOBAL
 ═══════════════════════════════════════════════ */
@@ -1368,31 +952,26 @@ function logout() {
 }
 
 function init() {
-  // ═══ AUTH GUARD ═══
-  // Detecta se está rodando localmente (file://) — bypassa login para testes locais
-  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
+  // ═══ AUTH GUARD: redireciona para login se não autenticado ═══
   const user = getUser();
-  if (!user && !isLocal) {
-    // Online sem login → redireciona para a página de login
+  if (!user) {
+    // Sem sessão Google — volta obrigatoriamente para a landing/login
     window.location.replace('index.html');
     return;
   }
 
-  // Se local sem usuário, cria um usuário de teste para não quebrar nada
-  if (!user && isLocal) {
-    localStorage.setItem('diverso_user', JSON.stringify({
-      name: 'Usuário Local',
-      email: 'local@teste.com',
-      picture: '',
-      sub: 'local_test_user',
-      loginAt: new Date().toISOString()
-    }));
-  }
-
+  // ═══ AUTH: carrega usuário e renderiza chip no header ═══
   renderUserChip();
 
-  // Tema
+  const saved = localStorage.getItem('diverso_projects');
+  if (saved) projects = JSON.parse(saved);
+  // Migração de estrutura antiga
+  projects.forEach(p => {
+    if (!p.editors)     p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+    if (!p.connections) p.connections = [];
+    if (!p.folders)     p.folders = [];
+  });
+
   const theme = localStorage.getItem('diverso_theme') || 'dark';
   if (theme === 'light') {
     document.documentElement.setAttribute('data-theme','light');
@@ -1405,11 +984,6 @@ function init() {
   if (cfg.model)    document.getElementById('cfg-model').value    = cfg.model;
   if (cfg.endpoint) document.getElementById('cfg-endpoint').value = cfg.endpoint;
 
-  // Mostra cache local imediatamente (sem piscar)
-  const local = localStorage.getItem('diverso_projects');
-  if (local) {
-    try { projects = JSON.parse(local); } catch(e) {}
-  }
   renderDashboard();
 
   document.querySelectorAll('.tab-btn').forEach(btn =>
@@ -1419,32 +993,12 @@ function init() {
     bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('open'); })
   );
   updateUndoBtn();
-
-  // Depois carrega da nuvem (atualiza se houver dados mais recentes)
-  loadFromCloud();
 }
 
 /* ═══════════════════════════════════════════════
-   PERSISTÊNCIA — Local + Nuvem
+   PERSISTÊNCIA
 ═══════════════════════════════════════════════ */
-function save(projectId) {
-  // 1. Salva local imediatamente (rápido — funciona offline e em file://)
-  localStorage.setItem('diverso_projects', JSON.stringify(projects));
-
-  // 2. Sincroniza com a nuvem apenas quando online (não file://)
-  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  if (isLocal) return; // local: só localStorage, sem Supabase
-
-  clearTimeout(syncTimeout);
-  const target = projectId
-    ? projects.find(p => p.id === projectId)
-    : (currentProjectId ? projects.find(p => p.id === currentProjectId) : null);
-  if (target) {
-    syncTimeout = setTimeout(() => saveProjectToCloud(target), 800);
-  } else {
-    syncTimeout = setTimeout(() => saveAllToCloud(), 800);
-  }
-}
+function save() { localStorage.setItem('diverso_projects', JSON.stringify(projects)); }
 function getConfig() { return JSON.parse(localStorage.getItem('diverso_config')||'{}'); }
 function saveConfig() {
   localStorage.setItem('diverso_config', JSON.stringify({
@@ -1486,33 +1040,13 @@ function updateUndoBtn() {
 /* ═══════════════════════════════════════════════
    NAVEGAÇÃO + TEMA
 ═══════════════════════════════════════════════ */
-let previousPage = 'dashboard'; // guarda a página anterior para voltar corretamente
-
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('settings-btn').classList.toggle('active', id==='settings');
-  // Mostra/esconde botão Organizar com IA conforme a página
-  const organizeBtn = document.getElementById('btn-organize-all');
-  if (organizeBtn) organizeBtn.style.display = (id==='project') ? 'flex' : 'none';
 }
-
 function toggleSettings() {
-  const settingsOpen = document.getElementById('page-settings').classList.contains('active');
-  if (settingsOpen) {
-    // Volta para onde estava antes de abrir configurações
-    showPage(previousPage);
-  } else {
-    // Guarda a página atual antes de abrir configurações
-    const pages = ['dashboard','project'];
-    for (const pg of pages) {
-      if (document.getElementById('page-'+pg)?.classList.contains('active')) {
-        previousPage = pg;
-        break;
-      }
-    }
-    showPage('settings');
-  }
+  showPage(document.getElementById('page-settings').classList.contains('active') ? 'dashboard' : 'settings');
 }
 function toggleTheme() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -1588,28 +1122,16 @@ function createProject() {
   const pri = document.getElementById('np-priority').value;
   projects.push({
     id:'p_'+Date.now(), name, priority:pri, progress:0,
-    color:PRIORITY_COLORS[pri],
-    ideas:[], connections:[],
+    color:PRIORITY_COLORS[pri], ideas:[], connections:[],
     editors:[{id:'e_0',title:'Prompt 1',draft:'',history:[]}],
     kanban:{todo:[],doing:[],done:[]},
-    flow:FLOW_DEFAULT,
-    flowBoxes:[], flowArrows:[],   // Fix: fluxo interativo já inicializado
-    tools:[],                       // Fix: ferramentas já inicializadas
-    folders:[],
-    createdAt:new Date().toISOString()
+    flow:FLOW_DEFAULT, folders:[], createdAt:new Date().toISOString()
   });
   save(); closeModal('modal-new-project');
   document.getElementById('np-name').value = '';
   renderDashboard(); toast('Projeto criado ✓');
 }
-function deleteProject(id,e) {
-  e.stopPropagation();
-  if(!confirm('Excluir este projeto?')) return;
-  const p = projects.find(x => x.id === id);
-  if (p && p._db_id) deleteProjectFromCloud(p._db_id);
-  projects = projects.filter(p => p.id !== id);
-  save(); renderDashboard();
-}
+function deleteProject(id,e) { e.stopPropagation(); if(!confirm('Excluir?')) return; projects=projects.filter(p=>p.id!==id); save(); renderDashboard(); }
 function renameProject(id,n)  { const p=projects.find(x=>x.id===id); if(p){p.name=n;save();} }
 function setProjectColor(id,c,e) { e.stopPropagation(); const p=projects.find(x=>x.id===id); if(p){p.color=c;save();renderDashboard();} }
 function setProjectPriority(id,v) { const p=projects.find(x=>x.id===id); if(p){p.priority=v;save();renderDashboard();} }
@@ -1622,11 +1144,10 @@ function openProject(id) {
   currentProjectId = id;
   undoStack = []; updateUndoBtn();
   const p = getProject();
-  // Migração de estrutura — garante todos os campos existam
   if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
   if (!p.connections) p.connections = [];
   if (!p.folders)     p.folders     = [];
-  if (!p.tools)       p.tools       = []; // Fix: inicializa ferramentas
+  // [CORREÇÃO 2] Migra fluxo antigo para flowBoxes se necessário
   if (!p.flowBoxes) {
     const steps = (p.flow || FLOW_DEFAULT).split('→').map(s=>s.trim()).filter(Boolean);
     p.flowBoxes = steps.map((s,i) => ({ id:'fb_'+i, title:s, desc:'', status: i===0?'doing':'todo' }));
@@ -1635,20 +1156,16 @@ function openProject(id) {
   }
   document.getElementById('pv-name').textContent = p.name;
   document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
-  previousPage = 'project'; // para o toggleSettings saber onde voltar
+  // [CORREÇÃO 4] Mostra botão Organizar com IA
+  document.getElementById('btn-organize-all').style.display = 'flex';
   showPage('project');
   switchTab('brainstorm');
-  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders(); renderTools();
+  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders();
 }
 function backToDashboard() {
-  currentProjectId = null;
-  previousPage = 'dashboard';
-  showPage('dashboard'); renderDashboard();
-}
-function goHome() {
-  // Clique no logo: se estiver num projeto, limpa contexto antes
-  if (currentProjectId) { currentProjectId = null; }
-  previousPage = 'dashboard';
+  currentProjectId=null;
+  // [CORREÇÃO 4] Esconde botão Organizar ao sair do projeto
+  document.getElementById('btn-organize-all').style.display = 'none';
   showPage('dashboard'); renderDashboard();
 }
 function getProject()      { return projects.find(p=>p.id===currentProjectId); }
@@ -1657,10 +1174,7 @@ function getProject()      { return projects.find(p=>p.id===currentProjectId); }
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
-  // Renderiza conteúdo ao trocar de aba
-  if (name==='brainstorm')   setTimeout(drawConnections, 100);
-  if (name==='ferramentas')  renderTools();
-  if (name==='fluxo')        setTimeout(drawFlowArrows, 100);
+  if (name==='brainstorm') setTimeout(drawConnections, 100);
 }
 
 /* ═══════════════════════════════════════════════
@@ -2402,203 +1916,6 @@ function aplicarSugestoesIA() {
   toast('✓ Sugestões da IA aplicadas!');
 }
 
-}
-
-/* ═══════════════════════════════════════════════
-   GERENCIADOR DE FERRAMENTAS
-   - tools[] ficam dentro do projeto (p.tools)
-   - Sincronizado no Supabase junto com o projeto
-   - Senhas/chaves ficam no localStorage/nuvem do usuário
-═══════════════════════════════════════════════ */
-
-// Mapeamento de categoria → cor + emoji
-const CAT_META = {
-  'Design':          { color:'#ec4899', emoji:'🎨' },
-  'Banco de Dados':  { color:'#22d3ee', emoji:'🗄️' },
-  'IA':              { color:'#a78bfa', emoji:'🤖' },
-  'Desenvolvimento': { color:'#10b981', emoji:'💻' },
-  'Marketing':       { color:'#facc15', emoji:'📣' },
-  'Produtividade':   { color:'#fb923c', emoji:'⚡' },
-  'Finanças':        { color:'#34d399', emoji:'💰' },
-  'Outro':           { color:'#5a5a8a', emoji:'📦' },
-};
-
-let viewingToolId = null; // ID da ferramenta aberta no modal de detalhes
-
-function renderTools() {
-  const p = getProject();
-  p.tools = p.tools || [];
-  const grid = document.getElementById('tools-grid');
-  const query  = (document.getElementById('tools-search')?.value  || '').toLowerCase();
-  const catFil = (document.getElementById('tools-filter-cat')?.value || '');
-
-  let tools = p.tools;
-  if (query)  tools = tools.filter(t => t.name.toLowerCase().includes(query) || (t.desc||'').toLowerCase().includes(query));
-  if (catFil) tools = tools.filter(t => t.category === catFil);
-
-  if (!tools.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
-      <div class="e-icon">🔧</div>
-      <p>${p.tools.length ? 'Nenhuma ferramenta encontrada.' : 'Nenhuma ferramenta ainda.<br/>Clique em <strong>+ Nova Ferramenta</strong> para começar.'}</p>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = tools.map(t => {
-    const meta   = CAT_META[t.category] || CAT_META['Outro'];
-    const catCls = 'cat-' + (t.category||'Outro').replace(/\s+/g,'-');
-    return `
-    <div class="tool-card" style="--tool-color:${meta.color}" onclick="openToolView('${t.id}')">
-      <div class="tool-card-header">
-        <div class="tool-card-icon">${meta.emoji}</div>
-        <div class="tool-card-info">
-          <div class="tool-card-name">${esc(t.name)}</div>
-          <div class="tool-card-desc">${esc(t.desc||'Sem descrição')}</div>
-        </div>
-        <span class="tool-category-badge ${catCls}">${esc(t.category||'Outro')}</span>
-      </div>
-      <div class="tool-has-badge">
-        ${t.url      ? '<span class="tool-has-item has-url">🔗 URL</span>'      : ''}
-        ${t.password ? '<span class="tool-has-item has-pass">🔒 Senha/Key</span>' : ''}
-        ${t.notes    ? '<span class="tool-has-item has-notes">📝 Notas</span>'   : ''}
-      </div>
-      <div class="tool-card-footer">
-        <span class="tool-card-email">${esc(t.email||'—')}</span>
-        <div class="tool-card-actions">
-          <button class="tool-action-btn" onclick="event.stopPropagation();editToolById('${t.id}')" title="Editar">✏️</button>
-          <button class="tool-action-btn" onclick="event.stopPropagation();deleteToolById('${t.id}')" title="Excluir">🗑️</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openToolView(id) {
-  const p = getProject();
-  const t = p.tools.find(x => x.id === id);
-  if (!t) return;
-  viewingToolId = id;
-  const meta   = CAT_META[t.category] || CAT_META['Outro'];
-  const catCls = 'cat-' + (t.category||'Outro').replace(/\s+/g,'-');
-  document.getElementById('view-tool-name').textContent  = meta.emoji + ' ' + t.name;
-  document.getElementById('view-tool-badge').textContent = t.category || 'Outro';
-  document.getElementById('view-tool-badge').className   = 'tool-category-badge ' + catCls;
-
-  let html = '';
-  if (t.desc)  html += `<div class="view-tool-row"><div class="view-tool-label">Descrição</div><div class="view-tool-value">${esc(t.desc)}</div></div>`;
-  if (t.url)   html += `<div class="view-tool-row"><div class="view-tool-label">URL</div><a class="tool-url-link" href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.url)}</a></div>`;
-  if (t.email) html += `<div class="view-tool-row"><div class="view-tool-label">E-mail</div><div class="view-tool-pass"><span class="view-tool-pass-text" style="color:var(--text)">${esc(t.email)}</span><button class="btn-copy" onclick="copyText('${esc(t.email)}')">Copiar</button></div></div>`;
-  if (t.password) html += `
-    <div class="view-tool-row">
-      <div class="view-tool-label">Senha / Token / API Key 🔒</div>
-      <div class="view-tool-pass">
-        <span class="view-tool-pass-text" id="vt-pass-text">••••••••••••</span>
-        <button class="btn-copy" onclick="toggleViewPass('${esc(t.password)}')">👁 Ver</button>
-        <button class="btn-copy" onclick="copyText('${esc(t.password)}')">Copiar</button>
-      </div>
-    </div>`;
-  if (t.notes) html += `<div class="view-tool-row"><div class="view-tool-label">Notas / Informações</div><div class="view-tool-notes">${esc(t.notes)}</div></div>`;
-  document.getElementById('view-tool-body').innerHTML = html || '<p style="color:var(--muted);font-size:.82rem">Nenhum dado adicional.</p>';
-  openModal('modal-view-tool');
-}
-
-function toggleViewPass(plain) {
-  const el = document.getElementById('vt-pass-text');
-  if (!el) return;
-  if (el.textContent === '••••••••••••') {
-    el.textContent = plain;
-    el.style.color = 'var(--neon-g)';
-  } else {
-    el.textContent = '••••••••••••';
-    el.style.color = '';
-  }
-}
-
-function copyText(txt) {
-  navigator.clipboard.writeText(txt).then(() => toast('📋 Copiado!')).catch(() => toast('Erro ao copiar','error'));
-}
-
-function toggleToolPass(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
-  else                          { inp.type = 'password'; btn.textContent = '👁'; }
-}
-
-function openModal_newTool() {
-  document.getElementById('modal-tool-title').textContent = '🔧 Nova Ferramenta';
-  document.getElementById('tool-editing-id').value = '';
-  ['tool-name','tool-desc','tool-url','tool-email','tool-password','tool-notes'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('tool-category').value = 'Outro';
-  openModal('modal-new-tool');
-}
-
-function saveTool() {
-  const name = document.getElementById('tool-name').value.trim();
-  if (!name) { toast('Digite o nome da ferramenta', 'error'); return; }
-  pushUndo();
-  const p = getProject();
-  p.tools = p.tools || [];
-  const editId = document.getElementById('tool-editing-id').value;
-  const toolData = {
-    id:       editId || 'tool_' + Date.now(),
-    name,
-    category: document.getElementById('tool-category').value,
-    desc:     document.getElementById('tool-desc').value.trim(),
-    url:      document.getElementById('tool-url').value.trim(),
-    email:    document.getElementById('tool-email').value.trim(),
-    password: document.getElementById('tool-password').value,
-    notes:    document.getElementById('tool-notes').value.trim(),
-    updatedAt: new Date().toISOString(),
-  };
-  if (editId) {
-    const idx = p.tools.findIndex(t => t.id === editId);
-    if (idx !== -1) p.tools[idx] = toolData;
-  } else {
-    p.tools.push(toolData);
-  }
-  save(); renderTools(); closeModal('modal-new-tool');
-  toast(editId ? '✓ Ferramenta atualizada!' : '✓ Ferramenta adicionada!');
-}
-
-function editTool() {
-  if (!viewingToolId) return;
-  closeModal('modal-view-tool');
-  editToolById(viewingToolId);
-}
-
-function editToolById(id) {
-  const p = getProject();
-  const t = p.tools.find(x => x.id === id);
-  if (!t) return;
-  document.getElementById('modal-tool-title').textContent = '✏️ Editar Ferramenta';
-  document.getElementById('tool-editing-id').value   = t.id;
-  document.getElementById('tool-name').value         = t.name || '';
-  document.getElementById('tool-category').value     = t.category || 'Outro';
-  document.getElementById('tool-desc').value         = t.desc || '';
-  document.getElementById('tool-url').value          = t.url || '';
-  document.getElementById('tool-email').value        = t.email || '';
-  document.getElementById('tool-password').value     = t.password || '';
-  document.getElementById('tool-notes').value        = t.notes || '';
-  openModal('modal-new-tool');
-}
-
-function deleteTool() {
-  if (!viewingToolId) return;
-  deleteToolById(viewingToolId);
-  closeModal('modal-view-tool');
-}
-
-function deleteToolById(id) {
-  if (!confirm('Excluir esta ferramenta?')) return;
-  pushUndo();
-  const p = getProject();
-  p.tools = p.tools.filter(t => t.id !== id);
-  save(); renderTools();
-}
-
 /* ═══════════════════════════════════════════════
    ARQUIVOS / PASTAS
 ═══════════════════════════════════════════════ */
@@ -2639,21 +1956,19 @@ function deleteFolder(fi) { if(!confirm('Excluir pasta?')) return; getProject().
 async function aiOrganize(module) {
   const cfg=getConfig();
   if(!cfg.apikey){toast('⚠️ Configure a API Key em Configurações','error');return;}
-  const p=getProject(); if(!p) return;
-  let content='';
-  if(module==='brainstorm') content='Ideias: '+( p.ideas||[]).join(' | ');
-  else if(module==='kanban') {
-    const k=p.kanban||{todo:[],doing:[],done:[]};
-    content=`Kanban — Todo: ${(k.todo||[]).map(c=>c.title).join(',')} | Fazendo: ${(k.doing||[]).map(c=>c.title).join(',')} | Feito: ${(k.done||[]).map(c=>c.title).join(',')}`;
-  }
+  const p=getProject(); let content='';
+  if(module==='brainstorm') content='Ideias: '+p.ideas.join(' | ');
+  else if(module==='editor') content='Prompts: '+(p.editors||[]).map((e,i)=>`[${e.title}]: ${e.draft||'(vazio)'}`).join(' / ');
+  else if(module==='kanban') content=`Kanban — Todo: ${p.kanban.todo.map(c=>c.title).join(',')} | Fazendo: ${p.kanban.doing.map(c=>c.title).join(',')} | Feito: ${p.kanban.done.map(c=>c.title).join(',')}`;
+  else if(module==='fluxo') content='Fluxo: '+(p.flow||FLOW_DEFAULT);
 
-  const prompt=`Analise: "${content}". Retorne SOMENTE JSON sem markdown: {"tituloProjeto":"string","prioridade":"alta|media-alta|media|baixa|muito-baixa","progresso":0,"kanban":{"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},"resumo":"texto"}`;
+  const prompt=`Analise: "${content}". Retorne SOMENTE JSON sem markdown: {"tituloProjeto":"string","prioridade":"alta|media-alta|media|baixa|muito-baixa","progresso":0,"kanban":{"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},"fluxo":"e1 → e2","resumo":"texto"}`;
   setAILoading(module,true); hideAIBox(module);
   const ep=cfg.endpoint==='openai'?'https://api.openai.com/v1/chat/completions':'https://models.inference.ai.azure.com/chat/completions';
   try {
     const res=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
       body:JSON.stringify({model:cfg.model||'gpt-4o-mini',max_tokens:900,
-        messages:[{role:'system',content:'Especialista em projetos. Responda APENAS JSON válido.'},{role:'user',content:prompt}]})});
+        messages:[{role:'system',content:'Especialista em projetos. Responda APENAS JSON.'},{role:'user',content:prompt}]})});
     if(!res.ok){const er=await res.json().catch(()=>({}));throw new Error(er.error?.message||'Erro '+res.status);}
     const data=await res.json();
     const json=JSON.parse(data.choices[0].message.content.trim().replace(/```json|```/g,'').trim());
@@ -2661,21 +1976,14 @@ async function aiOrganize(module) {
     if(json.tituloProjeto) p.name=json.tituloProjeto;
     if(json.prioridade)    p.priority=json.prioridade;
     if(typeof json.progresso==='number') p.progress=Math.min(100,Math.max(0,json.progresso));
-    if(json.kanban){
-      p.kanban=p.kanban||{todo:[],doing:[],done:[]};
-      ['todo','doing','done'].forEach(col=>{
-        if(json.kanban[col]){
-          const novos=json.kanban[col].filter(nc=>!(p.kanban[col]||[]).find(ec=>ec.title===nc.title));
-          p.kanban[col]=[...(p.kanban[col]||[]),...novos];
-        }
-      });
-    }
+    if(json.fluxo) p.flow=json.fluxo;
+    if(json.kanban){['todo','doing','done'].forEach(col=>{if(json.kanban[col]){const novos=json.kanban[col].filter(nc=>!p.kanban[col].find(ec=>ec.title===nc.title));p.kanban[col]=[...p.kanban[col],...novos];}});}
     save();
     document.getElementById('pv-name').textContent=p.name;
     document.getElementById('pv-meta').textContent=`Prioridade: ${p.priority} · ${p.progress}% concluído`;
-    renderKanban();
-    showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n\n💬 ${json.resumo||''}`);
-  } catch(err) { showAIBox(module,'❌ Erro: '+err.message+'\n\nVerifique sua API Key em Configurações.'); }
+    renderKanban(); renderFlow();
+    showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n🔀 ${json.fluxo||p.flow}\n\n💬 ${json.resumo||''}`);
+  } catch(err) { showAIBox(module,'❌ Erro: '+err.message); }
   setAILoading(module,false);
 }
 function setAILoading(m,v){const el=document.getElementById('ai-loading-'+m);if(el)el.classList.toggle('show',v);}
@@ -2686,135 +1994,13 @@ function hideAIBox(m){const el=document.getElementById('ai-box-'+m);if(el)el.cla
    EXPORTAR / RESETAR
 ═══════════════════════════════════════════════ */
 function exportData() {
-  // Exporta projetos completos incluindo ferramentas de cada projeto
-  const exportObj = {
-    app: 'Diverso WorkFlows Management',
-    exportedAt: new Date().toLocaleString('pt-BR'),
-    totalProjects: projects.length,
-    projects: projects.map(p => ({
-      ...p,
-      totalTools: (p.tools||[]).length,
-      totalIdeas: (p.ideas||[]).length,
-      kanbanTotal: (p.kanban?.todo?.length||0) + (p.kanban?.doing?.length||0) + (p.kanban?.done?.length||0),
-    }))
-  };
-  const json = JSON.stringify(exportObj, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `diverso-backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('⬇️ Backup exportado com sucesso!');
-}
-
-/* ─── IMPORTAR BACKUP ───────────────────────────
-   Lê o JSON exportado, mescla com os projetos
-   existentes (não sobrescreve, evita duplicatas
-   pelo ID) e sincroniza com a nuvem.
-────────────────────────────────────────────── */
-function importData(event) {
-  const file = event.target.files[0];
-  const resultEl = document.getElementById('import-result');
-  if (!file) return;
-
-  // Reseta o input para permitir reimportar o mesmo arquivo
-  event.target.value = '';
-
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    try {
-      const raw = JSON.parse(e.target.result);
-
-      // Suporta formato novo { app, projects:[...] } e formato antigo [...]
-      const incoming = Array.isArray(raw) ? raw
-        : Array.isArray(raw.projects) ? raw.projects
-        : null;
-
-      if (!incoming || !incoming.length) {
-        showImportResult('error', '❌ Arquivo inválido ou sem projetos.');
-        return;
-      }
-
-      let adicionados = 0;
-      let atualizados = 0;
-
-      incoming.forEach(proj => {
-        if (!proj.id || !proj.name) return;
-
-        // Garante estrutura mínima em cada projeto importado
-        proj.editors     = proj.editors     || [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
-        proj.connections = proj.connections || [];
-        proj.folders     = proj.folders     || [];
-        proj.tools       = proj.tools       || [];
-        proj.flowBoxes   = proj.flowBoxes   || [];
-        proj.flowArrows  = proj.flowArrows  || [];
-        proj.kanban      = proj.kanban      || { todo:[], doing:[], done:[] };
-        proj.ideas       = proj.ideas       || [];
-
-        // Remove campos de metadados gerados na exportação
-        delete proj.totalTools;
-        delete proj.totalIdeas;
-        delete proj.kanbanTotal;
-
-        const existIdx = projects.findIndex(p => p.id === proj.id);
-        if (existIdx !== -1) {
-          // Já existe — atualiza preservando o _db_id da nuvem
-          const dbId = projects[existIdx]._db_id;
-          projects[existIdx] = { ...proj, _db_id: dbId };
-          atualizados++;
-        } else {
-          // Novo — adiciona sem _db_id (cria novo na nuvem)
-          delete proj._db_id;
-          projects.push(proj);
-          adicionados++;
-        }
-      });
-
-      // Salva local e sincroniza tudo com a nuvem
-      localStorage.setItem('diverso_projects', JSON.stringify(projects));
-      await saveAllToCloud();
-
-      renderDashboard();
-      showImportResult('success',
-        `✅ Importação concluída!\n` +
-        `• ${adicionados} projeto(s) novo(s) adicionado(s)\n` +
-        `• ${atualizados} projeto(s) atualizado(s)\n` +
-        `• Total: ${projects.length} projeto(s) na conta`
-      );
-
-    } catch (err) {
-      showImportResult('error', '❌ Erro ao ler o arquivo: ' + err.message + '\n\nVerifique se é um JSON válido exportado pelo Diverso.');
-    }
-  };
-  reader.readAsText(file);
-}
-
-function showImportResult(type, msg) {
-  const el = document.getElementById('import-result');
-  if (!el) return;
-  el.style.display    = 'block';
-  el.style.background = type === 'success' ? 'rgba(16,185,129,.1)'         : 'rgba(236,72,153,.1)';
-  el.style.border     = type === 'success' ? '1px solid rgba(16,185,129,.4)' : '1px solid rgba(236,72,153,.4)';
-  el.style.color      = type === 'success' ? 'var(--neon-g)'                : 'var(--neon-m)';
-  el.style.whiteSpace = 'pre-line';
-  el.style.borderRadius = '8px';
-  el.textContent = msg;
-  setTimeout(() => { el.style.display = 'none'; }, 7000);
+  const b=new Blob([JSON.stringify({projects,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='diverso-backup.json'; a.click(); toast('Exportado ✓');
 }
 function confirmReset() {
-  if(!confirm('Apagar TODOS os dados? Isso não pode ser desfeito.')) return;
-  localStorage.removeItem('diverso_projects');
-  localStorage.removeItem('diverso_config');
-  projects=[]; undoStack=[];
-  // Tenta deletar da nuvem também
-  const user = getUser();
-  if (user) {
-    sb.from('diverso_projects').delete().eq('user_id', user.sub).then(() => {
-      toast('Todos os dados foram apagados.');
-    });
-  }
-  save(); renderDashboard(); showPage('dashboard');
+  if(!confirm('Apagar tudo?')) return;
+  localStorage.removeItem('diverso_projects'); localStorage.removeItem('diverso_config');
+  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Resetado');
 }
 
 /* UTILITÁRIOS */
