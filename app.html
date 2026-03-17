@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -686,6 +687,22 @@ input,textarea,select{font-family:var(--font);}
 .tool-url-link{color:var(--neon-c);text-decoration:none;font-size:.8rem;}
 .tool-url-link:hover{text-decoration:underline;}
 
+/* ═══════════════════════════════════════════
+   CONFIGURAÇÕES — Seção de Dados & Backup
+═══════════════════════════════════════════ */
+.settings-data-block{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:14px 0;flex-wrap:wrap;
+}
+.settings-data-label{display:flex;align-items:flex-start;gap:12px;flex:1;}
+.settings-data-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
+.settings-data-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.settings-data-desc{font-size:.74rem;color:var(--muted);line-height:1.5;}
+.settings-data-divider{height:1px;background:var(--border);margin:4px 0;}
+
+/* Resultado da importação */
+#import-result.ok   {background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--neon-g);}
+#import-result.error{background:rgba(236,72,153,.12); border:1px solid rgba(236,72,153,.3); color:var(--neon-m);}
 </style>
 <!-- Supabase SDK — sincronização em nuvem -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -694,7 +711,7 @@ input,textarea,select{font-family:var(--font);}
 
 <!-- ═══════ HEADER ═══════ -->
 <header id="header">
-  <div class="logo-wrap" onclick="showPage('dashboard')">
+  <div class="logo-wrap" onclick="goHome()">
     <div class="logo-name">
       Diverso WorkFlows
       <span class="logo-sub">Management</span>
@@ -1073,12 +1090,59 @@ input,textarea,select{font-family:var(--font);}
       <div class="toggle-row"><span>Tema Claro</span><button class="toggle" id="dark-toggle" onclick="toggleThemeFromSettings()"></button></div>
     </div>
     <div class="settings-section">
-      <h2>🗄️ Dados</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <h2>🗄️ Dados &amp; Backup</h2>
+
+      <!-- Exportar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span class="settings-data-icon">⬇️</span>
+          <div>
+            <div class="settings-data-title">Exportar Backup</div>
+            <div class="settings-data-desc">Baixa um arquivo JSON com todos os seus projetos, ferramentas, ideias, kanban e prompts.</div>
+          </div>
+        </div>
         <button class="btn btn-outline btn-sm" onclick="exportData()">⬇️ Exportar</button>
-        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar tudo</button>
       </div>
-      <div style="font-size:.74rem;color:var(--muted);margin-top:10px;">Dados salvos localmente no navegador.</div>
+
+      <div class="settings-data-divider"></div>
+
+      <!-- Importar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span class="settings-data-icon">⬆️</span>
+          <div>
+            <div class="settings-data-title">Importar Backup</div>
+            <div class="settings-data-desc">Restaura projetos a partir de um arquivo JSON exportado anteriormente. Os dados existentes serão mesclados.</div>
+          </div>
+        </div>
+        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+          ⬆️ Importar
+          <input type="file" id="import-file-input" accept=".json"
+            onchange="importData(event)"
+            style="display:none;"/>
+        </label>
+      </div>
+
+      <!-- Resultado da importação -->
+      <div id="import-result" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.78rem;line-height:1.5;"></div>
+
+      <div class="settings-data-divider"></div>
+
+      <!-- Resetar -->
+      <div class="settings-data-block">
+        <div class="settings-data-label">
+          <span class="settings-data-icon">🗑️</span>
+          <div>
+            <div class="settings-data-title">Resetar tudo</div>
+            <div class="settings-data-desc">Apaga permanentemente todos os projetos e dados, local e na nuvem.</div>
+          </div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="confirmReset()">🗑️ Resetar</button>
+      </div>
+
+      <div style="font-size:.72rem;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+        ☁️ Sincronização automática com Supabase ativa &nbsp;·&nbsp; <span id="sync-info">—</span>
+      </div>
     </div>
   </div>
 
@@ -1122,6 +1186,16 @@ function showSyncStatus(state) {
 async function loadFromCloud() {
   const user = getUser();
   if (!user) return;
+
+  // Se rodando localmente (file://), pula Supabase e usa só localStorage
+  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocal) {
+    showSyncStatus('offline');
+    const el = document.getElementById('sync-status');
+    if (el) { el.textContent = '💾 Modo local'; el.style.color = 'var(--muted)'; }
+    return;
+  }
+
   showSyncStatus('saving');
   try {
     const { data, error } = await sb
@@ -1135,13 +1209,16 @@ async function loadFromCloud() {
     if (data && data.length > 0) {
       // Converte registros Supabase → array de projetos
       projects = data.map(row => ({ ...row.data, _db_id: row.id }));
-      // Migração de estrutura antiga
+      // Migração completa de estrutura
       projects.forEach(p => {
-        if (!p.editors)     p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+        if (!p.editors)     p.editors     = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
         if (!p.connections) p.connections = [];
-        if (!p.folders)     p.folders = [];
-        if (!p.flowBoxes)   p.flowBoxes = [];
-        if (!p.flowArrows)  p.flowArrows = [];
+        if (!p.folders)     p.folders     = [];
+        if (!p.flowBoxes)   p.flowBoxes   = [];
+        if (!p.flowArrows)  p.flowArrows  = [];
+        if (!p.tools)       p.tools       = []; // Fix: garante ferramentas
+        if (!p.kanban)      p.kanban      = { todo:[], doing:[], done:[] };
+        if (!p.ideas)       p.ideas       = [];
       });
       // Atualiza cache local
       localStorage.setItem('diverso_projects', JSON.stringify(projects));
@@ -1293,8 +1370,26 @@ function logout() {
 
 function init() {
   // ═══ AUTH GUARD ═══
+  // Detecta se está rodando localmente (file://) — bypassa login para testes locais
+  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
   const user = getUser();
-  if (!user) { window.location.replace('index.html'); return; }
+  if (!user && !isLocal) {
+    // Online sem login → redireciona para a página de login
+    window.location.replace('index.html');
+    return;
+  }
+
+  // Se local sem usuário, cria um usuário de teste para não quebrar nada
+  if (!user && isLocal) {
+    localStorage.setItem('diverso_user', JSON.stringify({
+      name: 'Usuário Local',
+      email: 'local@teste.com',
+      picture: '',
+      sub: 'local_test_user',
+      loginAt: new Date().toISOString()
+    }));
+  }
 
   renderUserChip();
 
@@ -1334,9 +1429,13 @@ function init() {
    PERSISTÊNCIA — Local + Nuvem
 ═══════════════════════════════════════════════ */
 function save(projectId) {
-  // 1. Salva local imediatamente (rápido)
+  // 1. Salva local imediatamente (rápido — funciona offline e em file://)
   localStorage.setItem('diverso_projects', JSON.stringify(projects));
-  // 2. Sincroniza com a nuvem em background (debounce 800ms)
+
+  // 2. Sincroniza com a nuvem apenas quando online (não file://)
+  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocal) return; // local: só localStorage, sem Supabase
+
   clearTimeout(syncTimeout);
   const target = projectId
     ? projects.find(p => p.id === projectId)
@@ -1344,7 +1443,6 @@ function save(projectId) {
   if (target) {
     syncTimeout = setTimeout(() => saveProjectToCloud(target), 800);
   } else {
-    // Salva todos se não souber qual
     syncTimeout = setTimeout(() => saveAllToCloud(), 800);
   }
 }
@@ -1389,13 +1487,33 @@ function updateUndoBtn() {
 /* ═══════════════════════════════════════════════
    NAVEGAÇÃO + TEMA
 ═══════════════════════════════════════════════ */
+let previousPage = 'dashboard'; // guarda a página anterior para voltar corretamente
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.getElementById('settings-btn').classList.toggle('active', id==='settings');
+  // Mostra/esconde botão Organizar com IA conforme a página
+  const organizeBtn = document.getElementById('btn-organize-all');
+  if (organizeBtn) organizeBtn.style.display = (id==='project') ? 'flex' : 'none';
 }
+
 function toggleSettings() {
-  showPage(document.getElementById('page-settings').classList.contains('active') ? 'dashboard' : 'settings');
+  const settingsOpen = document.getElementById('page-settings').classList.contains('active');
+  if (settingsOpen) {
+    // Volta para onde estava antes de abrir configurações
+    showPage(previousPage);
+  } else {
+    // Guarda a página atual antes de abrir configurações
+    const pages = ['dashboard','project'];
+    for (const pg of pages) {
+      if (document.getElementById('page-'+pg)?.classList.contains('active')) {
+        previousPage = pg;
+        break;
+      }
+    }
+    showPage('settings');
+  }
 }
 function toggleTheme() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -1471,10 +1589,15 @@ function createProject() {
   const pri = document.getElementById('np-priority').value;
   projects.push({
     id:'p_'+Date.now(), name, priority:pri, progress:0,
-    color:PRIORITY_COLORS[pri], ideas:[], connections:[],
+    color:PRIORITY_COLORS[pri],
+    ideas:[], connections:[],
     editors:[{id:'e_0',title:'Prompt 1',draft:'',history:[]}],
     kanban:{todo:[],doing:[],done:[]},
-    flow:FLOW_DEFAULT, folders:[], createdAt:new Date().toISOString()
+    flow:FLOW_DEFAULT,
+    flowBoxes:[], flowArrows:[],   // Fix: fluxo interativo já inicializado
+    tools:[],                       // Fix: ferramentas já inicializadas
+    folders:[],
+    createdAt:new Date().toISOString()
   });
   save(); closeModal('modal-new-project');
   document.getElementById('np-name').value = '';
@@ -1500,10 +1623,11 @@ function openProject(id) {
   currentProjectId = id;
   undoStack = []; updateUndoBtn();
   const p = getProject();
+  // Migração de estrutura — garante todos os campos existam
   if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
   if (!p.connections) p.connections = [];
   if (!p.folders)     p.folders     = [];
-  // [CORREÇÃO 2] Migra fluxo antigo para flowBoxes se necessário
+  if (!p.tools)       p.tools       = []; // Fix: inicializa ferramentas
   if (!p.flowBoxes) {
     const steps = (p.flow || FLOW_DEFAULT).split('→').map(s=>s.trim()).filter(Boolean);
     p.flowBoxes = steps.map((s,i) => ({ id:'fb_'+i, title:s, desc:'', status: i===0?'doing':'todo' }));
@@ -1512,16 +1636,20 @@ function openProject(id) {
   }
   document.getElementById('pv-name').textContent = p.name;
   document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
-  // [CORREÇÃO 4] Mostra botão Organizar com IA
-  document.getElementById('btn-organize-all').style.display = 'flex';
+  previousPage = 'project'; // para o toggleSettings saber onde voltar
   showPage('project');
   switchTab('brainstorm');
   renderBrainstorm(); renderEditors(); renderKanban(); renderFlow(); renderFolders(); renderTools();
 }
 function backToDashboard() {
-  currentProjectId=null;
-  // [CORREÇÃO 4] Esconde botão Organizar ao sair do projeto
-  document.getElementById('btn-organize-all').style.display = 'none';
+  currentProjectId = null;
+  previousPage = 'dashboard';
+  showPage('dashboard'); renderDashboard();
+}
+function goHome() {
+  // Clique no logo: se estiver num projeto, limpa contexto antes
+  if (currentProjectId) { currentProjectId = null; }
+  previousPage = 'dashboard';
   showPage('dashboard'); renderDashboard();
 }
 function getProject()      { return projects.find(p=>p.id===currentProjectId); }
@@ -1530,7 +1658,10 @@ function getProject()      { return projects.find(p=>p.id===currentProjectId); }
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id==='tab-'+name));
-  if (name==='brainstorm') setTimeout(drawConnections, 100);
+  // Renderiza conteúdo ao trocar de aba
+  if (name==='brainstorm')   setTimeout(drawConnections, 100);
+  if (name==='ferramentas')  renderTools();
+  if (name==='fluxo')        setTimeout(drawFlowArrows, 100);
 }
 
 /* ═══════════════════════════════════════════════
@@ -2509,19 +2640,21 @@ function deleteFolder(fi) { if(!confirm('Excluir pasta?')) return; getProject().
 async function aiOrganize(module) {
   const cfg=getConfig();
   if(!cfg.apikey){toast('⚠️ Configure a API Key em Configurações','error');return;}
-  const p=getProject(); let content='';
-  if(module==='brainstorm') content='Ideias: '+p.ideas.join(' | ');
-  else if(module==='editor') content='Prompts: '+(p.editors||[]).map((e,i)=>`[${e.title}]: ${e.draft||'(vazio)'}`).join(' / ');
-  else if(module==='kanban') content=`Kanban — Todo: ${p.kanban.todo.map(c=>c.title).join(',')} | Fazendo: ${p.kanban.doing.map(c=>c.title).join(',')} | Feito: ${p.kanban.done.map(c=>c.title).join(',')}`;
-  else if(module==='fluxo') content='Fluxo: '+(p.flow||FLOW_DEFAULT);
+  const p=getProject(); if(!p) return;
+  let content='';
+  if(module==='brainstorm') content='Ideias: '+( p.ideas||[]).join(' | ');
+  else if(module==='kanban') {
+    const k=p.kanban||{todo:[],doing:[],done:[]};
+    content=`Kanban — Todo: ${(k.todo||[]).map(c=>c.title).join(',')} | Fazendo: ${(k.doing||[]).map(c=>c.title).join(',')} | Feito: ${(k.done||[]).map(c=>c.title).join(',')}`;
+  }
 
-  const prompt=`Analise: "${content}". Retorne SOMENTE JSON sem markdown: {"tituloProjeto":"string","prioridade":"alta|media-alta|media|baixa|muito-baixa","progresso":0,"kanban":{"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},"fluxo":"e1 → e2","resumo":"texto"}`;
+  const prompt=`Analise: "${content}". Retorne SOMENTE JSON sem markdown: {"tituloProjeto":"string","prioridade":"alta|media-alta|media|baixa|muito-baixa","progresso":0,"kanban":{"todo":[{"title":"x","desc":"y"}],"doing":[],"done":[]},"resumo":"texto"}`;
   setAILoading(module,true); hideAIBox(module);
   const ep=cfg.endpoint==='openai'?'https://api.openai.com/v1/chat/completions':'https://models.inference.ai.azure.com/chat/completions';
   try {
     const res=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
       body:JSON.stringify({model:cfg.model||'gpt-4o-mini',max_tokens:900,
-        messages:[{role:'system',content:'Especialista em projetos. Responda APENAS JSON.'},{role:'user',content:prompt}]})});
+        messages:[{role:'system',content:'Especialista em projetos. Responda APENAS JSON válido.'},{role:'user',content:prompt}]})});
     if(!res.ok){const er=await res.json().catch(()=>({}));throw new Error(er.error?.message||'Erro '+res.status);}
     const data=await res.json();
     const json=JSON.parse(data.choices[0].message.content.trim().replace(/```json|```/g,'').trim());
@@ -2529,14 +2662,21 @@ async function aiOrganize(module) {
     if(json.tituloProjeto) p.name=json.tituloProjeto;
     if(json.prioridade)    p.priority=json.prioridade;
     if(typeof json.progresso==='number') p.progress=Math.min(100,Math.max(0,json.progresso));
-    if(json.fluxo) p.flow=json.fluxo;
-    if(json.kanban){['todo','doing','done'].forEach(col=>{if(json.kanban[col]){const novos=json.kanban[col].filter(nc=>!p.kanban[col].find(ec=>ec.title===nc.title));p.kanban[col]=[...p.kanban[col],...novos];}});}
+    if(json.kanban){
+      p.kanban=p.kanban||{todo:[],doing:[],done:[]};
+      ['todo','doing','done'].forEach(col=>{
+        if(json.kanban[col]){
+          const novos=json.kanban[col].filter(nc=>!(p.kanban[col]||[]).find(ec=>ec.title===nc.title));
+          p.kanban[col]=[...(p.kanban[col]||[]),...novos];
+        }
+      });
+    }
     save();
     document.getElementById('pv-name').textContent=p.name;
     document.getElementById('pv-meta').textContent=`Prioridade: ${p.priority} · ${p.progress}% concluído`;
-    renderKanban(); renderFlow();
-    showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n🔀 ${json.fluxo||p.flow}\n\n💬 ${json.resumo||''}`);
-  } catch(err) { showAIBox(module,'❌ Erro: '+err.message); }
+    renderKanban();
+    showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n\n💬 ${json.resumo||''}`);
+  } catch(err) { showAIBox(module,'❌ Erro: '+err.message+'\n\nVerifique sua API Key em Configurações.'); }
   setAILoading(module,false);
 }
 function setAILoading(m,v){const el=document.getElementById('ai-loading-'+m);if(el)el.classList.toggle('show',v);}
@@ -2547,13 +2687,135 @@ function hideAIBox(m){const el=document.getElementById('ai-box-'+m);if(el)el.cla
    EXPORTAR / RESETAR
 ═══════════════════════════════════════════════ */
 function exportData() {
-  const b=new Blob([JSON.stringify({projects,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='diverso-backup.json'; a.click(); toast('Exportado ✓');
+  // Exporta projetos completos incluindo ferramentas de cada projeto
+  const exportObj = {
+    app: 'Diverso WorkFlows Management',
+    exportedAt: new Date().toLocaleString('pt-BR'),
+    totalProjects: projects.length,
+    projects: projects.map(p => ({
+      ...p,
+      totalTools: (p.tools||[]).length,
+      totalIdeas: (p.ideas||[]).length,
+      kanbanTotal: (p.kanban?.todo?.length||0) + (p.kanban?.doing?.length||0) + (p.kanban?.done?.length||0),
+    }))
+  };
+  const json = JSON.stringify(exportObj, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `diverso-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('⬇️ Backup exportado com sucesso!');
+}
+
+/* ─── IMPORTAR BACKUP ───────────────────────────
+   Lê o JSON exportado, mescla com os projetos
+   existentes (não sobrescreve, evita duplicatas
+   pelo ID) e sincroniza com a nuvem.
+────────────────────────────────────────────── */
+function importData(event) {
+  const file = event.target.files[0];
+  const resultEl = document.getElementById('import-result');
+  if (!file) return;
+
+  // Reseta o input para permitir reimportar o mesmo arquivo
+  event.target.value = '';
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const raw = JSON.parse(e.target.result);
+
+      // Suporta formato novo { app, projects:[...] } e formato antigo [...]
+      const incoming = Array.isArray(raw) ? raw
+        : Array.isArray(raw.projects) ? raw.projects
+        : null;
+
+      if (!incoming || !incoming.length) {
+        showImportResult('error', '❌ Arquivo inválido ou sem projetos.');
+        return;
+      }
+
+      let adicionados = 0;
+      let atualizados = 0;
+
+      incoming.forEach(proj => {
+        if (!proj.id || !proj.name) return;
+
+        // Garante estrutura mínima em cada projeto importado
+        proj.editors     = proj.editors     || [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+        proj.connections = proj.connections || [];
+        proj.folders     = proj.folders     || [];
+        proj.tools       = proj.tools       || [];
+        proj.flowBoxes   = proj.flowBoxes   || [];
+        proj.flowArrows  = proj.flowArrows  || [];
+        proj.kanban      = proj.kanban      || { todo:[], doing:[], done:[] };
+        proj.ideas       = proj.ideas       || [];
+
+        // Remove campos de metadados gerados na exportação
+        delete proj.totalTools;
+        delete proj.totalIdeas;
+        delete proj.kanbanTotal;
+
+        const existIdx = projects.findIndex(p => p.id === proj.id);
+        if (existIdx !== -1) {
+          // Já existe — atualiza preservando o _db_id da nuvem
+          const dbId = projects[existIdx]._db_id;
+          projects[existIdx] = { ...proj, _db_id: dbId };
+          atualizados++;
+        } else {
+          // Novo — adiciona sem _db_id (cria novo na nuvem)
+          delete proj._db_id;
+          projects.push(proj);
+          adicionados++;
+        }
+      });
+
+      // Salva local e sincroniza tudo com a nuvem
+      localStorage.setItem('diverso_projects', JSON.stringify(projects));
+      await saveAllToCloud();
+
+      renderDashboard();
+      showImportResult('success',
+        `✅ Importação concluída!\n` +
+        `• ${adicionados} projeto(s) novo(s) adicionado(s)\n` +
+        `• ${atualizados} projeto(s) atualizado(s)\n` +
+        `• Total: ${projects.length} projeto(s) na conta`
+      );
+
+    } catch (err) {
+      showImportResult('error', '❌ Erro ao ler o arquivo: ' + err.message + '\n\nVerifique se é um JSON válido exportado pelo Diverso.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function showImportResult(type, msg) {
+  const el = document.getElementById('import-result');
+  if (!el) return;
+  el.style.display    = 'block';
+  el.style.background = type === 'success' ? 'rgba(16,185,129,.1)'         : 'rgba(236,72,153,.1)';
+  el.style.border     = type === 'success' ? '1px solid rgba(16,185,129,.4)' : '1px solid rgba(236,72,153,.4)';
+  el.style.color      = type === 'success' ? 'var(--neon-g)'                : 'var(--neon-m)';
+  el.style.whiteSpace = 'pre-line';
+  el.style.borderRadius = '8px';
+  el.textContent = msg;
+  setTimeout(() => { el.style.display = 'none'; }, 7000);
 }
 function confirmReset() {
-  if(!confirm('Apagar tudo?')) return;
-  localStorage.removeItem('diverso_projects'); localStorage.removeItem('diverso_config');
-  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Resetado');
+  if(!confirm('Apagar TODOS os dados? Isso não pode ser desfeito.')) return;
+  localStorage.removeItem('diverso_projects');
+  localStorage.removeItem('diverso_config');
+  projects=[]; undoStack=[];
+  // Tenta deletar da nuvem também
+  const user = getUser();
+  if (user) {
+    sb.from('diverso_projects').delete().eq('user_id', user.sub).then(() => {
+      toast('Todos os dados foram apagados.');
+    });
+  }
+  save(); renderDashboard(); showPage('dashboard');
 }
 
 /* UTILITÁRIOS */
