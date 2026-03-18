@@ -657,6 +657,16 @@ input,textarea,select{font-family:var(--font);}
 /* ═══ LOGOUT HEADER ═══ */
 .btn-logout-header{padding:6px 12px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:600;background:transparent;border:1px solid rgba(236,72,153,.4);color:var(--neon-m);transition:var(--transition);display:flex;align-items:center;gap:5px;}
 .btn-logout-header:hover{box-shadow:var(--glow-m);background:#ec489918;transform:scale(1.04);}
+/* ═══ SYNC MANUAL ═══ */
+.btn-sync-manual{
+  width:26px;height:26px;border-radius:50%;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--muted);font-size:.95rem;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:var(--transition);flex-shrink:0;
+}
+.btn-sync-manual:hover{border-color:var(--neon-c);color:var(--neon-c);box-shadow:var(--glow-c);}
+.btn-sync-manual.spinning{animation:spin .7s linear infinite;color:var(--neon-c);border-color:var(--neon-c);}
+@keyframes spin{to{transform:rotate(360deg)}}
 /* ═══ BTN ORGANIZE ALL ═══ */
 .btn-organize-all{padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);display:flex;align-items:center;gap:6px;}
 .btn-organize-all:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
@@ -675,7 +685,11 @@ input,textarea,select{font-family:var(--font);}
     </div>
   </div>
   <div class="header-right">
-    <span id="sync-status" style="font-size:.66rem;font-family:var(--mono);color:var(--muted);min-width:68px;text-align:right;">💾 Local</span>
+    <!-- Indicador + botão manual de sync -->
+    <div style="display:flex;align-items:center;gap:5px;">
+      <span id="sync-status" style="font-size:.66rem;font-family:var(--mono);color:var(--muted);min-width:68px;text-align:right;">💾 Local</span>
+      <button class="btn-sync-manual" id="btn-sync-manual" onclick="syncNow()" title="Sincronizar agora com Supabase">⟳</button>
+    </div>
     <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
     <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
@@ -1117,6 +1131,26 @@ async function deleteProjectFromCloud(dbId) {
   try { await sb.from('diverso_projects').delete().eq('id',dbId).eq('user_id',user.sub); } catch(e){}
 }
 async function saveAllToCloud() { for (const p of projects) await saveProjectToCloud(p); }
+
+/* Sync manual — acionado pelo botão ⟳ no header */
+async function syncNow() {
+  if (isLocalEnv()) { toast('💾 Modo local — sem nuvem', 'error'); return; }
+  const btn = document.getElementById('btn-sync-manual');
+  if (btn) btn.classList.add('spinning');
+  setSyncStatus('saving');
+  try {
+    // 1. Envia todos os projetos locais para a nuvem
+    await saveAllToCloud();
+    // 2. Recarrega da nuvem para garantir dados mais recentes
+    await loadFromCloud();
+    toast('☁️ Sincronizado com sucesso!');
+  } catch(e) {
+    setSyncStatus('error');
+    toast('⚠️ Erro ao sincronizar: ' + e.message, 'error');
+  } finally {
+    if (btn) btn.classList.remove('spinning');
+  }
+}
 
 function migrateProjects() {
   projects.forEach(p => {
