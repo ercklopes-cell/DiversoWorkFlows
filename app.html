@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Diverso WorkFlows Management</title>
 
+<!-- PWA -->
+<meta name="theme-color" content="#05050f"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Diverso"/>
+<meta name="description" content="Organize projetos, brainstorm, prompts e kanban — tudo em um só lugar."/>
+<link rel="manifest" href="manifest.json"/>
+<!-- Ícone PWA inline via canvas (sem arquivo externo) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230d0d0d'/><text x='50%' y='58%' font-size='280' text-anchor='middle' dominant-baseline='middle' font-family='serif' fill='%23a78bfa'>D</text></svg>"/>
+
 <!-- [MUDANÇA 4] Nova fonte: Orbitron para logo neon + Inter para corpo -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 
@@ -670,6 +680,55 @@ input,textarea,select{font-family:var(--font);}
 /* ═══ BTN ORGANIZE ALL ═══ */
 .btn-organize-all{padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);display:flex;align-items:center;gap:6px;}
 .btn-organize-all:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
+
+/* ═══ MODO FOCO ═══ */
+#focus-overlay{position:fixed;inset:0;z-index:500;background:var(--bg);display:none;flex-direction:column;}
+#focus-overlay.open{display:flex;animation:pageIn .25s ease;}
+.focus-header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border2);background:var(--surface);flex-shrink:0;gap:10px;flex-wrap:wrap;}
+.focus-title{font-family:'Orbitron',sans-serif;font-size:.78rem;color:var(--neon-p);letter-spacing:.06em;white-space:nowrap;}
+.focus-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.btn-focus-gen{padding:7px 16px;border-radius:var(--radius-sm);font-size:.78rem;font-weight:700;background:linear-gradient(135deg,#a78bfa,#22d3ee);color:#fff;border:none;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;}
+.btn-focus-gen:hover{opacity:.85;transform:scale(1.03);}
+.btn-focus-gen:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-focus-save{padding:7px 14px;border-radius:var(--radius-sm);font-size:.78rem;font-weight:600;background:transparent;border:1px solid var(--neon-g);color:var(--neon-g);cursor:pointer;transition:var(--transition);}
+.btn-focus-save:hover{box-shadow:var(--glow-g);background:#10b98112;}
+.btn-focus-close{padding:7px 14px;border-radius:var(--radius-sm);font-size:.78rem;font-weight:600;background:transparent;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:var(--transition);}
+.btn-focus-close:hover{border-color:var(--neon-m);color:var(--neon-m);}
+.focus-body{flex:1;display:flex;flex-direction:column;padding:24px;max-width:860px;margin:0 auto;width:100%;overflow-y:auto;gap:14px;box-sizing:border-box;}
+.focus-editor-title{background:none;border:none;border-bottom:1px solid var(--border2);color:var(--text);font-size:1.1rem;font-weight:700;padding:8px 0;outline:none;width:100%;font-family:var(--font);}
+.focus-editor-title:focus{border-bottom-color:var(--neon-p);}
+.focus-textarea{flex:1;min-height:320px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:20px 24px;color:var(--text);font-family:var(--mono);font-size:.9rem;line-height:1.85;resize:vertical;outline:none;transition:border-color var(--transition);}
+.focus-textarea:focus{border-color:var(--neon-p);box-shadow:0 0 0 3px #a78bfa10;}
+.focus-result{background:linear-gradient(135deg,#a78bfa0a,#22d3ee08);border:1px solid #a78bfa33;border-radius:var(--radius);padding:16px 20px;font-family:var(--mono);font-size:.82rem;color:var(--neon-c);line-height:1.7;display:none;white-space:pre-wrap;}
+.focus-result.show{display:block;animation:pageIn .3s ease;}
+.focus-result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.focus-counter{font-size:.68rem;color:var(--muted);font-family:var(--mono);}
+
+/* ═══ RELATÓRIO ═══ */
+.report-body{font-family:var(--font);}
+.report-header-section{background:linear-gradient(135deg,#a78bfa18,#22d3ee10);border:1px solid var(--border2);border-radius:var(--radius);padding:20px 24px;margin-bottom:18px;}
+.report-project-name{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;color:var(--neon-p);margin-bottom:4px;}
+.report-project-meta{font-size:.76rem;color:var(--muted);}
+.report-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:18px;}
+.report-stat{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px;text-align:center;}
+.report-stat-value{font-size:1.5rem;font-weight:800;font-family:'Orbitron',sans-serif;color:var(--neon-p);line-height:1;}
+.report-stat-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+.report-section{margin-bottom:16px;}
+.report-section-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.report-ai-content{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 16px;font-size:.84rem;line-height:1.7;color:var(--text);white-space:pre-wrap;}
+.report-progress-bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:6px;}
+.report-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));transition:width .6s ease;}
+.report-kanban-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.report-pill{font-size:.72rem;padding:4px 12px;border-radius:99px;font-weight:600;}
+.report-pill-todo {background:rgba(90,90,138,.2);color:var(--muted);}
+.report-pill-doing{background:rgba(250,204,21,.15);color:var(--media);}
+.report-pill-done {background:rgba(16,185,129,.15);color:var(--neon-g);}
+.report-loading{display:flex;align-items:center;gap:10px;color:var(--neon-p);font-size:.84rem;padding:20px 0;}
+
+/* ═══ PWA INSTALL BTN ═══ */
+.btn-install-pwa{display:none;padding:7px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);align-items:center;gap:6px;}
+.btn-install-pwa:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
+.btn-install-pwa.visible{display:flex;}
 </style>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -695,6 +754,7 @@ input,textarea,select{font-family:var(--font);}
     <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
     <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
+    <button class="btn-install-pwa" id="btn-install-pwa" onclick="installPWA()" title="Instalar como App">📲 Instalar App</button>
     <button class="btn-logout-header" onclick="logout()" title="Sair da conta">🚪 Sair</button>
   </div>
 </header>
@@ -771,6 +831,58 @@ input,textarea,select{font-family:var(--font);}
 </div>
 
 <!-- ═══════ APP ═══════ -->
+<!-- ═══ MODO FOCO ═══ -->
+<div id="focus-overlay">
+  <div class="focus-header">
+    <span class="focus-title">🌙 MODO FOCO</span>
+    <div style="display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--muted);">
+      <span id="focus-editor-label"></span>
+      <span class="focus-counter" id="focus-counter">0 palavras</span>
+    </div>
+    <div class="focus-actions">
+      <button class="btn-focus-gen" id="btn-focus-gen" onclick="gerarPromptFoco()">
+        <span id="focus-spinner" style="display:none;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></span>
+        ✦ Gerar Prompt
+      </button>
+      <button class="btn-focus-save" onclick="salvarPromptFoco()">💾 Salvar Versão</button>
+      <button class="btn-focus-close" onclick="closeFocusMode()">✕ Fechar</button>
+    </div>
+  </div>
+  <div class="focus-body">
+    <input class="focus-editor-title" id="focus-editor-title" placeholder="Título do prompt…"/>
+    <textarea class="focus-textarea" id="focus-textarea"
+      placeholder="Escreva seu prompt aqui, sem distrações…&#10;&#10;Dica: clique em ✦ Gerar Prompt para a IA transformar seu texto em um prompt de alta performance."
+      oninput="updateFocusCounter()"></textarea>
+    <!-- Resultado gerado pela IA -->
+    <div class="focus-result" id="focus-result">
+      <div class="focus-result-header">
+        <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--neon-p);">✦ Prompt Gerado</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-xs" onclick="usarPromptFoco()">✓ Usar</button>
+          <button class="btn btn-outline btn-xs" onclick="copiarPromptFoco()">📋 Copiar</button>
+        </div>
+      </div>
+      <div id="focus-result-text" style="color:var(--text);font-family:var(--mono);font-size:.82rem;line-height:1.7;white-space:pre-wrap;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL RELATÓRIO ═══ -->
+<div class="modal-bg" id="modal-report">
+  <div class="modal" style="max-width:680px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+      <h3>📊 Relatório do Projeto</h3>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="exportarRelatorio()">⬇️ Exportar PDF</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-report')">✕ Fechar</button>
+      </div>
+    </div>
+    <div class="report-body" id="report-body">
+      <div class="report-loading"><div class="spinner"></div> Gerando relatório com IA…</div>
+    </div>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- DASHBOARD -->
@@ -788,6 +900,11 @@ input,textarea,select{font-family:var(--font);}
       <div class="project-header-info">
         <div class="project-header-name" id="pv-name"></div>
         <div class="project-header-meta" id="pv-meta"></div>
+      </div>
+      <!-- Modo Foco e Relatório -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="openFocusMode()" title="Modo Foco — editor sem distrações">🌙 Foco</button>
+        <button class="btn btn-ai btn-sm" onclick="gerarRelatorio()" title="Gerar relatório do projeto com IA">📊 Relatório</button>
       </div>
     </div>
     <div class="tabs">
@@ -1245,6 +1362,34 @@ function init() {
   // Carrega cache local imediatamente
   const local = localStorage.getItem('diverso_projects');
   if (local) { try { projects = JSON.parse(local); migrateProjects(); } catch(e){} }
+
+  // Cria projeto demo se estiver local e sem projetos
+  if (isLocalEnv() && projects.length === 0) {
+    projects = [{
+      id: 'p_demo', name: 'Projeto Demo', priority: 'media', progress: 30,
+      color: '#a78bfa', createdAt: new Date().toISOString(),
+      ideas: ['Ideia de exemplo 1', 'Ideia de exemplo 2'],
+      connections: [], editors: [{id:'e_0',title:'Prompt 1',draft:'Escreva seu prompt aqui…',history:[]}],
+      kanban: { todo:[{id:'k1',title:'Tarefa exemplo',desc:'Descrição'}], doing:[], done:[] },
+      flow: 'Ideia → Desenvolvimento → Teste → Pronto',
+      flowBoxes: [
+        {id:'fb_0',title:'Ideia',desc:'',status:'done'},
+        {id:'fb_1',title:'Desenvolvimento',desc:'',status:'doing'},
+        {id:'fb_2',title:'Teste',desc:'',status:'todo'},
+        {id:'fb_3',title:'Pronto',desc:'',status:'todo'}
+      ],
+      flowArrows: [['fb_0','fb_1'],['fb_1','fb_2'],['fb_2','fb_3']],
+      tools: [{
+        id:'tool_demo', name:'Canva', category:'Design',
+        desc:'Editor de imagens e design gráfico',
+        url:'https://canva.com', email:'exemplo@email.com',
+        password:'senha-exemplo-123', notes:'Plano gratuito\nAPI Key: sk-exemplo',
+        updatedAt: new Date().toISOString()
+      }],
+      folders: []
+    }];
+    localStorage.setItem('diverso_projects', JSON.stringify(projects));
+  }
 
   const theme = localStorage.getItem('diverso_theme') || 'dark';
   if (theme === 'light') {
@@ -2494,10 +2639,313 @@ function toast(msg,type='success') {
   w.appendChild(t); setTimeout(()=>t.remove(),2800);
 }
 
-// Esc fecha modais | Ctrl+Z = undo
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));
-  if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoAction();}
+/* ═══════════════════════════════════════════════
+   📱 PWA — Progressive Web App
+═══════════════════════════════════════════════ */
+let pwaInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  pwaInstallPrompt = e;
+  // Mostra botão de instalar no header
+  const btn = document.getElementById('btn-install-pwa');
+  if (btn) btn.classList.add('visible');
+});
+
+window.addEventListener('appinstalled', () => {
+  pwaInstallPrompt = null;
+  const btn = document.getElementById('btn-install-pwa');
+  if (btn) btn.classList.remove('visible');
+  toast('✅ App instalado com sucesso!');
+});
+
+function installPWA() {
+  if (!pwaInstallPrompt) {
+    toast('💡 Para instalar: no Chrome, clique nos 3 pontos → "Instalar app"', 'error');
+    return;
+  }
+  pwaInstallPrompt.prompt();
+  pwaInstallPrompt.userChoice.then(result => {
+    if (result.outcome === 'accepted') toast('📲 Instalando o app…');
+    pwaInstallPrompt = null;
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   🌙 MODO FOCO — Editor sem distrações
+═══════════════════════════════════════════════ */
+let focusEditorIndex = 0; // índice do editor ativo no modo foco
+let focusGeneratedText = ''; // guarda o prompt gerado pela IA
+
+function openFocusMode() {
+  const p = getProject(); if (!p) return;
+  p.editors = p.editors || [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
+  focusEditorIndex = 0;
+
+  // Carrega o primeiro editor
+  const ed = p.editors[0];
+  document.getElementById('focus-editor-title').value = ed.title || '';
+  document.getElementById('focus-textarea').value     = ed.draft || '';
+  document.getElementById('focus-editor-label').textContent = `${p.editors.length} editor(es)`;
+  document.getElementById('focus-result').classList.remove('show');
+  focusGeneratedText = '';
+  updateFocusCounter();
+  document.getElementById('focus-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('focus-textarea').focus(), 200);
+}
+
+function closeFocusMode() {
+  // Salva automaticamente ao fechar
+  salvarPromptFoco(true);
+  document.getElementById('focus-overlay').classList.remove('open');
+}
+
+function updateFocusCounter() {
+  const text  = document.getElementById('focus-textarea').value;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const chars = text.length;
+  document.getElementById('focus-counter').textContent = `${words} palavras · ${chars} chars`;
+}
+
+function salvarPromptFoco(silent = false) {
+  const p = getProject(); if (!p) return;
+  p.editors = p.editors || [];
+  if (!p.editors[focusEditorIndex]) return;
+  const ed    = p.editors[focusEditorIndex];
+  const title = document.getElementById('focus-editor-title').value.trim();
+  const draft = document.getElementById('focus-textarea').value;
+  if (title) ed.title = title;
+  ed.draft = draft;
+  if (!silent && draft.trim()) {
+    ed.history = ed.history || [];
+    ed.history.unshift({ text: draft, date: new Date().toLocaleString('pt-BR') });
+    toast('💾 Versão salva no histórico!');
+  }
+  save();
+  if (!silent) renderEditors();
+}
+
+async function gerarPromptFoco() {
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('⚠️ Configure a API Key em Configurações', 'error'); return; }
+  const texto = document.getElementById('focus-textarea').value.trim();
+  if (!texto) { toast('Escreva algo antes de gerar', 'error'); return; }
+
+  const btn     = document.getElementById('btn-focus-gen');
+  const spinner = document.getElementById('focus-spinner');
+  btn.disabled  = true; spinner.style.display = 'inline-block';
+  document.getElementById('focus-result').classList.remove('show');
+
+  const promptFixo = `Você é um engenheiro especialista em Prompt Engineering. Pegue o texto abaixo e transforme em um prompt perfeito, organizado, claro e de alta performance para IA (Claude, GPT, Grok etc.).
+
+Texto do usuário:
+${texto}
+
+Regras:
+- Estrutura clara: Contexto, Tarefa Principal, Regras, Formato de Saída.
+- Linguagem direta e imperativa.
+- Otimize para chain-of-thought quando fizer sentido.
+- Retorne SOMENTE o prompt final pronto para copiar, sem explicações.`;
+
+  const ep = cfg.endpoint === 'openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+  try {
+    const res = await fetch(ep, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({ model: cfg.model||'gpt-4o-mini', max_tokens:1200,
+        messages:[
+          {role:'system',content:'Especialista em Prompt Engineering. Retorne APENAS o prompt final.'},
+          {role:'user',content:promptFixo}
+        ]})
+    });
+    if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error(e.error?.message||'Erro '+res.status); }
+    const data = await res.json();
+    focusGeneratedText = data.choices[0].message.content.trim();
+    document.getElementById('focus-result-text').textContent = focusGeneratedText;
+    document.getElementById('focus-result').classList.add('show');
+    toast('✦ Prompt gerado! Clique em "✓ Usar" para aplicar.');
+  } catch(e) {
+    toast('❌ Erro: '+e.message, 'error');
+  }
+  btn.disabled = false; spinner.style.display = 'none';
+}
+
+function usarPromptFoco() {
+  if (!focusGeneratedText) return;
+  const p  = getProject(); if (!p) return;
+  const ed = p.editors[focusEditorIndex]; if (!ed) return;
+  // Salva versão original antes de substituir
+  if (ed.draft.trim()) {
+    ed.history = ed.history || [];
+    ed.history.unshift({ text: ed.draft, date: new Date().toLocaleString('pt-BR') + ' (original)' });
+  }
+  ed.draft = focusGeneratedText;
+  document.getElementById('focus-textarea').value = focusGeneratedText;
+  updateFocusCounter();
+  document.getElementById('focus-result').classList.remove('show');
+  focusGeneratedText = '';
+  save(); toast('✓ Prompt aplicado! Original salvo no histórico.');
+}
+
+function copiarPromptFoco() {
+  if (!focusGeneratedText) return;
+  navigator.clipboard.writeText(focusGeneratedText)
+    .then(() => toast('📋 Prompt copiado!'))
+    .catch(()  => toast('Erro ao copiar','error'));
+}
+
+/* ═══════════════════════════════════════════════
+   📊 RELATÓRIO DO PROJETO — gerado pela IA
+═══════════════════════════════════════════════ */
+async function gerarRelatorio() {
+  const p = getProject(); if (!p) return;
+  openModal('modal-report');
+  // Mostra loading
+  document.getElementById('report-body').innerHTML = `
+    <div class="report-loading"><div class="spinner"></div> Analisando projeto com IA…</div>`;
+
+  // Monta dados estruturados do projeto
+  const totalKanban = (p.kanban?.todo?.length||0)+(p.kanban?.doing?.length||0)+(p.kanban?.done?.length||0);
+  const flowDone    = (p.flowBoxes||[]).filter(b=>b.status==='done').length;
+  const flowTotal   = (p.flowBoxes||[]).length;
+  const progresso   = flowTotal>0 ? Math.round(flowDone/flowTotal*100) : (p.progress||0);
+
+  const dados = {
+    nome: p.name,
+    prioridade: p.priority,
+    progresso: progresso,
+    ideias: p.ideas?.length || 0,
+    prompts: (p.editors||[]).map(e=>e.title).join(', '),
+    kanban: {
+      todo: p.kanban?.todo?.map(c=>c.title).join(', ')||'—',
+      doing: p.kanban?.doing?.map(c=>c.title).join(', ')||'—',
+      done: p.kanban?.done?.map(c=>c.title).join(', ')||'—',
+    },
+    fluxo: (p.flowBoxes||[]).map(b=>`${b.title}(${b.status})`).join(' → '),
+    ferramentas: (p.tools||[]).map(t=>`${t.name}(${t.category})`).join(', ')||'—',
+  };
+
+  // Renderiza seção visual imediatamente com dados locais
+  const htmlEstatico = `
+    <div class="report-header-section">
+      <div class="report-project-name">${esc(p.name)}</div>
+      <div class="report-project-meta">Prioridade: ${p.priority} · Criado em ${new Date(p.createdAt).toLocaleDateString('pt-BR')}</div>
+    </div>
+    <div class="report-stats">
+      <div class="report-stat"><div class="report-stat-value">${progresso}%</div><div class="report-stat-label">Progresso</div></div>
+      <div class="report-stat"><div class="report-stat-value">${dados.ideias}</div><div class="report-stat-label">Ideias</div></div>
+      <div class="report-stat"><div class="report-stat-value">${totalKanban}</div><div class="report-stat-label">Cards Kanban</div></div>
+      <div class="report-stat"><div class="report-stat-value">${p.kanban?.done?.length||0}</div><div class="report-stat-label">Concluídos</div></div>
+      <div class="report-stat"><div class="report-stat-value">${flowTotal}</div><div class="report-stat-label">Etapas Fluxo</div></div>
+      <div class="report-stat"><div class="report-stat-value">${(p.tools||[]).length}</div><div class="report-stat-label">Ferramentas</div></div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Progresso Geral</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:4px;">${progresso}% concluído · ${flowDone} de ${flowTotal} etapas do fluxo</div>
+      <div class="report-progress-bar"><div class="report-progress-fill" style="width:${progresso}%"></div></div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Status Kanban</div>
+      <div class="report-kanban-pills">
+        <span class="report-pill report-pill-todo">📋 To-do: ${p.kanban?.todo?.length||0}</span>
+        <span class="report-pill report-pill-doing">⚡ Fazendo: ${p.kanban?.doing?.length||0}</span>
+        <span class="report-pill report-pill-done">✅ Feito: ${p.kanban?.done?.length||0}</span>
+      </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Ferramentas do Projeto</div>
+      <div style="font-size:.82rem;color:var(--text);">${dados.ferramentas}</div>
+    </div>
+    <div class="report-section" id="report-ai-section">
+      <div class="report-section-title">Análise da IA</div>
+      <div class="report-loading"><div class="spinner"></div> Analisando…</div>
+    </div>`;
+
+  document.getElementById('report-body').innerHTML = htmlEstatico;
+
+  // Chama IA para análise
+  const cfg = getConfig();
+  if (!cfg.apikey) {
+    document.getElementById('report-ai-section').innerHTML = `
+      <div class="report-section-title">Análise da IA</div>
+      <div class="report-ai-content" style="color:var(--muted);">⚠️ Configure a API Key em Configurações para gerar a análise da IA.</div>`;
+    return;
+  }
+
+  const prompt = `Você é um consultor de projetos. Analise este projeto e gere um relatório executivo em português:
+
+Projeto: ${dados.nome}
+Prioridade: ${dados.prioridade}
+Progresso: ${dados.progresso}%
+Ideias no brainstorm: ${dados.ideias}
+Kanban — A fazer: ${dados.kanban.todo} | Fazendo: ${dados.kanban.doing} | Feito: ${dados.kanban.done}
+Fluxo: ${dados.fluxo}
+Ferramentas: ${dados.ferramentas}
+
+Gere um relatório com:
+1. Resumo executivo (2-3 linhas)
+2. Pontos fortes
+3. Riscos ou gargalos identificados
+4. Próximas ações recomendadas (3 itens)
+5. Nota geral do projeto (0-10) com justificativa
+
+Seja direto, objetivo e construtivo.`;
+
+  const ep = cfg.endpoint==='openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+  try {
+    const res = await fetch(ep,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body:JSON.stringify({model:cfg.model||'gpt-4o-mini',max_tokens:900,
+        messages:[
+          {role:'system',content:'Consultor de projetos. Responda em português, de forma direta e estruturada.'},
+          {role:'user',content:prompt}
+        ]})
+    });
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'Erro '+res.status);}
+    const data = await res.json();
+    const analise = data.choices[0].message.content.trim();
+    const secaoIA = document.getElementById('report-ai-section');
+    if (secaoIA) secaoIA.innerHTML = `
+      <div class="report-section-title">✦ Análise da IA</div>
+      <div class="report-ai-content">${esc(analise)}</div>`;
+  } catch(e) {
+    const secaoIA = document.getElementById('report-ai-section');
+    if (secaoIA) secaoIA.innerHTML = `
+      <div class="report-section-title">Análise da IA</div>
+      <div class="report-ai-content" style="color:var(--neon-m);">❌ Erro: ${esc(e.message)}</div>`;
+  }
+}
+
+function exportarRelatorio() {
+  const p = getProject(); if (!p) return;
+  const html = document.getElementById('report-body').innerHTML;
+  const win  = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><title>Relatório — ${p.name}</title>
+  <style>body{font-family:system-ui,sans-serif;max-width:700px;margin:40px auto;color:#111;line-height:1.6;}
+  h1{color:#6d28d9;} h2{color:#444;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #eee;padding-bottom:6px;}
+  .report-progress-bar{height:8px;background:#eee;border-radius:99px;overflow:hidden;}
+  .report-progress-fill{height:100%;background:linear-gradient(90deg,#a78bfa,#22d3ee);}
+  .report-stat{display:inline-block;text-align:center;padding:12px;background:#f5f5f5;border-radius:8px;margin:4px;}
+  .report-stat-value{font-size:1.5rem;font-weight:800;color:#6d28d9;}
+  .report-stat-label{font-size:.65rem;color:#888;text-transform:uppercase;}
+  .report-ai-content{background:#f8f5ff;border:1px solid #e0d6ff;border-radius:8px;padding:14px;white-space:pre-wrap;}
+  .report-pill{display:inline-block;padding:4px 12px;border-radius:99px;font-weight:600;font-size:.8rem;margin:2px;}
+  </style></head><body><h1>📊 ${p.name}</h1>${html}</body></html>`);
+  win.document.close(); win.print();
+}
+
+// Fecha Modo Foco com Escape
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') {
+    document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));
+    if (document.getElementById('focus-overlay').classList.contains('open')) closeFocusMode();
+  }
+  if ((e.ctrlKey||e.metaKey)&&e.key==='z') { e.preventDefault(); undoAction(); }
 });
 
 init();
