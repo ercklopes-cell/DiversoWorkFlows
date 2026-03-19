@@ -4,25 +4,25 @@
   "description": "Organize projetos, brainstorm, prompts e kanban — tudo em um só lugar.",
   "start_url": "/app",
   "display": "standalone",
-  "background_color": "#05050f",
+  "background_color": "#0d0a19",
   "theme_color": "#a78bfa",
   "orientation": "any",
   "scope": "/",
   "icons": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230d0d0d'/><text x='50%' y='58%' font-size='280' text-anchor='middle' dominant-baseline='middle' font-family='serif' fill='%23a78bfa'>D</text></svg>",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-72x72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any" },
+    { "src": "icon-96x96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any" },
+    { "src": "icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
-  "screenshots": [],
   "shortcuts": [
     {
-      "name": "Novo Projeto",
-      "short_name": "Novo",
-      "description": "Criar um novo projeto",
-      "url": "/app"
+      "name": "Abrir App",
+      "url": "/app",
+      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96" }]
     }
   ],
   "categories": ["productivity", "utilities"],
