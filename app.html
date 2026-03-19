@@ -89,16 +89,17 @@ input,textarea,select{font-family:var(--font);}
 [data-theme="light"] #header{background:rgba(244,244,255,.92);}
 
 /* [CORREÇÃO 1] Nome sem glow excessivo — cor visível, sem text-shadow */
-.logo-wrap{display:flex;align-items:center;cursor:pointer;text-decoration:none;}
+.logo-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
 .logo-name{
   font-family:'Orbitron',sans-serif;
-  font-size:.86rem;font-weight:900;letter-spacing:.04em;
-  color:#c4b5fd;
+  font-size:.82rem;font-weight:900;letter-spacing:.04em;
+  color:#7c3aed;                          /* roxo médio — legível no dark E no light */
   text-shadow:none;
   white-space:nowrap;line-height:1.1;
 }
+[data-theme="light"] .logo-name { color:#6d28d9; }  /* roxo mais escuro no light */
 .logo-sub{
-  display:block;font-size:.48rem;font-weight:400;letter-spacing:.12em;
+  display:block;font-size:.46rem;font-weight:500;letter-spacing:.12em;
   text-transform:uppercase;color:var(--muted);margin-top:3px;
   font-family:var(--mono);text-shadow:none;
 }
@@ -725,10 +726,132 @@ input,textarea,select{font-family:var(--font);}
 .report-pill-done {background:rgba(16,185,129,.15);color:var(--neon-g);}
 .report-loading{display:flex;align-items:center;gap:10px;color:var(--neon-p);font-size:.84rem;padding:20px 0;}
 
-/* ═══ PWA INSTALL BTN ═══ */
-.btn-install-pwa{display:none;padding:7px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);align-items:center;gap:6px;}
-.btn-install-pwa:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
-.btn-install-pwa.visible{display:flex;}
+/* ═══ RESPONSIVO MOBILE ═══ */
+@media (max-width: 640px) {
+
+  /* Header compacto — sem overflow */
+  #header { padding: 0 10px; gap: 4px; height: auto; min-height: var(--header-h); flex-wrap: nowrap; }
+  #header .logo-wrap img { height: 26px; }
+  .logo-name { display: none; }  /* esconde nome no mobile — só a logo fica */
+  .header-right { gap: 3px; flex-wrap: nowrap; overflow: hidden; }
+  .undo-btn { padding: 4px 7px; font-size: .65rem; }
+  .undo-btn span { display: none; } /* esconde texto ↺, mantém ícone */
+  .btn-organize-all { display: none !important; }
+  .btn-logout-header { padding: 5px 8px; font-size: .68rem; }
+  .btn-logout-header span { display: none; }
+  #sync-status { display: none; }
+  .btn-sync-manual { width: 28px; height: 28px; flex-shrink: 0; }
+  .btn-install-pwa { padding: 4px 7px; font-size: .65rem; }
+  .icon-btn { width: 30px; height: 30px; font-size: .82rem; }
+  /* Esconde texto do botão Sair em mobile — só ícone */
+  .btn-logout-header { font-size: 0; padding: 5px 6px; }
+  .btn-logout-header::before { content: '🚪'; font-size: .9rem; }
+
+  /* Páginas */
+  .page { padding: 14px 12px; }
+  #app { padding-top: var(--header-h); }
+
+  /* Dashboard */
+  .page-title { font-size: 1.15rem; }
+  .page-sub { font-size: .76rem; }
+  .projects-grid { grid-template-columns: 1fr !important; gap: 12px; }
+  .project-card { padding: 14px 12px; }
+  .color-swatches { flex-wrap: wrap; gap: 4px; }
+  .color-swatch { width: 18px; height: 18px; }
+  .btn-new-project { padding: 14px 12px; font-size: .85rem; }
+
+  /* Header do projeto — empilha verticalmente */
+  .project-header { gap: 8px; flex-direction: column; align-items: flex-start; }
+  .project-header > div:last-child { width: 100%; display: flex; gap: 8px; }
+  .project-header > div:last-child .btn { flex: 1; justify-content: center; }
+  .project-header-name { font-size: .95rem; }
+
+  /* Abas — scroll horizontal sem quebra */
+  .tabs { gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; flex-wrap: nowrap; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 8px 10px; font-size: .7rem; white-space: nowrap; flex-shrink: 0; }
+
+  /* Kanban */
+  .kanban-board { grid-template-columns: 1fr !important; gap: 12px; }
+  .kanban-col { padding: 12px; }
+
+  /* Brainstorm */
+  .brainstorm-generate-bar { flex-direction: column; gap: 8px; padding: 10px 12px; }
+  .brainstorm-idea-input { width: 100%; }
+  .btn-generate-ai { width: 100%; justify-content: center; font-size: .78rem; padding: 8px 12px; }
+  .actions-bar { flex-wrap: wrap; gap: 6px; }
+  .actions-bar .btn { flex-shrink: 0; }
+
+  /* Editor de prompts */
+  .editor-block-header { flex-wrap: wrap; gap: 6px; }
+  .editor-block-footer { flex-direction: column; align-items: stretch; gap: 8px; }
+  .btn-gerar-prompt { width: 100%; justify-content: center; }
+  .editors-list { gap: 14px; }
+
+  /* Ferramentas */
+  .tools-topbar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .tools-search-wrap { width: 100%; min-width: 0; }
+  .tools-topbar > div:last-child { display: flex; gap: 8px; }
+  .tools-filter-select { flex: 1; min-width: 0; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .tool-card { padding: 14px 12px; }
+
+  /* Fluxo */
+  .flow-boxes-grid { flex-direction: column; }
+  .flow-box { max-width: 100%; min-width: 0; width: 100%; }
+  .flow-interactive-wrap { padding: 12px; }
+
+  /* Modais — tela cheia em mobile */
+  .modal-bg { padding: 8px; align-items: flex-end; }
+  .modal { padding: 18px 14px; border-radius: var(--radius) var(--radius) 0 0; max-height: 90vh; overflow-y: auto; }
+  .modal h3 { font-size: .92rem; }
+  .modal > div[style*="grid"] { grid-template-columns: 1fr !important; }
+  .modal-footer { flex-wrap: wrap; gap: 8px; }
+  .modal-footer .btn { flex: 1; justify-content: center; min-width: 80px; }
+
+  /* Configurações */
+  .settings-data-block { flex-direction: column; gap: 10px; }
+  .settings-section { padding: 14px 12px; }
+
+  /* Modo Foco */
+  .focus-header { padding: 10px 12px; flex-wrap: wrap; gap: 6px; }
+  .focus-title { font-size: .7rem; }
+  .focus-actions { flex-wrap: wrap; gap: 5px; width: 100%; }
+  .btn-focus-gen, .btn-focus-save, .btn-focus-close { flex: 1; justify-content: center; min-width: 70px; font-size: .72rem; padding: 6px 10px; }
+  .focus-body { padding: 12px; gap: 10px; }
+  .focus-textarea { font-size: .85rem; padding: 12px; min-height: 260px; }
+  .focus-editor-title { font-size: .95rem; }
+
+  /* Relatório */
+  .report-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .report-stat { padding: 8px 4px; }
+  .report-stat-value { font-size: 1.1rem; }
+  .report-stat-label { font-size: .55rem; }
+  #modal-report .modal { padding: 14px 12px; }
+
+  /* Barra de progresso do fluxo */
+  .flow-progress-bar-wrap { padding: 10px 12px; }
+
+  /* Toast */
+  #toast-wrap { bottom: 12px; right: 10px; left: 10px; }
+  .toast { max-width: 100%; font-size: .76rem; }
+
+  /* AI box */
+  .ai-box { font-size: .74rem; }
+
+  /* Pastas */
+  .folders-grid { grid-template-columns: 1fr; }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 900px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .kanban-board { grid-template-columns: 1fr 1fr !important; }
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+  .tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .tab-btn { flex-shrink: 0; }
+  .project-header { flex-wrap: wrap; }
+}
 </style>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -738,6 +861,12 @@ input,textarea,select{font-family:var(--font);}
 <!-- ═══════ HEADER ═══════ -->
 <header id="header">
   <div class="logo-wrap" onclick="showPage('dashboard')">
+    <!-- Logo imagem -->
+    <img src="https://i.ibb.co/kscRnmHz/dreamina-2026-03-17-4183-Generate-a-version-of-the-white-logo-wit.png"
+      alt="Diverso WorkFlows"
+      style="height:34px;width:auto;flex-shrink:0;"
+      onerror="this.style.display='none'"/>
+    <!-- Nome sempre visível ao lado da logo -->
     <div class="logo-name">
       Diverso WorkFlows
       <span class="logo-sub">Management</span>
@@ -1226,6 +1355,9 @@ async function loadFromCloud() {
   renderDashboard();
   const si = document.getElementById('sync-info');
   if (si) si.textContent = new Date().toLocaleTimeString('pt-BR');
+
+  // Carrega API Key e configurações da nuvem (funciona em qualquer dispositivo)
+  await loadConfigFromCloud();
 }
 async function saveProjectToCloud(project) {
   const user = getUser(); if (!user || isLocalEnv()) return;
@@ -1422,13 +1554,65 @@ function save() {
   syncTimeout = setTimeout(() => target ? saveProjectToCloud(target) : saveAllToCloud(), 800);
 }
 function getConfig() { return JSON.parse(localStorage.getItem('diverso_config')||'{}'); }
-function saveConfig() {
-  localStorage.setItem('diverso_config', JSON.stringify({
+
+async function saveConfig() {
+  const cfg = {
     apikey:   document.getElementById('cfg-apikey').value.trim(),
     model:    document.getElementById('cfg-model').value,
     endpoint: document.getElementById('cfg-endpoint').value
-  }));
-  toast('Configurações salvas ✓');
+  };
+  // 1. Salva local imediatamente
+  localStorage.setItem('diverso_config', JSON.stringify(cfg));
+
+  // 2. Salva na nuvem para sincronizar entre dispositivos
+  if (!isLocalEnv()) {
+    const user = getUser();
+    if (user) {
+      try {
+        await sb.from('diverso_config').upsert({
+          user_id:    user.sub,
+          user_email: user.email,
+          config:     cfg
+        }, { onConflict: 'user_id' });
+        toast('✓ Configurações salvas e sincronizadas em todos os dispositivos!');
+      } catch(e) {
+        toast('✓ Salvo localmente (erro na nuvem: ' + e.message + ')');
+      }
+    } else {
+      toast('Configurações salvas ✓');
+    }
+  } else {
+    toast('Configurações salvas ✓');
+  }
+}
+
+// Carrega config da nuvem — chamado no loadFromCloud
+async function loadConfigFromCloud() {
+  const user = getUser();
+  if (!user || isLocalEnv()) return;
+  try {
+    const { data, error } = await sb
+      .from('diverso_config')
+      .select('config')
+      .eq('user_id', user.sub)
+      .single();
+    if (error || !data) return;
+    const cloudCfg = data.config;
+    if (!cloudCfg || !cloudCfg.apikey) return;
+    // Mescla: nuvem tem prioridade sobre local (garante sincronização)
+    const localCfg = getConfig();
+    const merged = { ...localCfg, ...cloudCfg };
+    localStorage.setItem('diverso_config', JSON.stringify(merged));
+    // Atualiza campos visíveis nas configurações
+    const apikeyEl   = document.getElementById('cfg-apikey');
+    const modelEl    = document.getElementById('cfg-model');
+    const endpointEl = document.getElementById('cfg-endpoint');
+    if (apikeyEl   && merged.apikey)   apikeyEl.value   = merged.apikey;
+    if (modelEl    && merged.model)    modelEl.value    = merged.model;
+    if (endpointEl && merged.endpoint) endpointEl.value = merged.endpoint;
+  } catch(e) {
+    console.warn('Erro ao carregar config da nuvem:', e.message);
+  }
 }
 
 /* ═══════════════════════════════════════════════
@@ -1513,7 +1697,14 @@ function renderDashboard() {
     grid.innerHTML = '<div class="empty"><div class="e-icon">🗂️</div><p>Crie seu primeiro projeto!</p></div>';
     return;
   }
-  grid.innerHTML = projects.map(p => {
+
+  // Ordenação por prioridade: alta → media-alta → media → baixa → muito-baixa
+  const PRIORITY_ORDER = { 'alta':0, 'media-alta':1, 'media':2, 'baixa':3, 'muito-baixa':4 };
+  const sorted = [...projects].sort((a,b) =>
+    (PRIORITY_ORDER[a.priority]??5) - (PRIORITY_ORDER[b.priority]??5)
+  );
+
+  grid.innerHTML = sorted.map(p => {
     const cc = p.color || PRIORITY_COLORS[p.priority] || '#a78bfa';
     const sw = COLORS.map(c => `<div class="color-swatch${p.color===c?' selected':''}" style="background:${c};box-shadow:0 0 6px ${c}66" onclick="setProjectColor('${p.id}','${c}',event)"></div>`).join('');
     return `
@@ -1772,10 +1963,21 @@ window.addEventListener('resize',()=>{ if(currentProjectId) drawConnections(); }
 function renderEditors() {
   const p = getProject();
   if (!p.editors || !p.editors.length) {
-    p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[] }];
+    p.editors = [{ id:'e_0', title:'Prompt 1', draft:'', history:[], createdAt: new Date().toISOString() }];
     save();
   }
-  document.getElementById('editors-list').innerHTML = p.editors.map((ed, ei) => `
+  // Garante que todos os editors têm createdAt
+  p.editors.forEach((ed, i) => { if (!ed.createdAt) ed.createdAt = new Date(Date.now() - i * 1000).toISOString(); });
+
+  // Mais recentes no topo — ordena por updatedAt desc, depois createdAt desc
+  const sorted = [...p.editors].map((ed, originalIndex) => ({ ed, originalIndex }))
+    .sort((a, b) => {
+      const ta = a.ed.updatedAt || a.ed.createdAt || '';
+      const tb = b.ed.updatedAt || b.ed.createdAt || '';
+      return tb.localeCompare(ta);
+    });
+
+  document.getElementById('editors-list').innerHTML = sorted.map(({ ed, originalIndex: ei }) => `
     <div class="editor-block" id="edblock-${ei}">
 
       <!-- Cabeçalho: título editável + ações -->
@@ -1849,16 +2051,18 @@ function renderEditors() {
 
 function addEditor() {
   pushUndo(); const p=getProject();
-  p.editors.push({id:'e_'+Date.now(),title:'Prompt '+(p.editors.length+1),draft:'',history:[]});
+  const now = new Date().toISOString();
+  p.editors.push({id:'e_'+Date.now(),title:'Prompt '+(p.editors.length+1),draft:'',history:[],createdAt:now,updatedAt:now});
   save(); renderEditors(); toast('Novo editor criado');
 }
-function updateEditorTitle(ei,v) { getProject().editors[ei].title=v; save(); }
-function updateEditorDraft(ei,v) { getProject().editors[ei].draft=v; save(); }
+function updateEditorTitle(ei,v) { const e=getProject().editors[ei]; if(e){e.title=v;e.updatedAt=new Date().toISOString();} save(); }
+function updateEditorDraft(ei,v) { const e=getProject().editors[ei]; if(e){e.draft=v;e.updatedAt=new Date().toISOString();} save(); }
 function saveEditorVersion(ei) {
   const p=getProject(); const ed=p.editors[ei];
   if(!ed.draft.trim()){ toast('Escreva algo antes','error'); return; }
   ed.history=ed.history||[];
   ed.history.unshift({text:ed.draft,date:new Date().toLocaleString('pt-BR')});
+  ed.updatedAt = new Date().toISOString();
   save(); renderEditors(); toast('Versão salva ✓');
 }
 function loadEditorVersion(ei,vi) {
