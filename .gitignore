@@ -1,6 +1,2 @@
 .DS_Store
-Thumbs.db
-.vscode/
 *.log
-.env
-client_secret*.json

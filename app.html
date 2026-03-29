@@ -555,6 +555,14 @@ input,textarea,select{font-family:var(--font);}
 .btn-generate-ai:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
 .btn-generate-ai:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .gen-spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+/* Mobile: barra brainstorm empilha verticalmente */
+@media(max-width:640px){
+  .brainstorm-generate-bar{flex-direction:column;align-items:stretch;}
+  .btn-generate-ai{width:100%;justify-content:center;font-size:.74rem;padding:8px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .brainstorm-idea-input{font-size:.82rem;}
+  .btn-ai-txt-full{display:none!important;}
+  .btn-ai-txt-short{display:inline!important;}
+}
 
 /* [CORREÇÃO 2] Fluxograma interativo */
 .flow-interactive-wrap{
@@ -671,71 +679,78 @@ input,textarea,select{font-family:var(--font);}
 .btn-organize-all{padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;background:linear-gradient(135deg,#a78bfa22,#22d3ee18);border:1px solid #a78bfa55;color:var(--neon-p);transition:var(--transition);display:flex;align-items:center;gap:6px;}
 .btn-organize-all:hover{box-shadow:var(--glow-p);transform:scale(1.04);}
 
-/* ══ HEADER SPLIT DESKTOP/MOBILE ══ */
-.hd-desk{display:flex;align-items:center;gap:6px;}
-.hd-mob{display:none;align-items:center;gap:6px;}
-@media(max-width:768px){.hd-desk{display:none!important;}.hd-mob{display:flex!important;}}
+/* ══ PWA INSTALL BUTTON ══ */
+.btn-install-pwa{
+  padding:6px 14px;border-radius:var(--radius-sm);font-size:.74rem;font-weight:700;
+  background:linear-gradient(135deg,#10b981,#22d3ee);color:#fff;border:none;
+  cursor:pointer;display:none;align-items:center;gap:6px;
+  box-shadow:0 0 12px #10b98144;transition:var(--transition);white-space:nowrap;
+}
+.btn-install-pwa:hover{box-shadow:0 0 20px #10b98166;transform:scale(1.04);}
+.btn-install-pwa.visible{display:flex;}
 
-/* ══ PAINEL LATERAL MOBILE ══ */
-.mm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;backdrop-filter:blur(4px);display:none;}
-.mm-panel{position:fixed;top:0;right:0;bottom:0;width:min(300px,88vw);background:var(--surface);border-left:1px solid var(--border2);z-index:500;display:flex;flex-direction:column;transform:translateX(110%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;}
-.mm-panel.open{transform:translateX(0);}
-.mm-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border2);flex-shrink:0;}
-.mm-userinfo{padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface2);}
-.mm-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font-size:.88rem;font-weight:500;cursor:pointer;width:100%;text-align:left;font-family:var(--font);transition:background .15s;flex-shrink:0;}
-.mm-item:hover,.mm-item:active{background:var(--surface2);}
-.mm-ic{font-size:1.1rem;width:26px;text-align:center;flex-shrink:0;}
-.mm-danger{color:var(--neon-m);}
-@media(max-width:640px){.mm-panel{width:100vw;border-left:none;}}
+/* ══ MODO FOCO ══ */
+.modal-foco{
+  position:fixed;inset:0;z-index:600;background:var(--bg);
+  display:none;flex-direction:column;
+  animation:fadeInFoco .2s ease;
+}
+.modal-foco.open{display:flex;}
+@keyframes fadeInFoco{from{opacity:0}to{opacity:1}}
+.foco-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:1px solid var(--border2);
+  flex-shrink:0;background:var(--surface);
+}
+.foco-title-input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-size:1rem;font-weight:700;color:var(--text);font-family:var(--font);
+  margin:0 16px;
+}
+.foco-body{flex:1;display:flex;flex-direction:column;padding:20px;gap:12px;overflow:hidden;}
+.foco-textarea{
+  flex:1;width:100%;background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:18px 20px;
+  color:var(--text);font-size:1rem;line-height:1.8;font-family:var(--font);
+  resize:none;outline:none;transition:border-color .2s;
+}
+.foco-textarea:focus{border-color:var(--neon-p);}
+.foco-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;border-top:1px solid var(--border2);
+  background:var(--surface);flex-shrink:0;flex-wrap:wrap;gap:8px;
+}
+.foco-counter{font-size:.72rem;color:var(--muted);font-family:var(--mono);}
+.foco-actions{display:flex;gap:8px;flex-wrap:wrap;}
 
-/* ══ BIBLIOTECA DE PROMPTS ══ */
-.lib-topbar{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap;}
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.lib-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:16px;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
-.lib-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--lc,var(--neon-p));box-shadow:0 0 8px var(--lc,var(--neon-p));}
-.lib-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(167,139,250,.15);border-color:var(--neon-p);}
-.lib-card-title{font-size:.9rem;font-weight:700;color:var(--text);flex:1;line-height:1.3;}
-.lib-card-prev{font-size:.75rem;color:var(--muted);line-height:1.55;font-family:var(--mono);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
-.lib-card-ft{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);}
-.lib-meta{font-size:.64rem;color:var(--muted);font-family:var(--mono);}
-.lib-fav{background:none;border:none;cursor:pointer;font-size:1rem;padding:2px;line-height:1;transition:transform .2s;}
-.lib-fav:hover{transform:scale(1.3);}
-.lib-tags{display:flex;flex-wrap:wrap;gap:4px;}
-.lib-tag{font-size:.6rem;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
-.lib-view-box{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:16px;font-family:var(--mono);font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;max-height:300px;overflow-y:auto;}
-.lib-cp{--lc:#ec4899;}.lib-cd{--lc:#10b981;}.lib-ca{--lc:#22d3ee;}.lib-cc{--lc:#f472b6;}
-.lib-cm{--lc:#facc15;}.lib-ce{--lc:#60a5fa;}.lib-cn{--lc:#fb923c;}.lib-ci{--lc:#a78bfa;}.lib-cg{--lc:#5a5a8a;}
-@media(max-width:640px){.lib-grid{grid-template-columns:1fr;}.lib-topbar{flex-direction:column;align-items:stretch;}}
-
-/* ══ HISTÓRICO DE ATIVIDADES ══ */
-.act-list{display:flex;flex-direction:column;gap:8px;}
-.act-item{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;}
-.act-item:hover{border-color:#a78bfa44;}
-.act-ic{font-size:1.1rem;flex-shrink:0;}
-.act-info{flex:1;min-width:0;}
-.act-desc{font-size:.82rem;color:var(--text);margin-bottom:3px;line-height:1.4;}
-.act-time{font-size:.67rem;color:var(--muted);font-family:var(--mono);}
-.btn-recover{padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:600;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--neon-g);cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.btn-recover:hover{background:rgba(16,185,129,.22);}
-
-/* ══ AGENDA / PRAZOS ══ */
-.agenda-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
-.agenda-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:14px;transition:var(--transition);}
-.agenda-card.vhoje{border-color:var(--media);box-shadow:0 0 10px rgba(250,204,21,.15);}
-.agenda-card.atrasado{border-color:var(--neon-m);box-shadow:0 0 10px rgba(236,72,153,.15);}
-.ag-badge{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:8px;}
-.ag-ok{background:rgba(16,185,129,.12);color:var(--neon-g);}
-.ag-soon{background:rgba(250,204,21,.15);color:var(--media);animation:agpulse 2s ease-in-out infinite;}
-.ag-late{background:rgba(236,72,153,.15);color:var(--neon-m);animation:agpulse 1s ease-in-out infinite;}
-@keyframes agpulse{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* ══ KANBAN PRAZO ══ */
-.kcard-due{font-size:.65rem;font-family:var(--mono);padding:2px 7px;border-radius:99px;display:inline-flex;align-items:center;gap:3px;margin-top:4px;}
-.kcard-due-ok{background:rgba(16,185,129,.12);color:var(--neon-g);}
-.kcard-due-soon{background:rgba(250,204,21,.15);color:var(--media);animation:agpulse 2s ease-in-out infinite;}
-.kcard-due-late{background:rgba(236,72,153,.15);color:var(--neon-m);animation:agpulse 1s ease-in-out infinite;}
-.new-card-date-input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;color:var(--text);font-size:.78rem;outline:none;margin-bottom:4px;font-family:var(--mono);color-scheme:dark;}
-.new-card-date-input:focus{border-color:var(--neon-p);}
+/* ══ RELATÓRIO DO PROJETO ══ */
+.relatorio-wrap{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:24px;margin-top:14px;
+}
+.relatorio-section{margin-bottom:20px;}
+.relatorio-section h3{
+  font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--neon-p);margin-bottom:10px;font-family:var(--mono);
+}
+.relatorio-section p{font-size:.85rem;line-height:1.7;color:var(--text);}
+.relatorio-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:20px;}
+.relatorio-stat{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:12px 14px;text-align:center;
+}
+.relatorio-stat .val{font-size:1.5rem;font-weight:800;color:var(--neon-p);display:block;}
+.relatorio-stat .lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.relatorio-score{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:14px 18px;
+}
+.relatorio-score .nota{font-size:2rem;font-weight:900;color:var(--neon-g);}
+.relatorio-ai-loading{text-align:center;padding:40px;color:var(--muted);}
+.relatorio-ai-loading .spinner{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.tag-item{font-size:.68rem;padding:3px 10px;border-radius:99px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);}
 </style>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -751,24 +766,19 @@ input,textarea,select{font-family:var(--font);}
     </div>
   </div>
   <div class="header-right">
-    <!-- DESKTOP -->
-    <div class="hd-desk">
+    <!-- Indicador + botão manual de sync -->
+    <div style="display:flex;align-items:center;gap:5px;">
       <span id="sync-status" style="font-size:.66rem;font-family:var(--mono);color:var(--muted);min-width:68px;text-align:right;">💾 Local</span>
-      <button class="btn-sync-manual" id="btn-sync-manual" onclick="syncNow()" title="Sincronizar">⟳</button>
-      <div id="user-chip-wrap"></div>
-      <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
-      <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar</button>
-      <button class="icon-btn" onclick="showPage('biblioteca')" title="Biblioteca de Prompts">📚</button>
-      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
-      <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
-      <button class="btn-logout-header" onclick="logout()" title="Sair da conta">🚪 Sair</button>
+      <button class="btn-sync-manual" id="btn-sync-manual" onclick="syncNow()" title="Sincronizar agora com Supabase">⟳</button>
     </div>
-    <!-- MOBILE -->
-    <div class="hd-mob">
-      <span id="sync-status-m" style="font-size:.6rem;font-family:var(--mono);color:var(--muted);">💾</span>
-      <div id="user-chip-wrap-m"></div>
-      <button onclick="mmOpen()" title="Menu" style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">☰</button>
-    </div>
+    <div id="user-chip-wrap"></div>
+    <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
+    <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
+    <button class="icon-btn" onclick="showPage('biblioteca')" title="Biblioteca de Prompts">📚</button>
+    <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
+    <button class="icon-btn" id="settings-btn" onclick="toggleSettings()" title="Configurações">☰</button>
+    <button class="btn-install-pwa" id="btn-install-pwa" onclick="installPWA()" title="Instalar App como PWA" style="display:none;">📲 Instalar</button>
+    <button class="btn-logout-header" onclick="logout()" title="Sair da conta">🚪 Sair</button>
   </div>
 </header>
 
@@ -858,6 +868,8 @@ input,textarea,select{font-family:var(--font);}
   <div class="page" id="page-project">
     <div class="project-header">
       <button class="back-btn" onclick="backToDashboard()">← Voltar</button>
+      <button class="btn btn-outline btn-sm" onclick="abrirFoco()" title="Modo Foco" style="font-size:.75rem;padding:6px 12px;">🌙 Foco</button>
+      <button class="btn btn-outline btn-sm" onclick="abrirRelatorio()" title="Relatório" style="font-size:.75rem;padding:6px 12px;">📊 Relatório</button>
       <div class="project-header-info">
         <div class="project-header-name" id="pv-name"></div>
         <div class="project-header-meta" id="pv-meta"></div>
@@ -870,8 +882,6 @@ input,textarea,select{font-family:var(--font);}
       <button class="tab-btn" data-tab="fluxo">🔀 Fluxo</button>
       <button class="tab-btn" data-tab="arquivos">📁 Arquivos</button>
       <button class="tab-btn" data-tab="ferramentas">🔧 Ferramentas</button>
-      <button class="tab-btn" data-tab="historico">⏰ Histórico</button>
-      <button class="tab-btn" data-tab="agenda">📅 Agenda</button>
     </div>
 
     <!-- TAB BRAINSTORM -->
@@ -883,7 +893,8 @@ input,textarea,select{font-family:var(--font);}
           placeholder="Digite sua ideia principal aqui para gerar post-its com IA…"/>
         <button class="btn btn-generate-ai" onclick="gerarBrainstormIA()">
           <span id="gen-spinner" class="gen-spinner" style="display:none"></span>
-          ✦ Gerar Brainstorm com IA
+          <span class="btn-ai-txt-full">✦ Gerar Brainstorm com IA</span>
+          <span class="btn-ai-txt-short" style="display:none;">✦ Gerar IA</span>
         </button>
       </div>
 
@@ -925,17 +936,17 @@ input,textarea,select{font-family:var(--font);}
         <div class="kanban-col col-todo" id="kcol-todo" ondragover="kColDragOver(event,'todo')" ondrop="kColDrop(event,'todo')" ondragleave="kColDragLeave(event)">
           <div class="kanban-col-header"><span class="kanban-col-title">To-do</span><span class="col-badge" id="kcnt-todo">0</span></div>
           <div class="kanban-cards" id="kcards-todo"></div>
-          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-todo"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-todo"/><input class="new-card-date-input" type="date" id="ndd-todo" title="Prazo (opcional)"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('todo')">＋ Adicionar</button></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-todo"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-todo"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('todo')">＋ Adicionar</button></div>
         </div>
         <div class="kanban-col col-doing" id="kcol-doing" ondragover="kColDragOver(event,'doing')" ondrop="kColDrop(event,'doing')" ondragleave="kColDragLeave(event)">
           <div class="kanban-col-header"><span class="kanban-col-title">Fazendo</span><span class="col-badge" id="kcnt-doing">0</span></div>
           <div class="kanban-cards" id="kcards-doing"></div>
-          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-doing"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-doing"/><input class="new-card-date-input" type="date" id="ndd-doing" title="Prazo (opcional)"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('doing')">＋ Adicionar</button></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-doing"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-doing"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('doing')">＋ Adicionar</button></div>
         </div>
         <div class="kanban-col col-done" id="kcol-done" ondragover="kColDragOver(event,'done')" ondrop="kColDrop(event,'done')" ondragleave="kColDragLeave(event)">
           <div class="kanban-col-header"><span class="kanban-col-title">Feito</span><span class="col-badge" id="kcnt-done">0</span></div>
           <div class="kanban-cards" id="kcards-done"></div>
-          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-done"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-done"/><input class="new-card-date-input" type="date" id="ndd-done" title="Prazo (opcional)"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('done')">＋ Adicionar</button></div>
+          <div class="new-card-row"><input class="new-card-title-input" placeholder="Título…" id="nct-done"/><input class="new-card-desc-input" placeholder="Descrição (opcional)" id="ncd-done"/><button class="btn btn-outline btn-sm btn-full" onclick="addKCard('done')">＋ Adicionar</button></div>
         </div>
       </div>
       <div class="ai-loading" id="ai-loading-kanban"><div class="spinner"></div> Analisando…</div>
@@ -1003,49 +1014,6 @@ input,textarea,select{font-family:var(--font);}
         </div>
       </div>
       <div class="tools-grid" id="tools-grid"></div>
-    </div>
-
-    <!-- TAB: HISTÓRICO DE ATIVIDADES -->
-    <div class="tab-panel" id="tab-historico">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:.88rem;font-weight:700;margin-bottom:2px;">⏰ Histórico de Atividades</div>
-          <div style="font-size:.73rem;color:var(--muted);">Log automático das ações do projeto com recuperação</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <select class="tools-filter-select" id="act-filter" onchange="renderAct()">
-            <option value="">Todas as ações</option>
-            <option value="idea">💡 Brainstorm</option>
-            <option value="kanban">📋 Kanban</option>
-            <option value="prompt">✍️ Prompts</option>
-            <option value="flow">🔀 Fluxo</option>
-            <option value="tool">🔧 Ferramentas</option>
-          </select>
-          <button class="btn btn-danger btn-sm" onclick="clearAct()">🗑 Limpar</button>
-        </div>
-      </div>
-      <div class="act-list" id="act-list">
-        <div style="text-align:center;padding:40px;color:var(--muted);">
-          <div style="font-size:2rem;opacity:.3;margin-bottom:12px;">⏰</div>
-          <p>Nenhuma atividade ainda.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB: AGENDA / PRAZOS -->
-    <div class="tab-panel" id="tab-agenda">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:.88rem;font-weight:700;margin-bottom:2px;">📅 Agenda — Cards com Prazo</div>
-          <div style="font-size:.73rem;color:var(--muted);">Visualize todos os cards com data definida, ordenados por urgência</div>
-        </div>
-      </div>
-      <div class="agenda-grid" id="agenda-grid">
-        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">
-          <div style="font-size:2rem;opacity:.3;margin-bottom:12px;">📅</div>
-          <p>Nenhum card com prazo definido.<br/>Adicione datas nos cards do Kanban.</p>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1129,99 +1097,6 @@ input,textarea,select{font-family:var(--font);}
     </div>
   </div>
 
-  <!-- PÁGINA BIBLIOTECA DE PROMPTS (dentro do #app) -->
-  <div class="page" id="page-biblioteca">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:10px;">
-      <div>
-        <div class="page-title">📚 Biblioteca de Prompts</div>
-        <div class="page-sub">Seus prompts salvos — acessíveis de qualquer projeto</div>
-      </div>
-      <button class="btn btn-primary" onclick="libNew()">＋ Novo Prompt</button>
-    </div>
-    <div class="lib-topbar">
-      <div class="tools-search-wrap" style="flex:1;min-width:180px;">
-        <span>🔍</span>
-        <input class="tools-search-input" id="lib-q" placeholder="Buscar prompt…" oninput="renderLib()"/>
-      </div>
-      <select class="tools-filter-select" id="lib-cat-f" onchange="renderLib()">
-        <option value="">Todas as categorias</option>
-        <option value="Copywriting">✍️ Copywriting</option><option value="Código">💻 Código</option>
-        <option value="Análise">🔍 Análise</option><option value="Criativo">🎨 Criativo</option>
-        <option value="Marketing">📣 Marketing</option><option value="Educação">📚 Educação</option>
-        <option value="Negócios">💼 Negócios</option><option value="IA">🤖 IA</option>
-        <option value="Geral">📦 Geral</option>
-      </select>
-      <select class="tools-filter-select" id="lib-sort-f" onchange="renderLib()">
-        <option value="recent">Mais recentes</option><option value="used">Mais usados</option>
-        <option value="fav">Favoritos</option><option value="az">A → Z</option>
-      </select>
-    </div>
-    <div class="lib-grid" id="lib-grid"></div>
-  </div>
-
-</div><!-- fim #app -->
-<div class="mm-overlay" id="mm-overlay" onclick="mmClose()"></div>
-<div class="mm-panel" id="mm-panel">
-  <div class="mm-head">
-    <span style="font-size:.74rem;font-weight:700;color:var(--neon-p);font-family:var(--mono);letter-spacing:.06em;">MENU</span>
-    <button onclick="mmClose()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;">✕</button>
-  </div>
-  <div class="mm-userinfo" id="mm-userinfo"></div>
-  <button class="mm-item" onclick="mmClose();showPage('biblioteca')"><span class="mm-ic">📚</span>Biblioteca de Prompts</button>
-  <button class="mm-item" id="mm-org-btn" onclick="mmClose();organizarTudoIA()" style="display:none"><span class="mm-ic">✦</span>Organizar com IA</button>
-  <button class="mm-item" onclick="mmClose();undoAction()"><span class="mm-ic">↺</span>Desfazer</button>
-  <hr style="border:none;border-top:1px solid var(--border);margin:0;flex-shrink:0;"/>
-  <button class="mm-item" onclick="mmClose();syncNow()"><span class="mm-ic">⟳</span>Sincronizar<span id="mm-sync-lbl" style="font-size:.65rem;color:var(--muted);margin-left:auto;font-family:var(--mono);">☁️</span></button>
-  <button class="mm-item" onclick="mmClose();toggleTheme()"><span class="mm-ic" id="mm-theme-ic">☀️</span>Alternar Tema</button>
-  <button class="mm-item" onclick="mmClose();toggleSettings()"><span class="mm-ic">⚙️</span>Configurações</button>
-  <hr style="border:none;border-top:1px solid var(--border);margin:0;flex-shrink:0;"/>
-  <button class="mm-item mm-danger" onclick="mmClose();logout()"><span class="mm-ic">🚪</span>Sair da conta</button>
-</div>
-
-<!-- MODAL: Editar Prompt da Biblioteca -->
-<div class="modal-bg" id="modal-lib-form">
-  <div class="modal" style="max-width:520px;">
-    <h3 id="lib-form-h">📚 Novo Prompt</h3>
-    <input type="hidden" id="lib-form-id"/>
-    <div class="form-group"><label>Título</label><input class="form-input" id="lib-form-name" placeholder="Nome do prompt"/></div>
-    <div class="form-group"><label>Categoria</label>
-      <select class="form-select" id="lib-form-cat">
-        <option value="Geral">📦 Geral</option><option value="Copywriting">✍️ Copywriting</option>
-        <option value="Código">💻 Código</option><option value="Análise">🔍 Análise</option>
-        <option value="Criativo">🎨 Criativo</option><option value="Marketing">📣 Marketing</option>
-        <option value="Educação">📚 Educação</option><option value="Negócios">💼 Negócios</option>
-        <option value="IA">🤖 IA</option>
-      </select>
-    </div>
-    <div class="form-group"><label>Prompt</label>
-      <textarea class="form-input" id="lib-form-content" rows="7" placeholder="Cole ou escreva o prompt aqui…" style="resize:vertical;font-family:var(--mono);font-size:.82rem;line-height:1.6;min-height:140px;"></textarea>
-    </div>
-    <div class="form-group"><label>Tags <span style="font-size:.68rem;color:var(--muted);">(separadas por vírgula)</span></label>
-      <input class="form-input" id="lib-form-tags" placeholder="ex: resumo, texto, produtividade"/>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-lib-form')">Cancelar</button>
-      <button class="btn btn-primary" onclick="libSave()">💾 Salvar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Visualizar Prompt da Biblioteca -->
-<div class="modal-bg" id="modal-lib-view">
-  <div class="modal" style="max-width:560px;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px;">
-      <div><h3 id="lv-name" style="margin-bottom:4px;"></h3><div id="lv-meta" style="font-size:.72rem;color:var(--muted);"></div></div>
-      <button class="lib-fav" id="lv-fav" onclick="libFavToggle()" style="font-size:1.3rem;">☆</button>
-    </div>
-    <div class="lib-view-box" id="lv-content"></div>
-    <div id="lv-tags" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;"></div>
-    <div class="modal-footer" style="margin-top:16px;">
-      <button class="btn btn-danger btn-sm" onclick="libDel()">🗑 Excluir</button>
-      <button class="btn btn-outline" onclick="closeModal('modal-lib-view')">Fechar</button>
-      <button class="btn btn-outline btn-sm" onclick="libCopy()">📋 Copiar</button>
-      <button class="btn btn-primary btn-sm" onclick="libEdit()">✏️ Editar</button>
-    </div>
-  </div>
 </div>
 
 <!-- MODAIS FERRAMENTAS -->
@@ -1373,7 +1248,6 @@ function migrateProjects() {
     if (!p.flowArrows)  p.flowArrows  = [];
     if (!p.kanban)      p.kanban      = {todo:[],doing:[],done:[]};
     if (!p.ideas)       p.ideas       = [];
-    if (!p.activityLog) p.activityLog = [];
   });
 }
 
@@ -1413,26 +1287,27 @@ function getUser() {
 
 // Renderiza o chip de usuário no header
 function renderUserChip() {
+  const wrap = document.getElementById('user-chip-wrap');
+  if (!wrap) return;
   const user = getUser();
-  if (!user) { window.location.replace('index.html'); return; }
+  if (!user) {
+    // Sem login: não deve chegar aqui (auth guard redireciona antes)
+    // Mas por segurança, redireciona
+    window.location.replace('index.html');
+    return;
+  }
+  // Com login: avatar + nome + botão sair
   const initial = user.name ? user.name[0].toUpperCase() : '?';
   const avatarHtml = user.picture
     ? `<img class="user-avatar" src="${user.picture}" alt="${user.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
     : '';
-  // Desktop chip
-  const wrap = document.getElementById('user-chip-wrap');
-  if (wrap) wrap.innerHTML = `
+  wrap.innerHTML = `
     <div class="user-chip" title="${user.email}">
       ${avatarHtml}
       <div class="user-avatar-fallback" ${user.picture ? 'style="display:none"' : ''}>${initial}</div>
       <span class="user-name">${user.name || user.email}</span>
       <button class="logout-btn" onclick="logout()" title="Sair">✕</button>
     </div>`;
-  // Mobile chip
-  const mwrap = document.getElementById('user-chip-wrap-m');
-  if (mwrap) mwrap.innerHTML = user.picture
-    ? `<img src="${user.picture}" onclick="mmOpen()" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(--neon-p);cursor:pointer;" onerror="this.style.display='none'">`
-    : `<div onclick="mmOpen()" style="width:28px;height:28px;border-radius:50%;background:var(--neon-p);color:#000;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;">${initial}</div>`;
 }
 
 // Logout: limpa sessão e volta pra landing
@@ -1460,7 +1335,7 @@ function init() {
   const theme = localStorage.getItem('diverso_theme') || 'dark';
   if (theme === 'light') {
     document.documentElement.setAttribute('data-theme','light');
-    const _tb=document.getElementById('theme-btn'); if(_tb) _tb.textContent='🌙';
+    document.getElementById('theme-btn').textContent = '🌙';
     const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.add('on');
   }
   const cfg = getConfig();
@@ -1515,7 +1390,8 @@ function undoAction() {
   save();
   renderBrainstorm(); renderEditors(); renderKanban(); renderFlow();
   const p = getProject();
-  {const _n=document.getElementById('pv-name');const _m=document.getElementById('pv-meta');if(_n)_n.textContent=p.name;if(_m)_m.textContent=`Prioridade: ${p.priority} · ${p.progress||0}% concluído`;}
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
   updateUndoBtn();
   toast('↺ Desfeito');
 }
@@ -1529,12 +1405,10 @@ function updateUndoBtn() {
 ═══════════════════════════════════════════════ */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const _pg = document.getElementById('page-'+id); if(_pg) _pg.classList.add('active');
-  const _sb = document.getElementById('settings-btn');
-  if(_sb) _sb.classList.toggle('active', id==='settings');
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('settings-btn').classList.toggle('active', id==='settings');
   const ob = document.getElementById('btn-organize-all');
   if (ob) ob.style.display = (id==='project') ? 'flex' : 'none';
-  if (id === 'biblioteca') { loadLib(); }
 }
 function toggleSettings() {
   const open = document.getElementById('page-settings').classList.contains('active');
@@ -1549,22 +1423,17 @@ function toggleSettings() {
 }
 function toggleTheme() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  const _tb = document.getElementById('theme-btn');
-  const _dt = document.getElementById('dark-toggle');
   if (isLight) {
     document.documentElement.removeAttribute('data-theme');
-    if(_tb) _tb.textContent = '☀️';
+    document.getElementById('theme-btn').textContent = '☀️';
     localStorage.setItem('diverso_theme','dark');
-    if(_dt) _dt.classList.remove('on');
+    const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.remove('on');
   } else {
     document.documentElement.setAttribute('data-theme','light');
-    if(_tb) _tb.textContent = '🌙';
+    document.getElementById('theme-btn').textContent = '🌙';
     localStorage.setItem('diverso_theme','light');
-    if(_dt) _dt.classList.add('on');
+    const dt = document.getElementById('dark-toggle'); if(dt) dt.classList.add('on');
   }
-  // Sincroniza ícone no painel mobile
-  const _mi = document.getElementById('mm-theme-ic');
-  if(_mi) _mi.textContent = isLight ? '☀️' : '🌙';
 }
 function toggleThemeFromSettings() { toggleTheme(); }
 
@@ -1665,7 +1534,8 @@ function openProject(id) {
     p.flowBoxes = steps.map((s,i)=>({id:'fb_'+i,title:s,desc:'',status:i===0?'doing':'todo'}));
     p.flowArrows = []; save();
   }
-  {const _n=document.getElementById('pv-name');const _m=document.getElementById('pv-meta');if(_n)_n.textContent=p.name;if(_m)_m.textContent=`Prioridade: ${p.priority} · ${p.progress||0}% concluído`;}
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
   previousPage = 'project';
   showPage('project');
   switchTab('brainstorm');
@@ -1685,8 +1555,6 @@ function switchTab(name) {
   if (name==='brainstorm')  setTimeout(drawConnections, 100);
   if (name==='ferramentas') renderTools();
   if (name==='fluxo')       setTimeout(drawFlowArrows, 100);
-  if (name==='historico')   renderAct();
-  if (name==='agenda')      renderAgenda();
 }
 
 /* ═══════════════════════════════════════════════
@@ -2055,23 +1923,10 @@ function usarPromptGerado(ei) {
 ═══════════════════════════════════════════════ */
 function renderKanban() {
   const p=getProject();
-  const hoje=new Date(); hoje.setHours(0,0,0,0);
   ['todo','doing','done'].forEach(col=>{
     const cards=p.kanban[col]||[];
     document.getElementById('kcnt-'+col).textContent=cards.length;
-    document.getElementById('kcards-'+col).innerHTML=cards.map((c,i)=>{
-      let dueHtml='';
-      if(c.due){
-        const due=new Date(c.due+'T00:00:00');
-        const diff=Math.round((due-hoje)/(1000*60*60*24));
-        let cls,lbl;
-        if(diff<0){cls='kcard-due-late';lbl='⚠️ '+Math.abs(diff)+'d atraso';}
-        else if(diff===0){cls='kcard-due-late';lbl='🔥 Hoje';}
-        else if(diff<=3){cls='kcard-due-soon';lbl='⏰ '+diff+'d';}
-        else{cls='kcard-due-ok';lbl='📅 '+due.toLocaleDateString('pt-BR');}
-        dueHtml=`<div class="kcard-due ${cls}">${lbl}</div>`;
-      }
-      return `
+    document.getElementById('kcards-'+col).innerHTML=cards.map((c,i)=>`
       <div class="kcard" draggable="true"
         ondragstart="kCardDragStart(event,'${col}',${i})"
         ondragover="kCardDragOver(event)"
@@ -2079,14 +1934,12 @@ function renderKanban() {
         ondrop="kCardDrop(event,'${col}',${i})">
         <div class="kcard-title">${esc(c.title)}</div>
         ${c.desc?`<div class="kcard-desc">${esc(c.desc)}</div>`:''}
-        ${dueHtml}
         <div class="kcard-footer">
           <button class="kcard-btn kcard-up"      onclick="kCardMove('${col}',${i},-1)">↑</button>
           <button class="kcard-btn kcard-down"     onclick="kCardMove('${col}',${i},1)">↓</button>
           <button class="kcard-btn kcard-del-btn"  onclick="kCardDel('${col}',${i})">🗑</button>
         </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
   });
 }
 function addKCard(col) {
@@ -2094,13 +1947,9 @@ function addKCard(col) {
   if(!title){toast('Digite um título','error');return;}
   pushUndo();
   const desc=document.getElementById('ncd-'+col).value.trim();
-  const dueEl=document.getElementById('ndd-'+col);
-  const due=dueEl?dueEl.value:'';
-  getProject().kanban[col].push({title,desc,due,id:'k_'+Date.now()});
+  getProject().kanban[col].push({title,desc,id:'k_'+Date.now()});
   document.getElementById('nct-'+col).value='';
   document.getElementById('ncd-'+col).value='';
-  if(dueEl) dueEl.value='';
-  logAct('kanban_add','📋 Adicionou card "'+title+'" em '+col,{});
   save(); renderKanban();
 }
 function kCardDel(col,i)  { pushUndo(); getProject().kanban[col].splice(i,1); save(); renderKanban(); }
@@ -2440,7 +2289,8 @@ function aplicarSugestoesIA() {
   }
   save();
   renderKanban(); renderBrainstorm(); renderFlow();
-  {const _n=document.getElementById('pv-name');const _m=document.getElementById('pv-meta');if(_n)_n.textContent=p.name;if(_m)_m.textContent=`Prioridade: ${p.priority} · ${p.progress||0}% concluído`;}
+  document.getElementById('pv-name').textContent = p.name;
+  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
   closeModal('modal-ia-global');
   pendingIASuggestions = null;
   toast('✓ Sugestões da IA aplicadas!');
@@ -2509,7 +2359,8 @@ async function aiOrganize(module) {
     if(json.fluxo) p.flow=json.fluxo;
     if(json.kanban){['todo','doing','done'].forEach(col=>{if(json.kanban[col]){const novos=json.kanban[col].filter(nc=>!p.kanban[col].find(ec=>ec.title===nc.title));p.kanban[col]=[...p.kanban[col],...novos];}});}
     save();
-    {const _n=document.getElementById('pv-name');const _m=document.getElementById('pv-meta');if(_n)_n.textContent=p.name;if(_m)_m.textContent=`Prioridade: ${p.priority} · ${p.progress}% concluído`;}
+    document.getElementById('pv-name').textContent=p.name;
+    document.getElementById('pv-meta').textContent=`Prioridade: ${p.priority} · ${p.progress}% concluído`;
     renderKanban(); renderFlow();
     showAIBox(module,`✦ IA\n\n📌 ${json.tituloProjeto||p.name}\n🎯 ${json.prioridade||p.priority}\n📊 ${json.progresso??p.progress}%\n🔀 ${json.fluxo||p.flow}\n\n💬 ${json.resumo||''}`);
   } catch(err) { showAIBox(module,'❌ Erro: '+err.message); }
@@ -2737,409 +2588,374 @@ document.addEventListener('keydown',e=>{
 
 
 /* ════════════════════════════════════════════════════════
-   PAINEL LATERAL MOBILE
+   📲 PWA — Instalar como App
 ════════════════════════════════════════════════════════ */
-function mmOpen() {
-  const panel = document.getElementById('mm-panel');
-  const overlay = document.getElementById('mm-overlay');
-  if (!panel || !overlay) return;
-  // Sync status
-  const sl = document.getElementById('mm-sync-lbl');
-  const ss = document.getElementById('sync-status');
-  if (sl && ss) sl.textContent = ss.textContent;
-  // Theme icon
-  const ti = document.getElementById('mm-theme-ic');
-  if (ti) ti.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '🌙' : '☀️';
-  // Organize button
-  const mo = document.getElementById('mm-org-btn');
-  if (mo) mo.style.display = currentProjectId ? 'flex' : 'none';
-  // User info
-  const user = getUser();
-  const mu = document.getElementById('mm-userinfo');
-  if (mu && user) {
-    const init = user.name ? user.name[0].toUpperCase() : '?';
-    const av = user.picture
-      ? `<img src="${user.picture}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--neon-p);" onerror="this.style.display='none'">`
-      : `<div style="width:36px;height:36px;border-radius:50%;background:var(--neon-p);color:#000;font-weight:700;display:flex;align-items:center;justify-content:center;">${init}</div>`;
-    mu.innerHTML = av + `<div><div style="font-size:.85rem;font-weight:700;">${user.name || 'Usuário'}</div><div style="font-size:.7rem;color:var(--muted);">${user.email || ''}</div></div>`;
-  }
-  panel.classList.add('open');
-  overlay.style.display = 'block';
+let _pwdPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwdPrompt = e;
+  const btn = document.getElementById('btn-install-pwa');
+  if (btn) { btn.style.display = 'flex'; btn.classList.add('visible'); }
+});
+
+window.addEventListener('appinstalled', () => {
+  _pwdPrompt = null;
+  const btn = document.getElementById('btn-install-pwa');
+  if (btn) btn.classList.remove('visible');
+  toast('✅ App instalado com sucesso!');
+});
+
+function installPWA() {
+  if (!_pwdPrompt) { toast('Abra no Chrome/Edge e use o menu do browser para instalar.', 'error'); return; }
+  _pwdPrompt.prompt();
+  _pwdPrompt.userChoice.then(r => {
+    if (r.outcome === 'accepted') toast('📲 Instalando o app…');
+    _pwdPrompt = null;
+    const btn = document.getElementById('btn-install-pwa');
+    if (btn) { btn.classList.remove('visible'); btn.style.display = 'none'; }
+  });
 }
-function mmClose() {
-  const p = document.getElementById('mm-panel');
-  const o = document.getElementById('mm-overlay');
-  if (p) p.classList.remove('open');
-  if (o) o.style.display = 'none';
+
+function pwdInstall() { installPWA(); }
+
+/* Service Worker para PWA offline */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
 }
 
 /* ════════════════════════════════════════════════════════
-   📚 BIBLIOTECA DE PROMPTS
+   🌙 MODO FOCO — Editor sem distrações
 ════════════════════════════════════════════════════════ */
-let _lib = [];
-let _libId = null;
-const LIB_CAT_CLASS = {
-  'Copywriting':'lib-cp','Código':'lib-cd','Análise':'lib-ca','Criativo':'lib-cc',
-  'Marketing':'lib-cm','Educação':'lib-ce','Negócios':'lib-cn','IA':'lib-ci','Geral':'lib-cg'
-};
+let _focoEditorIdx = 0;
 
-function loadLib() {
-  const user = getUser(); if (!user) return;
-  try { const x = localStorage.getItem('diverso_lib'); if (x) _lib = JSON.parse(x); } catch(e) {}
-  if (isLocalEnv()) { renderLib(); return; }
-  sb.from('diverso_prompt_library')
-    .select('*').eq('user_id', user.sub).order('updated_at', { ascending: false })
-    .then(({ data, error }) => {
-      if (!error && data) { _lib = data; localStorage.setItem('diverso_lib', JSON.stringify(_lib)); }
-      renderLib();
-    }).catch(() => renderLib());
+function abrirFoco() {
+  const p = getProject(); if (!p || !p.editors || !p.editors.length) { toast('Projeto sem editores', 'error'); return; }
+  // Popula select de editores
+  const sel = document.getElementById('foco-editor-sel');
+  sel.innerHTML = p.editors.map((ed, i) => `<option value="${i}">${esc(ed.title || 'Editor '+(i+1))}</option>`).join('');
+  sel.value = _focoEditorIdx = 0;
+  focoCarregaEditor(0);
+  document.getElementById('modal-foco').classList.add('open');
+  setTimeout(() => document.getElementById('foco-textarea').focus(), 100);
 }
 
-function renderLib() {
-  const grid = document.getElementById('lib-grid'); if (!grid) return;
-  const q    = (document.getElementById('lib-q')?.value || '').toLowerCase();
-  const cat  = document.getElementById('lib-cat-f')?.value || '';
-  const sort = document.getElementById('lib-sort-f')?.value || 'recent';
-  let list = [..._lib];
-  if (q)   list = list.filter(p => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
-  if (cat) list = list.filter(p => p.category === cat);
-  if (sort === 'used') list.sort((a, b) => (b.use_count || 0) - (a.use_count || 0));
-  else if (sort === 'fav')  list = [...list.filter(p => p.is_favorite), ...list.filter(p => !p.is_favorite)];
-  else if (sort === 'az')   list.sort((a, b) => a.title.localeCompare(b.title));
-  else list.sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
-
-  if (!list.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;">
-      <div style="font-size:3rem;opacity:.3;margin-bottom:16px;">📚</div>
-      <p style="color:var(--muted);font-size:.88rem;margin-bottom:20px;">${_lib.length ? 'Nenhum prompt encontrado.' : 'Biblioteca vazia.'}</p>
-      ${!_lib.length ? `<button class="btn btn-primary" onclick="libNew()">＋ Criar primeiro prompt</button>` : ''}
-    </div>`;
-    return;
-  }
-  grid.innerHTML = list.map(p => {
-    const cls  = LIB_CAT_CLASS[p.category] || 'lib-cg';
-    const tags = (p.tags || []).filter(Boolean).slice(0, 3);
-    const ts   = p.updated_at || p.created_at || '';
-    return `<div class="lib-card ${cls}" onclick="libView('${p.id}')">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
-        <div class="lib-card-title">${esc(p.title)}</div>
-        <span class="lib-fav" onclick="event.stopPropagation();libFav('${p.id}')">${p.is_favorite ? '⭐' : '☆'}</span>
-      </div>
-      <div class="lib-card-prev">${esc(p.content)}</div>
-      ${tags.length ? `<div class="lib-tags">${tags.map(t => `<span class="lib-tag">${esc(t)}</span>`).join('')}</div>` : ''}
-      <div class="lib-card-ft">
-        <span class="lib-meta">${esc(p.category || 'Geral')} · ${p.use_count || 0}× usado</span>
-        <span class="lib-meta">${ts ? new Date(ts).toLocaleDateString('pt-BR') : ''}</span>
-      </div>
-    </div>`;
-  }).join('');
+function fecharFoco() {
+  document.getElementById('modal-foco').classList.remove('open');
 }
 
-function libView(id) {
-  const p = _lib.find(x => x.id === id); if (!p) return;
-  _libId = id;
-  document.getElementById('lv-name').textContent    = p.title;
-  document.getElementById('lv-meta').textContent    = `${p.category || 'Geral'} · ${p.use_count || 0}× usado`;
-  document.getElementById('lv-fav').textContent     = p.is_favorite ? '⭐' : '☆';
-  document.getElementById('lv-content').textContent = p.content;
-  document.getElementById('lv-tags').innerHTML = (p.tags || []).filter(Boolean)
-    .map(t => `<span class="lib-tag" style="font-size:.72rem;">${esc(t)}</span>`).join('');
-  openModal('modal-lib-view');
+function focoTrocaEditor() {
+  const idx = parseInt(document.getElementById('foco-editor-sel').value);
+  _focoEditorIdx = idx;
+  focoCarregaEditor(idx);
 }
 
-function libNew() {
-  document.getElementById('lib-form-h').textContent   = '📚 Novo Prompt';
-  document.getElementById('lib-form-id').value         = '';
-  document.getElementById('lib-form-name').value       = '';
-  document.getElementById('lib-form-content').value    = '';
-  document.getElementById('lib-form-tags').value       = '';
-  document.getElementById('lib-form-cat').value        = 'Geral';
-  openModal('modal-lib-form');
-}
-
-function libEdit() {
-  const p = _lib.find(x => x.id === _libId); if (!p) return;
-  closeModal('modal-lib-view');
-  document.getElementById('lib-form-h').textContent   = '✏️ Editar Prompt';
-  document.getElementById('lib-form-id').value         = p.id;
-  document.getElementById('lib-form-name').value       = p.title;
-  document.getElementById('lib-form-content').value    = p.content;
-  document.getElementById('lib-form-tags').value       = (p.tags || []).join(', ');
-  document.getElementById('lib-form-cat').value        = p.category || 'Geral';
-  openModal('modal-lib-form');
-}
-
-function libSave() {
-  const title   = document.getElementById('lib-form-name').value.trim();
-  const content = document.getElementById('lib-form-content').value.trim();
-  if (!title || !content) { toast('Preencha título e conteúdo', 'error'); return; }
-  const cat  = document.getElementById('lib-form-cat').value;
-  const tags = document.getElementById('lib-form-tags').value.split(',').map(t => t.trim()).filter(Boolean);
-  const id   = document.getElementById('lib-form-id').value;
-  const now  = new Date().toISOString();
-  const user = getUser();
-
-  if (id) {
-    const idx = _lib.findIndex(p => p.id === id);
-    if (idx !== -1) _lib[idx] = { ..._lib[idx], title, content, category: cat, tags, updated_at: now };
-    if (!isLocalEnv() && user) sb.from('diverso_prompt_library').update({ title, content, category: cat, tags, updated_at: now }).eq('id', id).eq('user_id', user.sub).then(() => {});
-    toast('✓ Prompt atualizado!');
-  } else {
-    const novo = { id: 'local_' + Date.now(), title, content, category: cat, tags, is_favorite: false, use_count: 0, created_at: now, updated_at: now };
-    _lib.unshift(novo);
-    if (!isLocalEnv() && user) {
-      sb.from('diverso_prompt_library')
-        .insert({ user_id: user.sub, user_email: user.email, title, content, category: cat, tags, is_favorite: false, use_count: 0 })
-        .select('id').single()
-        .then(({ data }) => { if (data) { const i = _lib.findIndex(p => p.id === novo.id); if (i !== -1) _lib[i].id = data.id; } });
-    }
-    toast('✓ Prompt salvo na biblioteca!');
-  }
-  localStorage.setItem('diverso_lib', JSON.stringify(_lib));
-  renderLib(); closeModal('modal-lib-form');
-}
-
-function libDel() {
-  if (!_libId || !confirm('Excluir este prompt?')) return;
-  const user = getUser();
-  if (!isLocalEnv() && user) sb.from('diverso_prompt_library').delete().eq('id', _libId).eq('user_id', user.sub).then(() => {});
-  _lib = _lib.filter(p => p.id !== _libId);
-  localStorage.setItem('diverso_lib', JSON.stringify(_lib));
-  renderLib(); closeModal('modal-lib-view');
-  toast('🗑 Prompt excluído');
-}
-
-function libFav(id) {
-  const p = _lib.find(x => x.id === id); if (!p) return;
-  p.is_favorite = !p.is_favorite; p.updated_at = new Date().toISOString();
-  const user = getUser();
-  if (!isLocalEnv() && user) sb.from('diverso_prompt_library').update({ is_favorite: p.is_favorite }).eq('id', id).eq('user_id', user.sub).then(() => {});
-  localStorage.setItem('diverso_lib', JSON.stringify(_lib)); renderLib();
-}
-
-function libFavToggle() {
-  libFav(_libId);
-  const p = _lib.find(x => x.id === _libId);
-  const el = document.getElementById('lv-fav'); if (el && p) el.textContent = p.is_favorite ? '⭐' : '☆';
-}
-
-function libCopy() {
-  const p = _lib.find(x => x.id === _libId); if (!p) return;
-  navigator.clipboard.writeText(p.content).then(() => toast('📋 Prompt copiado!')).catch(() => toast('Erro ao copiar', 'error'));
-  p.use_count = (p.use_count || 0) + 1;
-  const user = getUser();
-  if (!isLocalEnv() && user) sb.from('diverso_prompt_library').update({ use_count: p.use_count }).eq('id', _libId).eq('user_id', user.sub).then(() => {});
-  localStorage.setItem('diverso_lib', JSON.stringify(_lib));
-}
-
-/* ════════════════════════════════════════════════════════
-   ⏰ HISTÓRICO DE ATIVIDADES
-════════════════════════════════════════════════════════ */
-const ACT_ICONS = {
-  idea_add: '💡', idea_del: '🗑️',
-  kanban_add: '📋', kanban_del: '🗑️', kanban_move: '↔️',
-  prompt_save: '💾', prompt_gen: '✦', brainstorm_gen: '🤖',
-  flow_add: '🔀', flow_edit: '✏️', flow_del: '🗑️',
-  tool_add: '🔧', tool_edit: '✏️', tool_del: '🗑️'
-};
-const ACT_CATS = {
-  idea:   'idea_add,idea_del',
-  kanban: 'kanban_add,kanban_del,kanban_move',
-  prompt: 'prompt_save,prompt_gen,brainstorm_gen',
-  flow:   'flow_add,flow_edit,flow_del',
-  tool:   'tool_add,tool_edit,tool_del'
-};
-
-function logAct(action, desc, payload) {
+function focoCarregaEditor(idx) {
   const p = getProject(); if (!p) return;
-  p.activityLog = p.activityLog || [];
-  p.activityLog.unshift({ id: 'a' + Date.now(), action, desc, payload, ts: new Date().toISOString() });
-  if (p.activityLog.length > 150) p.activityLog = p.activityLog.slice(0, 150);
+  const ed = p.editors[idx];
+  if (!ed) return;
+  document.getElementById('foco-textarea').value = ed.draft || '';
+  document.getElementById('foco-title-lbl').textContent = '🌙 ' + (ed.title || 'Editor');
+  focoCount();
+}
+
+function focoCount() {
+  const txt = document.getElementById('foco-textarea').value;
+  const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+  const chars = txt.length;
+  const lbl = document.getElementById('foco-counter-lbl');
+  const det = document.getElementById('foco-detail');
+  if (lbl) lbl.textContent = words + ' palavras';
+  if (det) det.textContent = words + ' palavras · ' + chars + ' chars';
+  // Auto-salva o rascunho no editor
+  const p = getProject(); if (!p) return;
+  const ed = p.editors[_focoEditorIdx]; if (!ed) return;
+  ed.draft = txt;
   save();
 }
 
-function renderAct() {
+function focoSalvar() {
   const p = getProject(); if (!p) return;
-  const el = document.getElementById('act-list'); if (!el) return;
-  const filter = document.getElementById('act-filter')?.value || '';
-  let log = p.activityLog || [];
-  if (filter && ACT_CATS[filter]) {
-    const types = ACT_CATS[filter].split(',');
-    log = log.filter(e => types.includes(e.action));
-  }
-  if (!log.length) {
-    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:2rem;opacity:.3;margin-bottom:12px;">⏰</div><p>' + (filter ? 'Nenhuma atividade desse tipo.' : 'Nenhuma atividade ainda.') + '</p></div>';
-    return;
-  }
-  el.innerHTML = log.map(e => {
-    const icon = ACT_ICONS[e.action] || '📌';
-    const dt   = new Date(e.ts);
-    const diff = Math.floor((new Date() - dt) / 1000);
-    const tempo = diff < 60 ? 'agora' : diff < 3600 ? Math.floor(diff / 60) + 'min' : diff < 86400 ? Math.floor(diff / 3600) + 'h' : dt.toLocaleDateString('pt-BR');
-    const canR = e.payload && Object.keys(e.payload).length > 0;
-    return `<div class="act-item">
-      <div class="act-ic">${icon}</div>
-      <div class="act-info">
-        <div class="act-desc">${esc(e.desc)}</div>
-        <div class="act-time">${tempo} atrás</div>
-      </div>
-      ${canR ? `<button class="btn-recover" onclick="recoverAct('${e.id}')">↩ Recuperar</button>` : ''}
-    </div>`;
-  }).join('');
+  const ed = p.editors[_focoEditorIdx]; if (!ed) return;
+  const txt = document.getElementById('foco-textarea').value.trim();
+  if (!txt) { toast('Escreva algo antes de salvar', 'error'); return; }
+  ed.draft = txt;
+  ed.history = ed.history || [];
+  ed.history.unshift({ text: txt, date: new Date().toLocaleString('pt-BR') });
+  ed.updatedAt = new Date().toISOString();
+  if (ed.history.length > 20) ed.history = ed.history.slice(0, 20);
+  save();
+  toast('💾 Versão salva no histórico do editor!');
 }
 
-function recoverAct(id) {
+async function focoGerarIA() {
   const p = getProject(); if (!p) return;
-  const e = (p.activityLog || []).find(x => x.id === id); if (!e || !e.payload) return;
-  if (!confirm('Recuperar: "' + e.desc + '"?')) return;
-  pushUndo();
-  const pl = e.payload;
+  const ed = p.editors[_focoEditorIdx]; if (!ed) return;
+  const draft = document.getElementById('foco-textarea').value.trim();
+  if (!draft) { toast('Escreva algo primeiro para a IA melhorar', 'error'); return; }
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure sua API key em Configurações', 'error'); return; }
+  const btn = document.getElementById('foco-btn-ia');
+  btn.disabled = true; btn.textContent = '⏳ Gerando…';
   try {
-    if (e.action === 'idea_del' && pl.idea !== undefined) {
-      p.ideas = p.ideas || [];
-      if (pl.idx !== undefined) p.ideas.splice(pl.idx, 0, pl.idea); else p.ideas.push(pl.idea);
-      save(); renderBrainstorm(); toast('💡 Ideia recuperada!');
-    } else if (e.action === 'kanban_del' && pl.card) {
-      p.kanban[pl.col] = p.kanban[pl.col] || []; p.kanban[pl.col].push(pl.card);
-      save(); renderKanban(); toast('📋 Card recuperado!');
-    } else if (e.action === 'kanban_move' && pl.card && pl.from) {
-      const dest = p.kanban[pl.to] || [];
-      const idx = dest.findIndex(c => c.id === pl.card.id);
-      if (idx !== -1) { dest.splice(idx, 1); p.kanban[pl.from] = p.kanban[pl.from] || []; p.kanban[pl.from].push(pl.card); }
-      save(); renderKanban(); toast('↩ Card movido de volta!');
-    } else if (e.action === 'tool_del' && pl.tool) {
-      p.tools = p.tools || []; p.tools.push(pl.tool);
-      save(); renderTools(); toast('🔧 Ferramenta recuperada!');
-    } else if (e.action === 'flow_del' && pl.box) {
-      p.flowBoxes = p.flowBoxes || []; p.flowBoxes.push(pl.box);
-      save(); renderFlow(); toast('🔀 Etapa recuperada!');
-    } else { toast('Recuperação não disponível para esta ação', 'error'); }
-    renderAct();
-  } catch(err) { toast('Erro: ' + err.message, 'error'); }
-}
-
-function clearAct() {
-  if (!confirm('Limpar histórico deste projeto?')) return;
-  const p = getProject(); if (!p) return;
-  p.activityLog = []; save(); renderAct();
-}
-
-/* ════════════════════════════════════════════════════════
-   📅 AGENDA — Cards com Prazo
-════════════════════════════════════════════════════════ */
-function renderAgenda() {
-  const p = getProject(); if (!p) return;
-  const grid = document.getElementById('agenda-grid'); if (!grid) return;
-  const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
-  const cards = [];
-  ['todo', 'doing', 'done'].forEach(col => {
-    (p.kanban[col] || []).forEach(card => { if (card.due) cards.push({ ...card, col }); });
-  });
-  cards.sort((a, b) => new Date(a.due) - new Date(b.due));
-  if (!cards.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);"><div style="font-size:2rem;opacity:.3;margin-bottom:12px;">📅</div><p>Nenhum card com prazo definido.<br/>Adicione datas nos cards do Kanban.</p></div>';
-    return;
+    const endpoint = cfg.endpoint === 'openai'
+      ? 'https://api.openai.com/v1/chat/completions'
+      : 'https://models.inference.ai.azure.com/chat/completions';
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({
+        model: cfg.model || 'gpt-4o-mini',
+        messages:[
+          { role:'system', content:'Você é um especialista em prompt engineering. Melhore e expanda o prompt do usuário, mantendo a intenção original mas tornando-o mais claro, específico e eficaz. Retorne apenas o prompt melhorado, sem explicações.' },
+          { role:'user', content: draft }
+        ],
+        max_tokens: 1000
+      })
+    });
+    const data = await resp.json();
+    const melhorado = data.choices?.[0]?.message?.content?.trim();
+    if (!melhorado) throw new Error('Resposta vazia da IA');
+    document.getElementById('foco-textarea').value = melhorado;
+    focoCount();
+    toast('✦ Prompt melhorado pela IA!');
+  } catch(e) {
+    toast('❌ Erro: ' + e.message, 'error');
   }
-  const colLbl = { todo: 'To-do', doing: 'Fazendo', done: 'Feito' };
-  grid.innerHTML = cards.map(card => {
-    const due  = new Date(card.due + 'T00:00:00');
-    const diff = Math.round((due - hoje) / (1000 * 60 * 60 * 24));
-    let cardCls = '', badgeCls = 'ag-ok', badgeLbl = '';
-    if (card.col === 'done') { badgeCls = 'ag-ok'; badgeLbl = '✅ Feito'; }
-    else if (diff < 0)  { cardCls = 'atrasado'; badgeCls = 'ag-late'; badgeLbl = '⚠️ ' + Math.abs(diff) + 'd atrasado'; }
-    else if (diff === 0){ cardCls = 'vhoje';    badgeCls = 'ag-soon'; badgeLbl = '🔥 Vence hoje'; }
-    else if (diff <= 3) { cardCls = 'vhoje';    badgeCls = 'ag-soon'; badgeLbl = '⏰ ' + diff + 'd restante(s)'; }
-    else { badgeCls = 'ag-ok'; badgeLbl = '📅 ' + due.toLocaleDateString('pt-BR'); }
-    return `<div class="agenda-card ${cardCls}">
-      <div class="ag-badge ${badgeCls}">${badgeLbl}</div>
-      <div style="font-size:.85rem;font-weight:600;margin-bottom:4px;">${esc(card.title)}</div>
-      ${card.desc ? `<div style="font-size:.73rem;color:var(--muted);margin-bottom:6px;">${esc(card.desc)}</div>` : ''}
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-        <span style="font-size:.72rem;font-family:var(--mono);">${due.toLocaleDateString('pt-BR')}</span>
-        <span style="font-size:.65rem;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--muted);">${colLbl[card.col]}</span>
-      </div>
-    </div>`;
-  }).join('');
+  btn.disabled = false; btn.textContent = '✦ Gerar com IA';
 }
 
+// Fecha foco com Escape (adiciona ao listener existente)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('modal-foco')?.classList.contains('open')) fecharFoco();
+  }
+});
+
 /* ════════════════════════════════════════════════════════
-   HOOKS DE LOG NAS FUNÇÕES EXISTENTES
+   📊 RELATÓRIO DO PROJETO
 ════════════════════════════════════════════════════════ */
-// Guarda referências originais e envolve com log
-(function() {
-  // addIdea
-  const _ai = addIdea;
-  addIdea = function() { _ai.apply(this, arguments); logAct('idea_add', '💡 Adicionou nova ideia', {}); };
+function abrirRelatorio() {
+  const p = getProject(); if (!p) return;
+  closeModal('modal-relatorio');
+  openModal('modal-relatorio');
+  renderRelatorioBase(p);
+}
 
-  // deleteIdeaU
-  const _di = deleteIdeaU;
-  deleteIdeaU = function(i) {
-    const p = getProject(); const idea = p?.ideas?.[i];
-    logAct('idea_del', '🗑 Removeu ideia: "' + String(idea || '').slice(0, 50) + '"', { idea, idx: i });
-    _di.apply(this, arguments);
+function renderRelatorioBase(p) {
+  const body = document.getElementById('relatorio-body');
+  // Estatísticas
+  const totalIdeas    = (p.ideas || []).length;
+  const totalEditors  = (p.editors || []).length;
+  const totalCards    = (p.kanban?.todo?.length||0) + (p.kanban?.doing?.length||0) + (p.kanban?.done?.length||0);
+  const doneCards     = (p.kanban?.done?.length || 0);
+  const totalFlowBoxes= (p.flowBoxes || []).length;
+  const doneFlow      = (p.flowBoxes || []).filter(b => b.status === 'done').length;
+  const totalTools    = (p.tools || []).length;
+  const progressColor = p.progress >= 70 ? 'var(--neon-g)' : p.progress >= 40 ? 'var(--media)' : 'var(--neon-m)';
+
+  body.innerHTML = `
+    <div class="relatorio-stat-grid">
+      <div class="relatorio-stat"><span class="val" style="color:${progressColor}">${p.progress||0}%</span><span class="lbl">Progresso</span></div>
+      <div class="relatorio-stat"><span class="val">${totalIdeas}</span><span class="lbl">Ideias</span></div>
+      <div class="relatorio-stat"><span class="val">${totalCards}</span><span class="lbl">Cards Kanban</span></div>
+      <div class="relatorio-stat"><span class="val">${doneCards}</span><span class="lbl">Concluídos</span></div>
+      <div class="relatorio-stat"><span class="val">${totalFlowBoxes}</span><span class="lbl">Etapas Fluxo</span></div>
+      <div class="relatorio-stat"><span class="val">${totalEditors}</span><span class="lbl">Prompts</span></div>
+      <div class="relatorio-stat"><span class="val">${totalTools}</span><span class="lbl">Ferramentas</span></div>
+    </div>
+
+    <div class="relatorio-section">
+      <h3>📋 Kanban</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${['todo','doing','done'].map(col => {
+          const cards = p.kanban?.[col] || [];
+          const label = col==='todo'?'📋 To-do':col==='doing'?'⚡ Fazendo':'✅ Feito';
+          return `<div style="flex:1;min-width:120px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;">
+            <div style="font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:6px;">${label} (${cards.length})</div>
+            ${cards.slice(0,3).map(c=>`<div style="font-size:.75rem;color:var(--text);margin-bottom:3px;">• ${esc(c.title)}</div>`).join('')}
+            ${cards.length>3?`<div style="font-size:.68rem;color:var(--muted);">+${cards.length-3} mais…</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    ${p.flowBoxes?.length ? `
+    <div class="relatorio-section">
+      <h3>🔀 Fluxograma</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${p.flowBoxes.map(b => {
+          const c = b.status==='done'?'var(--neon-g)':b.status==='doing'?'var(--media)':'var(--muted)';
+          const ic= b.status==='done'?'✅':b.status==='doing'?'⚡':'○';
+          return `<div style="font-size:.75rem;padding:4px 10px;border-radius:99px;border:1px solid ${c};color:${c};">${ic} ${esc(b.title)}</div>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    ${p.ideas?.length ? `
+    <div class="relatorio-section">
+      <h3>💡 Brainstorm</h3>
+      <div class="tag-list">${p.ideas.slice(0,8).map(i=>`<span class="tag-item">${esc(String(i).slice(0,40))}</span>`).join('')}${p.ideas.length>8?`<span class="tag-item">+${p.ideas.length-8} mais</span>`:''}</div>
+    </div>` : ''}
+
+    ${p.editors?.length ? `
+    <div class="relatorio-section">
+      <h3>✍️ Prompts / Editores</h3>
+      ${p.editors.map(ed=>`
+        <div style="margin-bottom:8px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 12px;">
+          <div style="font-size:.78rem;font-weight:700;margin-bottom:4px;">${esc(ed.title||'Editor')}</div>
+          ${ed.draft?`<div style="font-size:.72rem;color:var(--muted);font-family:var(--mono);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${esc(ed.draft.slice(0,200))}</div>`:''}
+        </div>`).join('')}
+    </div>` : ''}
+
+    <div style="margin-top:16px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:.75rem;color:var(--muted);text-align:center;">
+      Clique em <strong>✦ Analisar com IA</strong> para receber uma análise detalhada do projeto.
+    </div>
+  `;
+}
+
+async function gerarRelatorioIA() {
+  const p = getProject(); if (!p) return;
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure sua API key em Configurações', 'error'); return; }
+
+  const btn = document.getElementById('btn-rel-ia');
+  const loading = document.getElementById('relatorio-loading');
+  btn.disabled = true; btn.textContent = '⏳ Analisando…';
+  loading.style.display = 'block';
+
+  const resumo = {
+    nome: p.name, prioridade: p.priority, progresso: p.progress||0,
+    ideias: (p.ideas||[]).slice(0,10),
+    kanban: {
+      todo: (p.kanban?.todo||[]).map(c=>c.title),
+      doing: (p.kanban?.doing||[]).map(c=>c.title),
+      done: (p.kanban?.done||[]).map(c=>c.title),
+    },
+    fluxo: (p.flowBoxes||[]).map(b=>({titulo:b.title,status:b.status})),
+    prompts: (p.editors||[]).map(e=>e.title),
+    ferramentas: (p.tools||[]).map(t=>t.name),
   };
 
-  // saveEditorVersion
-  const _sv = saveEditorVersion;
-  saveEditorVersion = function(ei) {
-    const p = getProject(); const ed = p?.editors?.[ei];
-    if (ed) logAct('prompt_save', '💾 Salvou versão: "' + ed.title + '"', {});
-    _sv.apply(this, arguments);
-  };
+  try {
+    const endpoint = cfg.endpoint === 'openai'
+      ? 'https://api.openai.com/v1/chat/completions'
+      : 'https://models.inference.ai.azure.com/chat/completions';
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({
+        model: cfg.model || 'gpt-4o-mini',
+        messages:[
+          { role:'system', content:'Você é um consultor de projetos. Analise o projeto fornecido e retorne SOMENTE um JSON válido com: {"resumo":"...","pontos_fortes":["..."],"riscos":["..."],"proximas_acoes":["..."],"nota":8}. Sem markdown, sem código, apenas JSON puro.' },
+          { role:'user', content: JSON.stringify(resumo) }
+        ],
+        max_tokens: 900
+      })
+    });
+    const data = await resp.json();
+    let txt = data.choices?.[0]?.message?.content?.trim() || '{}';
+    txt = txt.replace(/```json|```/g,'').trim();
+    const analise = JSON.parse(txt);
+    loading.style.display = 'none';
 
-  // kCardDel — log com payload para recuperação
-  const _kd = kCardDel;
-  kCardDel = function(col, i) {
-    const p = getProject(); const card = p?.kanban?.[col]?.[i];
-    if (card) logAct('kanban_del', '🗑 Removeu card "' + card.title + '"', { card, col });
-    _kd.apply(this, arguments);
-  };
+    // Renderiza base + análise IA
+    renderRelatorioBase(p);
+    const body = document.getElementById('relatorio-body');
+    const nota = analise.nota || 0;
+    const notaCor = nota>=8?'var(--neon-g)':nota>=6?'var(--media)':'var(--neon-m)';
 
-  // kColDrop — log de movimentação
-  const _kcd = kColDrop;
-  kColDrop = function(e, col) {
-    if (kDragging?.col && kDragging.col !== col) {
-      const p = getProject(); const card = p?.kanban?.[kDragging.col]?.[kDragging.idx];
-      if (card) logAct('kanban_move', '↔️ Moveu "' + card.title + '" para ' + col, { from: kDragging.col, to: col, card });
-    }
-    _kcd.apply(this, arguments);
-  };
+    body.insertAdjacentHTML('beforeend', `
+      <hr style="border:none;border-top:1px solid var(--border2);margin:20px 0;"/>
+      <h3 style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--neon-p);font-family:var(--mono);margin-bottom:14px;">✦ Análise da IA</h3>
 
-  // addFlowBox
-  const _afb = addFlowBox;
-  addFlowBox = function() { _afb.apply(this, arguments); logAct('flow_add', '🔀 Adicionou etapa no fluxo', {}); };
+      <div class="relatorio-score" style="margin-bottom:18px;">
+        <div class="nota" style="color:${notaCor};">${nota}/10</div>
+        <div><div style="font-size:.82rem;font-weight:700;margin-bottom:4px;">Pontuação Geral</div>
+          <div style="font-size:.74rem;color:var(--muted);">${nota>=8?'Projeto saudável e bem estruturado':nota>=6?'Projeto com bom progresso':'Projeto precisa de atenção'}</div>
+        </div>
+      </div>
 
-  // deleteFlowBox
-  const _dfb = deleteFlowBox;
-  deleteFlowBox = function() {
-    const id = document.getElementById('fbox-editing-id')?.value;
-    const p = getProject(); const box = p?.flowBoxes?.find(b => b.id === id);
-    if (box) logAct('flow_del', '🗑 Removeu etapa "' + box.title + '"', { box });
-    _dfb.apply(this, arguments);
-  };
+      ${analise.resumo?`<div class="relatorio-section"><h3>📝 Resumo</h3><p style="font-size:.85rem;line-height:1.7;color:var(--text);">${esc(analise.resumo)}</p></div>`:''}
 
-  // saveTool
-  const _st = saveTool;
-  saveTool = function() {
-    const editId = document.getElementById('tool-editing-id')?.value;
-    const name   = document.getElementById('tool-name')?.value || '';
-    _st.apply(this, arguments);
-    logAct(editId ? 'tool_edit' : 'tool_add', (editId ? '✏️ Editou' : '🔧 Adicionou') + ' ferramenta "' + name + '"', {});
-  };
+      ${analise.pontos_fortes?.length?`<div class="relatorio-section"><h3>✅ Pontos Fortes</h3>${analise.pontos_fortes.map(p=>`<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--neon-g);flex-shrink:0;">✓</span><span style="font-size:.83rem;color:var(--text);">${esc(p)}</span></div>`).join('')}</div>`:''}
 
-  // deleteToolById
-  const _dtb = deleteToolById;
-  deleteToolById = function(id) {
-    const p = getProject(); const tool = p?.tools?.find(t => t.id === id);
-    if (tool) logAct('tool_del', '🗑 Removeu ferramenta "' + tool.name + '"', { tool });
-    _dtb.apply(this, arguments);
-  };
-})();
+      ${analise.riscos?.length?`<div class="relatorio-section"><h3>⚠️ Riscos</h3>${analise.riscos.map(r=>`<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--media);flex-shrink:0;">!</span><span style="font-size:.83rem;color:var(--text);">${esc(r)}</span></div>`).join('')}</div>`:''}
 
-/* Fecha painel mobile com Escape */
-document.addEventListener('keydown', e => { if (e.key === 'Escape') mmClose(); });
+      ${analise.proximas_acoes?.length?`<div class="relatorio-section"><h3>🎯 Próximas Ações</h3>${analise.proximas_acoes.map((a,i)=>`<div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--neon-p);flex-shrink:0;font-family:var(--mono);font-size:.7rem;">${i+1}.</span><span style="font-size:.83rem;color:var(--text);">${esc(a)}</span></div>`).join('')}</div>`:''}
+    `);
+    toast('✦ Análise IA concluída!');
+  } catch(e) {
+    loading.style.display = 'none';
+    toast('❌ Erro na análise: ' + e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '✦ Analisar com IA';
+}
+
+function exportarRelatorio() {
+  const p = getProject(); if (!p) return;
+  const body = document.getElementById('relatorio-body');
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório — ${p.name}</title>
+  <style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;color:#1a1a2e;}
+  h1{color:#7c3aed;} h3{color:#5b21b6;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;}
+  .stat{display:inline-block;background:#f3f0ff;border-radius:8px;padding:10px 16px;margin:4px;text-align:center;}
+  .stat .v{font-size:1.5rem;font-weight:800;color:#7c3aed;display:block;}
+  </style></head><body>
+  <h1>📊 ${p.name}</h1>
+  <p><strong>Progresso:</strong> ${p.progress||0}% · <strong>Prioridade:</strong> ${p.priority}</p>
+  ${body.innerHTML}
+  <hr/><p style="font-size:.75rem;color:#999;">Gerado em ${new Date().toLocaleString('pt-BR')} · Diverso WorkFlows</p>
+  </body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `relatorio-${p.name.replace(/\s+/g,'-').toLowerCase()}.html`;
+  a.click(); toast('⬇️ Relatório exportado!');
+}
 
 init();
 </script>
+
+<!-- MODO FOCO -->
+<div class="modal-foco" id="modal-foco">
+  <div class="foco-header">
+    <button onclick="fecharFoco()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.85rem;padding:6px 10px;border-radius:6px;border:1px solid var(--border2);">✕ Fechar</button>
+    <div style="flex:1;text-align:center;font-size:.78rem;color:var(--muted);font-family:var(--mono);" id="foco-title-lbl">🌙 Modo Foco</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="foco-counter-lbl" style="font-size:.68rem;color:var(--muted);font-family:var(--mono);white-space:nowrap;">0 palavras</span>
+      <select id="foco-editor-sel" onchange="focoTrocaEditor()" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:5px 8px;font-size:.75rem;outline:none;cursor:pointer;max-width:140px;"></select>
+    </div>
+  </div>
+  <div class="foco-body">
+    <textarea class="foco-textarea" id="foco-textarea" placeholder="Escreva seu prompt aqui, sem distrações…" oninput="focoCount()"></textarea>
+  </div>
+  <div class="foco-footer">
+    <span style="font-size:.68rem;color:var(--muted);font-family:var(--mono);" id="foco-detail">0 palavras · 0 chars</span>
+    <div class="foco-actions">
+      <button class="btn btn-outline btn-sm" onclick="focoGerarIA()" id="foco-btn-ia">✦ Gerar com IA</button>
+      <button class="btn btn-primary btn-sm" onclick="focoSalvar()">💾 Salvar versão</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELATÓRIO DO PROJETO -->
+<div class="modal-bg" id="modal-relatorio">
+  <div class="modal" style="max-width:680px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;">📊 Relatório do Projeto</h3>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="exportarRelatorio()">⬇️ Exportar</button>
+        <button class="btn btn-primary btn-sm" onclick="gerarRelatorioIA()" id="btn-rel-ia">✦ Analisar com IA</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-relatorio')">✕</button>
+      </div>
+    </div>
+    <div id="relatorio-loading" style="display:none;text-align:center;padding:40px;">
+      <div class="spinner" style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;"></div>
+      <p style="color:var(--muted);">Analisando projeto com IA…</p>
+    </div>
+    <div id="relatorio-body"></div>
+  </div>
+</div>
 </body>
 </html>
