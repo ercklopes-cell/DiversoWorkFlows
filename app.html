@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Diverso WorkFlows Management</title>
+<title>DiversoFlows</title>
 
 <!-- [MUDANÇA 4] Nova fonte: Orbitron para logo neon + Inter para corpo -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -770,6 +770,17 @@ input,textarea,select{font-family:var(--font);}
 .lib-cp{--lc:#ec4899;}.lib-cd{--lc:#10b981;}.lib-ca{--lc:#22d3ee;}.lib-cc{--lc:#f472b6;}
 .lib-cm{--lc:#facc15;}.lib-ce{--lc:#60a5fa;}.lib-cn{--lc:#fb923c;}.lib-ci{--lc:#a78bfa;}.lib-cg{--lc:#5a5a8a;}
 @media(max-width:640px){.lib-grid{grid-template-columns:1fr;}.lib-topbar{flex-direction:column;align-items:stretch;}}
+
+/* ══ GITHUB BADGE E META ══ */
+.pv-github-link{font-size:.62rem;color:var(--neon-p);font-family:var(--mono);text-decoration:none;margin-left:8px;opacity:.8;}
+.pv-github-link:hover{opacity:1;text-decoration:underline;}
+/* Modal github resultado */
+.gh-section{margin-bottom:16px;}
+.gh-section h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--neon-p);font-family:var(--mono);margin-bottom:8px;}
+.gh-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:.82rem;color:var(--text);line-height:1.4;}
+.gh-item::before{content:'→';color:var(--neon-c);flex-shrink:0;font-family:var(--mono);}
+.gh-progress-bar{height:8px;border-radius:99px;background:var(--border2);overflow:hidden;margin-top:4px;}
+.gh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));transition:width .4s ease;}
 </style>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -780,8 +791,8 @@ input,textarea,select{font-family:var(--font);}
 <header id="header">
   <div class="logo-wrap" onclick="showPage('dashboard')">
     <div class="logo-name">
-      Diverso WorkFlows
-      <span class="logo-sub">Management</span>
+      DiversoFlows
+      <span class="logo-sub">Workspace</span>
     </div>
   </div>
   <div class="header-right">
@@ -792,6 +803,7 @@ input,textarea,select{font-family:var(--font);}
     </div>
     <div id="user-chip-wrap"></div>
     <button class="undo-btn" id="undo-btn" onclick="undoAction()" disabled title="Desfazer (Ctrl+Z)">↺ Desfazer</button>
+    <button class="undo-btn" id="redo-btn" onclick="redoAction()" disabled title="Refazer (Ctrl+Y)" style="margin-left:2px;">↪ Refazer</button>
     <button class="btn-organize-all" id="btn-organize-all" onclick="organizarTudoIA()" style="display:none">✦ Organizar com IA</button>
     <button class="icon-btn" onclick="showPage('biblioteca')" title="Biblioteca de Prompts">📚</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">☀️</button>
@@ -887,6 +899,7 @@ input,textarea,select{font-family:var(--font);}
   <div class="page" id="page-project">
     <div class="project-header">
       <button class="back-btn" onclick="backToDashboard()">← Voltar</button>
+      <button class="btn btn-outline btn-sm" onclick="syncGitHub()" title="Sync GitHub + IA" style="font-size:.75rem;padding:6px 12px;">🐙 GitHub</button>
       <button class="btn btn-outline btn-sm" onclick="abrirFoco()" title="Modo Foco" style="font-size:.75rem;padding:6px 12px;">🌙 Foco</button>
       <button class="btn btn-outline btn-sm" onclick="abrirRelatorio()" title="Relatório" style="font-size:.75rem;padding:6px 12px;">📊 Relatório</button>
       <div class="project-header-info">
@@ -1039,7 +1052,7 @@ input,textarea,select{font-family:var(--font);}
   <!-- CONFIGURAÇÕES -->
   <div class="page" id="page-settings">
     <div class="page-title">Configurações</div>
-    <div class="page-sub">Personalize o Diverso WorkFlows Management</div>
+    <div class="page-sub">Personalize o DiversoFlows</div>
 
     <div class="settings-section">
       <h2>🔑 GitHub Models / OpenAI</h2>
@@ -1303,6 +1316,8 @@ function migrateProjects() {
     if (!p.flowArrows)  p.flowArrows  = [];
     if (!p.kanban)      p.kanban      = {todo:[],doing:[],done:[]};
     if (!p.ideas)       p.ideas       = [];
+    if (!p.githubRepo)  p.githubRepo  = '';
+    if (!p.activityLog) p.activityLog = [];
   });
 }
 
@@ -1320,7 +1335,8 @@ let connectSource = null;
 
 // [MUDANÇA 2] Undo stack (máx 10 snapshots por projeto)
 let undoStack = [];
-const UNDO_LIMIT = 10;
+let redoStack = [];
+const UNDO_LIMIT = 20;
 
 const FLOW_DEFAULT = 'Ideia → Refinamento → Projeto → Teste → Pronto';
 const FLOW_EMOJIS  = ['💡','🔍','🛠️','🧪','✅','🚀','📦','🎯','🔧','📊'];
@@ -1430,14 +1446,23 @@ function saveConfig() {
 /* ═══════════════════════════════════════════════
    [MUDANÇA 2] UNDO
 ═══════════════════════════════════════════════ */
-function pushUndo() {
+/* pushLog é o novo pushUndo — mantém compatibilidade */
+function pushLog(label) {
   if (!currentProjectId) return;
-  undoStack.push(JSON.parse(JSON.stringify(getProject())));
+  const snap = JSON.parse(JSON.stringify(getProject()));
+  snap._label = label || 'Ação';
+  undoStack.push(snap);
   if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+  redoStack = []; // nova ação limpa o redo
   updateUndoBtn();
 }
+function pushUndo() { pushLog('Ação'); } // compatibilidade retroativa
 function undoAction() {
   if (!undoStack.length || !currentProjectId) return;
+  // Salva estado atual no redoStack antes de restaurar
+  const curr = JSON.parse(JSON.stringify(getProject()));
+  curr._label = 'Refazer';
+  redoStack.push(curr);
   const snap = undoStack.pop();
   const idx = projects.findIndex(p => p.id === currentProjectId);
   if (idx === -1) return;
@@ -1446,13 +1471,36 @@ function undoAction() {
   renderBrainstorm(); renderEditors(); renderKanban(); renderFlow();
   const p = getProject();
   document.getElementById('pv-name').textContent = p.name;
-  document.getElementById('pv-meta').textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  const _repoLnk = p.githubRepo ? ` · <a href="${p.githubRepo}" target="_blank" class="pv-github-link">🐙 GitHub</a>` : '';
+  document.getElementById('pv-meta').innerHTML = `Prioridade: ${p.priority} · ${p.progress||0}% concluído${_repoLnk}`;
   updateUndoBtn();
   toast('↺ Desfeito');
 }
 function updateUndoBtn() {
-  const btn = document.getElementById('undo-btn');
-  if (btn) btn.disabled = undoStack.length === 0;
+  const ub = document.getElementById('undo-btn');
+  const rb = document.getElementById('redo-btn');
+  if (ub) ub.disabled = undoStack.length === 0;
+  if (rb) rb.disabled = redoStack.length === 0;
+  // Mostra label da última ação no tooltip
+  if (ub && undoStack.length) ub.title = 'Desfazer: ' + (undoStack[undoStack.length-1]._label||'Ação') + ' (Ctrl+Z)';
+  if (rb && redoStack.length) rb.title = 'Refazer: '  + (redoStack[redoStack.length-1]._label||'Ação') + ' (Ctrl+Y)';
+}
+function redoAction() {
+  if (!redoStack.length || !currentProjectId) return;
+  const curr = JSON.parse(JSON.stringify(getProject()));
+  curr._label = undoStack.length ? undoStack[undoStack.length-1]._label : 'Ação';
+  undoStack.push(curr);
+  const snap = redoStack.pop();
+  const idx = projects.findIndex(p => p.id === currentProjectId);
+  if (idx === -1) return;
+  projects[idx] = snap;
+  save();
+  renderBrainstorm(); renderEditors(); renderKanban(); renderFlow();
+  const p = getProject();
+  const pvn = document.getElementById('pv-name'); if(pvn) pvn.textContent = p.name;
+  const pvm = document.getElementById('pv-meta'); if(pvm) pvm.textContent = `Prioridade: ${p.priority} · ${p.progress||0}% concluído`;
+  updateUndoBtn();
+  toast('↪ Refeito');
 }
 
 /* ═══════════════════════════════════════════════
@@ -1578,7 +1626,7 @@ function setProgress(id,v) { const p=projects.find(x=>x.id===id); if(p){p.progre
 ═══════════════════════════════════════════════ */
 function openProject(id) {
   currentProjectId = id;
-  undoStack = []; updateUndoBtn();
+  undoStack = []; redoStack = []; updateUndoBtn();
   const p = getProject();
   // Migração completa de estrutura
   if (!p.editors)     p.editors     = [{id:'e_0',title:'Prompt 1',draft:'',history:[]}];
@@ -1666,6 +1714,7 @@ function autoH(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px
 
 function addIdea() {
   pushUndo();
+  pushLog('Brainstorm: Nova ideia');
   getProject().ideas.push('Nova ideia…');
   save(); renderBrainstorm();
   const rows = document.querySelectorAll('.idea-row');
@@ -1855,6 +1904,7 @@ function saveEditorVersion(ei) {
   const p=getProject(); const ed=p.editors[ei];
   if(!ed.draft.trim()){ toast('Escreva algo antes','error'); return; }
   ed.history=ed.history||[];
+  pushLog('Editor: Salvar versão "'+ed.title+'"');
   ed.history.unshift({text:ed.draft,date:new Date().toLocaleString('pt-BR')});
   save(); renderEditors(); toast('Versão salva ✓');
 }
@@ -2431,7 +2481,7 @@ function hideAIBox(m){const el=document.getElementById('ai-box-'+m);if(el)el.cla
 ═══════════════════════════════════════════════ */
 function exportData() {
   const obj = {
-    app:'Diverso WorkFlows Management',
+    app:'DiversoFlows',
     exportedAt: new Date().toLocaleString('pt-BR'),
     totalProjects: projects.length,
     projects: projects.map(p=>({...p}))
@@ -2490,7 +2540,7 @@ function confirmReset() {
   localStorage.removeItem('diverso_projects'); localStorage.removeItem('diverso_config');
   const user=getUser();
   if (user && !isLocalEnv()) sb.from('diverso_projects').delete().eq('user_id',user.sub).then(()=>{});
-  projects=[]; undoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Dados apagados.');
+  projects=[]; undoStack=[]; redoStack=[]; save(); renderDashboard(); showPage('dashboard'); toast('Dados apagados.');
 }
 
 /* ═══════════════════════════════════════════════
@@ -2640,6 +2690,7 @@ function toast(msg,type='success') {
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));
   if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoAction();}
+  if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.shiftKey&&e.key==='Z'))){e.preventDefault();redoAction();}
 });
 
 
@@ -2962,7 +3013,7 @@ function exportarRelatorio() {
   <h1>📊 ${p.name}</h1>
   <p><strong>Progresso:</strong> ${p.progress||0}% · <strong>Prioridade:</strong> ${p.priority}</p>
   ${body.innerHTML}
-  <hr/><p style="font-size:.75rem;color:#999;">Gerado em ${new Date().toLocaleString('pt-BR')} · Diverso WorkFlows</p>
+  <hr/><p style="font-size:.75rem;color:#999;">Gerado em ${new Date().toLocaleString('pt-BR')} · DiversoFlows</p>
   </body></html>`;
   const blob = new Blob([html], {type:'text/html'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
@@ -3168,6 +3219,283 @@ function libCopy() {
   localStorage.setItem('diverso_lib', JSON.stringify(_lib));
 }
 
+
+/* ════════════════════════════════════════════════════════
+   🐙 SYNC GITHUB + IA
+════════════════════════════════════════════════════════ */
+
+let _ghSugestoes = null; // guarda sugestões para aplicar
+
+function syncGitHub() {
+  const p = getProject(); if (!p) return;
+  openModal('modal-github');
+  _ghSugestoes = null;
+  document.getElementById('gh-btn-apply').style.display = 'none';
+  document.getElementById('gh-result').style.display   = 'none';
+  document.getElementById('gh-loading').style.display  = 'none';
+  document.getElementById('gh-repo-info').style.display= 'none';
+
+  if (p.githubRepo) {
+    // Já tem repo: mostra estado com opção de re-analisar
+    document.getElementById('gh-start').style.display = 'none';
+    githubAnalisar(p.githubRepo);
+  } else {
+    document.getElementById('gh-start').style.display = 'block';
+  }
+}
+
+function githubStart() {
+  const url = prompt('URL do repositório GitHub (ex: https://github.com/usuario/repo):');
+  if (!url || !url.includes('github.com')) { toast('URL inválida', 'error'); return; }
+  const p = getProject(); if (!p) return;
+  p.githubRepo = url.trim().replace(/\/$/, '');
+  save();
+  document.getElementById('gh-start').style.display = 'none';
+  githubAnalisar(p.githubRepo);
+}
+
+function githubChangeRepo() {
+  const p = getProject(); if (!p) return;
+  const url = prompt('Nova URL do repositório GitHub:', p.githubRepo || '');
+  if (!url) return;
+  p.githubRepo = url.trim().replace(/\/$/, '');
+  save();
+  githubAnalisar(p.githubRepo);
+}
+
+async function githubAnalisar(repoUrl) {
+  const cfg = getConfig();
+  if (!cfg.apikey) {
+    toast('⚠️ Configure a API key em Configurações', 'error');
+    return;
+  }
+
+  // Extrai owner/repo da URL
+  const match = repoUrl.match(/github\.com\/([^/]+)\/([^/?\s]+)/);
+  if (!match) { toast('URL do repositório inválida', 'error'); return; }
+  const [, owner, repo] = match;
+
+  const ghLoad = document.getElementById('gh-loading');
+  const ghRes  = document.getElementById('gh-result');
+  const ghMsg  = document.getElementById('gh-loading-msg');
+  ghLoad.style.display = 'block';
+  ghRes.style.display  = 'none';
+  document.getElementById('gh-btn-apply').style.display = 'none';
+
+  try {
+    // 1. Info do repo
+    ghMsg.textContent = '📡 Buscando informações do repositório…';
+    const infoResp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      headers: { 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!infoResp.ok) throw new Error(`Repo não encontrado (${infoResp.status}). Certifique-se que é público.`);
+    const info = await infoResp.json();
+
+    // Exibe info do repo
+    document.getElementById('gh-repo-info').style.display = 'block';
+    document.getElementById('gh-repo-name').textContent = `${info.full_name}`;
+    document.getElementById('gh-repo-desc').textContent = info.description || 'Sem descrição';
+    document.getElementById('gh-repo-stats').innerHTML =
+      `<span>⭐ ${info.stargazers_count||0}</span>
+       <span>🍴 ${info.forks_count||0}</span>
+       <span>👁 ${info.watchers_count||0}</span>
+       <span>📝 ${info.language||'N/A'}</span>
+       <span>🔄 ${new Date(info.updated_at).toLocaleDateString('pt-BR')}</span>`;
+
+    // 2. README
+    ghMsg.textContent = '📖 Lendo README…';
+    let readme = '';
+    try {
+      const rdResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (rdResp.ok) readme = await rdResp.text();
+      readme = readme.slice(0, 3000); // limita tamanho
+    } catch(e) { readme = '(README não disponível)'; }
+
+    // 3. Lista de arquivos raiz
+    ghMsg.textContent = '🗂 Analisando estrutura de arquivos…';
+    let arquivos = [];
+    try {
+      const treeResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents`, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (treeResp.ok) {
+        const tree = await treeResp.json();
+        arquivos = tree.map(f => `${f.type === 'dir' ? '📁' : '📄'} ${f.name}`).slice(0, 30);
+      }
+    } catch(e) {}
+
+    // 4. Envia para IA
+    ghMsg.textContent = '🤖 Analisando com IA…';
+    const endpoint = cfg.endpoint === 'openai'
+      ? 'https://api.openai.com/v1/chat/completions'
+      : 'https://models.inference.ai.azure.com/chat/completions';
+
+    const prompt = `Analise este repositório GitHub e retorne SOMENTE um JSON válido sem markdown:
+
+REPOSITÓRIO: ${info.full_name}
+DESCRIÇÃO: ${info.description || 'N/A'}
+LINGUAGEM: ${info.language || 'N/A'}
+ESTRELAS: ${info.stargazers_count}
+ARQUIVOS:
+${arquivos.join('\n')}
+
+README (parcial):
+${readme}
+
+Retorne JSON com esta estrutura exata:
+{
+  "resumo": "string com análise em português",
+  "progresso": número de 0 a 100,
+  "flowBoxes": [{"titulo":"string","status":"todo|doing|done"},…] máx 6 itens,
+  "kanban": {
+    "todo": ["tarefa1","tarefa2"],
+    "doing": ["tarefa3"],
+    "done": ["tarefa4"]
+  },
+  "tecnologias": ["tech1","tech2"],
+  "sugestoes": ["sugestão1","sugestão2","sugestão3"]
+}`;
+
+    const aiResp = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+cfg.apikey },
+      body: JSON.stringify({
+        model: cfg.model || 'gpt-4o-mini',
+        messages: [
+          { role:'system', content:'Você é um especialista em análise de repositórios. Retorne SOMENTE JSON puro sem markdown, sem explicações, sem código.' },
+          { role:'user', content: prompt }
+        ],
+        max_tokens: 1200
+      })
+    });
+    const aiData = await aiResp.json();
+    let txt = aiData.choices?.[0]?.message?.content?.trim() || '{}';
+    txt = txt.replace(/```json|```/g,'').trim();
+    _ghSugestoes = JSON.parse(txt);
+
+    // 5. Renderiza resultado
+    ghLoad.style.display = 'none';
+    ghRes.style.display  = 'block';
+    document.getElementById('gh-btn-apply').style.display = 'flex';
+    renderGhResult(_ghSugestoes, info);
+
+  } catch(e) {
+    ghLoad.style.display = 'none';
+    document.getElementById('gh-result').style.display = 'block';
+    document.getElementById('gh-result').innerHTML = `
+      <div style="color:var(--neon-m);padding:20px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--neon-m)44;">
+        ❌ <strong>Erro:</strong> ${esc(e.message)}
+      </div>`;
+    toast('❌ ' + e.message, 'error');
+  }
+}
+
+function renderGhResult(sug, info) {
+  const el = document.getElementById('gh-result');
+  const prog = Math.max(0, Math.min(100, sug.progresso || 0));
+  const progCor = prog>=70?'var(--neon-g)':prog>=40?'var(--media)':'var(--neon-m)';
+
+  el.innerHTML = `
+    <div class="gh-section">
+      <h4>📝 Resumo da IA</h4>
+      <p style="font-size:.83rem;color:var(--text);line-height:1.6;">${esc(sug.resumo||'')}</p>
+    </div>
+
+    <div class="gh-section">
+      <h4>📊 Progresso Sugerido</h4>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="font-size:1.4rem;font-weight:800;color:${progCor};">${prog}%</div>
+        <div style="flex:1;"><div class="gh-progress-bar"><div class="gh-progress-fill" style="width:${prog}%"></div></div></div>
+      </div>
+    </div>
+
+    ${sug.tecnologias?.length ? `
+    <div class="gh-section">
+      <h4>🛠 Tecnologias Detectadas</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${sug.tecnologias.map(t=>`<span style="font-size:.7rem;padding:3px 10px;border-radius:99px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);">${esc(t)}</span>`).join('')}
+      </div>
+    </div>` : ''}
+
+    ${sug.flowBoxes?.length ? `
+    <div class="gh-section">
+      <h4>🔀 Fluxograma Sugerido (${sug.flowBoxes.length} etapas)</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${sug.flowBoxes.map(b=>{
+          const c=b.status==='done'?'var(--neon-g)':b.status==='doing'?'var(--media)':'var(--muted)';
+          const ic=b.status==='done'?'✅':b.status==='doing'?'⚡':'○';
+          return `<span style="font-size:.75rem;padding:4px 10px;border-radius:99px;border:1px solid ${c};color:${c};">${ic} ${esc(b.titulo||b.title||'')}</span>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    ${(sug.kanban?.todo?.length||sug.kanban?.doing?.length||sug.kanban?.done?.length) ? `
+    <div class="gh-section">
+      <h4>📋 Kanban Sugerido</h4>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        ${['todo','doing','done'].map(col=>{
+          const cards=sug.kanban[col]||[];
+          const lbl=col==='todo'?'📋 To-do':col==='doing'?'⚡ Fazendo':'✅ Feito';
+          return `<div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;">
+            <div style="font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:6px;">${lbl} (${cards.length})</div>
+            ${cards.slice(0,4).map(c=>`<div style="font-size:.72rem;color:var(--text);margin-bottom:3px;line-height:1.3;">• ${esc(c)}</div>`).join('')}
+            ${cards.length>4?`<div style="font-size:.65rem;color:var(--muted);">+${cards.length-4} mais</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+
+    ${sug.sugestoes?.length ? `
+    <div class="gh-section">
+      <h4>💡 Sugestões da IA</h4>
+      ${sug.sugestoes.map(s=>`<div class="gh-item">${esc(s)}</div>`).join('')}
+    </div>` : ''}
+  `;
+}
+
+function githubAplicar() {
+  if (!_ghSugestoes) return;
+  const p = getProject(); if (!p) return;
+  pushLog('Sync GitHub + IA');
+
+  // Aplica flowBoxes
+  if (_ghSugestoes.flowBoxes?.length) {
+    p.flowBoxes = _ghSugestoes.flowBoxes.map((b,i) => ({
+      id: 'fb_gh_' + i,
+      title: b.titulo || b.title || 'Etapa '+(i+1),
+      desc: '',
+      status: b.status || 'todo'
+    }));
+    // Cria setas sequenciais
+    p.flowArrows = p.flowBoxes.slice(0,-1).map((_,i) => [p.flowBoxes[i].id, p.flowBoxes[i+1].id]);
+  }
+
+  // Aplica kanban
+  if (_ghSugestoes.kanban) {
+    ['todo','doing','done'].forEach(col => {
+      const items = _ghSugestoes.kanban[col] || [];
+      if (items.length) {
+        const newCards = items.map(title => ({ id:'kgh_'+Date.now()+'_'+Math.random().toString(36).slice(2), title, desc:'', due:'' }));
+        p.kanban[col] = [...(p.kanban[col]||[]), ...newCards];
+      }
+    });
+  }
+
+  // Aplica progresso
+  if (_ghSugestoes.progresso !== undefined) {
+    p.progress = Math.max(0, Math.min(100, _ghSugestoes.progresso));
+  }
+
+  save();
+  renderFlow(); renderKanban(); renderBrainstorm();
+  if (typeof updateProgressFromFlow === 'function') updateProgressFromFlow();
+
+  closeModal('modal-github');
+  toast('✅ Sugestões aplicadas! Fluxograma, Kanban e Progresso atualizados.');
+}
+
 init();
 </script>
 
@@ -3225,6 +3553,43 @@ init();
       <button class="btn btn-outline" onclick="closeModal('modal-lib-view')">Fechar</button>
       <button class="btn btn-outline btn-sm" onclick="libCopy()">📋 Copiar</button>
       <button class="btn btn-primary btn-sm" onclick="libEdit()">✏️ Editar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: Sync GitHub + IA -->
+<div class="modal-bg" id="modal-github">
+  <div class="modal" style="max-width:640px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;">🐙 Sync GitHub + IA</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="githubChangeRepo()" id="gh-btn-change">✏️ Mudar repo</button>
+        <button class="btn btn-primary" onclick="githubAplicar()" id="gh-btn-apply" style="display:none;">✓ Aplicar Sugestões</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-github')">✕</button>
+      </div>
+    </div>
+    <!-- Info do repo -->
+    <div id="gh-repo-info" style="display:none;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:.8rem;">
+      <div style="font-weight:700;margin-bottom:4px;" id="gh-repo-name"></div>
+      <div style="color:var(--muted);" id="gh-repo-desc"></div>
+      <div style="display:flex;gap:14px;margin-top:8px;font-family:var(--mono);font-size:.7rem;color:var(--muted);" id="gh-repo-stats"></div>
+    </div>
+    <!-- Loading -->
+    <div id="gh-loading" style="display:none;text-align:center;padding:40px;">
+      <div class="spinner" style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;"></div>
+      <p style="color:var(--muted);" id="gh-loading-msg">Lendo repositório…</p>
+    </div>
+    <!-- Resultado IA -->
+    <div id="gh-result" style="display:none;"></div>
+    <!-- Estado inicial -->
+    <div id="gh-start" style="text-align:center;padding:30px 20px;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🐙</div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:16px;">
+        Vincule um repositório GitHub público para que a IA analise o código<br>
+        e gere sugestões de Kanban, Fluxograma e progresso automaticamente.
+      </p>
+      <button class="btn btn-primary" onclick="githubStart()">🔗 Vincular Repositório</button>
     </div>
   </div>
 </div>
