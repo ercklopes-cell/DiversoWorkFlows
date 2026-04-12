@@ -1,120 +1,64 @@
-# Diverso WorkFlows Management
+# Diverso WorkFlows
 
-Organizador de projetos para criativos e empreendedores com Brainstorm visual, Editor de Prompts, Kanban, Fluxograma e integração com IA (GPT-4 Mini via GitHub Models / OpenAI).
+![Version](https://img.shields.io/badge/version-2.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![PWA](https://img.shields.io/badge/PWA-Ready-FF00AA)
 
----
+**Seu cérebro externo visual para devs, criativos e indie hackers.**
 
-## 📁 Estrutura do Projeto
+Organize ideias com post-its conectáveis, refine prompts com IA, gerencie fluxos com Kanban + Fluxograma automático e transforme projetos em realidade — tudo em uma interface bonita, leve e extremamente funcional.
 
-```
-diverso-project/
-├── public/
-│   ├── index.html      ← Landing page (tela de entrada)
-│   └── app.html        ← Aplicativo principal
-├── vercel.json         ← Configuração de deploy no Vercel
-└── README.md
-```
+![Screenshot](https://via.placeholder.com/1200x600.png?text=Screenshot+do+App+-+Substitua+por+uma+imagem+real)
 
----
+## ✨ Principais Funcionalidades
 
-## 🚀 Deploy no Vercel
+- 💡 **Brainstorm Visual** — Post-its conectáveis com drag & drop e modo conexão
+- ✍️ **Editor Múltiplo de Prompts** — Com histórico de versões e geração/refinamento via IA
+- 📋 **Kanban Integrado** — Organizado automaticamente com IA
+- 🔀 **Fluxograma Interativo** — Etapas visuais com progresso automático
+- 🐙 **Sync com GitHub + IA** — Analisa seu repo e sugere fluxo, kanban e progresso
+- 📚 **Biblioteca de Prompts** — Prompts salvos e acessíveis em qualquer projeto
+- 🌙 **Modo Foco** — Ambiente sem distrações para escrever
+- 📊 **Relatório + Análise IA** — Avaliação inteligente do projeto
+- 💾 **Dados locais + Supabase** — Funciona offline e sincroniza na nuvem
+- 📱 **PWA** — Instale como aplicativo no celular ou desktop
 
-### Opção 1 — Via GitHub (recomendado)
+## 🚀 Experimente Agora
 
-1. Suba este repositório no GitHub
-2. Acesse [vercel.com](https://vercel.com) → **Add New Project**
-3. Conecte o repositório do GitHub
-4. Clique em **Deploy** — pronto!
-
-O Vercel detecta automaticamente o `vercel.json` e serve os arquivos da pasta `public/`.
-
-### Opção 2 — Upload direto
-
-1. Acesse [vercel.com](https://vercel.com)
-2. Arraste a pasta `diverso-project/` para o dashboard
-3. Aguarde o deploy
-
----
-
-## 🔑 Configurar Login com Google (OAuth)
-
-Após ter o domínio no Vercel (ex: `diverso-project.vercel.app`):
-
-### Passo 1 — Google Cloud Console
-
-1. Acesse [console.cloud.google.com](https://console.cloud.google.com)
-2. Crie um novo projeto
-3. Vá em **APIs & Services → OAuth consent screen**
-   - User Type: **External**
-   - Preencha nome do app e e-mail de suporte
-4. Vá em **APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID**
-   - Application type: **Web application**
-   - **Authorized JavaScript origins:**
-     ```
-     https://SEU-PROJETO.vercel.app
-     http://localhost (para testes locais)
-     ```
-   - **Authorized redirect URIs:**
-     ```
-     https://SEU-PROJETO.vercel.app
-     http://localhost
-     ```
-5. Copie o **Client ID** gerado (formato: `xxxxxxx.apps.googleusercontent.com`)
-
-### Passo 2 — Inserir no código
-
-No arquivo `public/index.html`, localize o comentário:
-```
-<!-- GOOGLE_CLIENT_ID -->
-```
-E substitua `YOUR_CLIENT_ID` pelo seu Client ID real.
-
----
-
-## 🤖 Configurar IA (GitHub Models / OpenAI)
-
-1. Abra o app em `app.html`
-2. Clique em **☰ → Configurações**
-3. Cole seu token em **Token GitHub / API Key**
-4. Selecione o modelo desejado (`gpt-4o-mini` recomendado)
-5. Clique em **Salvar**
-
-**Para obter o token do GitHub Models:**
-- Acesse [github.com/settings/tokens](https://github.com/settings/tokens)
-- Gere um token com permissão de leitura
-- Use como API Key no app
-
----
-
-## ✨ Funcionalidades
-
-| Módulo | Descrição |
-|--------|-----------|
-| 💡 Brainstorm | Post-its coloridos conectáveis com undo (Ctrl+Z) |
-| ✍️ Editor de Prompts | Múltiplos editores com histórico de versões |
-| 📋 Kanban | 3 colunas drag-and-drop com botões ↑ ↓ 🗑 |
-| 🔀 Fluxograma | Visual automático editável por texto |
-| 📁 Arquivos | Pastas virtuais com notas por projeto |
-| 🤖 IA | Organiza projetos via GPT-4 Mini automaticamente |
-
----
-
-## 💾 Dados
-
-- Todos os dados ficam salvos no **localStorage** do navegador
-- Nenhum servidor ou banco de dados necessário
-- Use **Exportar** nas configurações para fazer backup em JSON
-
----
+**[Abrir Diverso WorkFlows →](https://diversoworkflows.vercel.app/app)**
 
 ## 🛠 Tecnologias
 
-- HTML5 + CSS3 + JavaScript vanilla
-- Google Fonts (Orbitron + DM Sans)
-- localStorage para persistência
-- Google Identity Services (OAuth 2.0)
-- OpenAI / GitHub Models API
+- **Frontend**: HTML, CSS, Vanilla JavaScript
+- **IA**: OpenAI / GitHub Models (GPT-4o-mini e outros)
+- **Banco**: Supabase (sincronização opcional)
+- **Armazenamento**: LocalStorage + Supabase
+- **Instalação**: PWA (funciona offline)
+
+## Como Usar
+
+1. Acesse [https://diversoworkflows.vercel.app/app](https://diversoworkflows.vercel.app/app)
+2. Faça login com sua conta Google
+3. Crie seu primeiro projeto e comece a organizar suas ideias
+
+*(Não precisa instalar nada — funciona direto no navegador)*
+
+## Próximos Passos (Roadmap)
+
+- Colaboração em tempo real
+- Templates prontos para devs
+- Exportação avançada (PDF, Notion, Markdown)
+- Mais integrações com IA
+
+## Contribuindo
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+
+## License
+
+Este projeto está licenciado sob a **MIT License**.
 
 ---
 
-*Diverso Project © 2026 — Feito para criativos que pensam rápido*
+**Desenvolvido com ❤️ por [Erick Lopes](https://github.com/ercklopes-cell)**
+Diverso Project@
