@@ -781,6 +781,41 @@ input,textarea,select{font-family:var(--font);}
 .gh-item::before{content:'→';color:var(--neon-c);flex-shrink:0;font-family:var(--mono);}
 .gh-progress-bar{height:8px;border-radius:99px;background:var(--border2);overflow:hidden;margin-top:4px;}
 .gh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--neon-p),var(--neon-c));transition:width .4s ease;}
+
+/* ══ LOG / HISTÓRICO ══ */
+.log-timeline{display:flex;flex-direction:column;gap:0;}
+.log-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);position:relative;}
+.log-item:last-child{border-bottom:none;}
+.log-dot{width:10px;height:10px;border-radius:50%;background:var(--neon-p);flex-shrink:0;margin-top:4px;box-shadow:0 0 6px var(--neon-p);}
+.log-dot.log-ai{background:var(--neon-c);box-shadow:0 0 6px var(--neon-c);}
+.log-dot.log-warn{background:var(--media);box-shadow:0 0 6px var(--media);}
+.log-line{position:absolute;left:4px;top:22px;bottom:-10px;width:2px;background:var(--border);z-index:0;}
+.log-content{flex:1;min-width:0;}
+.log-action{font-size:.8rem;color:var(--text);font-weight:500;margin-bottom:2px;}
+.log-ts{font-size:.65rem;color:var(--muted);font-family:var(--mono);}
+/* ══ CHECKLIST ══ */
+.checklist-grid{display:flex;flex-direction:column;gap:6px;}
+.checklist-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);transition:var(--transition);cursor:pointer;}
+.checklist-item.done{opacity:.55;text-decoration:line-through;}
+.checklist-item:hover{border-color:var(--neon-p);}
+.checklist-cb{width:18px;height:18px;border-radius:4px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);}
+.checklist-item.done .checklist-cb{background:var(--neon-g);border-color:var(--neon-g);color:#000;font-size:.65rem;}
+.checklist-label{font-size:.82rem;color:var(--text);flex:1;}
+.checklist-tag{font-size:.6rem;padding:2px 7px;border-radius:99px;background:var(--surface);border:1px solid var(--border2);color:var(--muted);}
+/* ══ PITCH / README RESULTADO ══ */
+.pitch-section{margin-bottom:18px;}
+.pitch-section h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.pitch-copy-btn{padding:3px 9px;font-size:.65rem;border-radius:6px;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);cursor:pointer;transition:var(--transition);}
+.pitch-copy-btn:hover{border-color:var(--neon-p);color:var(--neon-p);}
+.pitch-content{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 16px;font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;font-family:var(--mono);max-height:220px;overflow-y:auto;}
+.modal-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border2);padding-bottom:8px;flex-wrap:wrap;}
+.modal-tab-btn{padding:5px 14px;border-radius:var(--radius-sm);border:1px solid transparent;background:none;color:var(--muted);font-size:.77rem;cursor:pointer;transition:var(--transition);}
+.modal-tab-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--neon-p);}
+.modal-tab-panel{display:none;}.modal-tab-panel.active{display:block;}
+/* ══ CHECKLIST FLUTUANTE ══ */
+.checklist-badge{position:fixed;bottom:24px;right:24px;z-index:300;background:linear-gradient(135deg,var(--neon-p),var(--neon-c));border-radius:99px;padding:10px 18px;font-size:.8rem;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(167,139,250,.5);display:none;align-items:center;gap:8px;transition:var(--transition);}
+.checklist-badge:hover{transform:scale(1.05);}
+.checklist-badge.visible{display:flex;}
 </style>
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -902,6 +937,10 @@ input,textarea,select{font-family:var(--font);}
       <button class="btn btn-outline btn-sm" onclick="syncGitHub()" title="Sync GitHub + IA" style="font-size:.75rem;padding:6px 12px;">🐙 GitHub</button>
       <button class="btn btn-outline btn-sm" onclick="abrirFoco()" title="Modo Foco" style="font-size:.75rem;padding:6px 12px;">🌙 Foco</button>
       <button class="btn btn-outline btn-sm" onclick="abrirRelatorio()" title="Relatório" style="font-size:.75rem;padding:6px 12px;">📊 Relatório</button>
+      <button class="btn btn-outline btn-sm" onclick="abrirHistorico()" title="Histórico de ações" style="font-size:.75rem;padding:6px 12px;">📜 Log</button>
+      <button class="btn btn-outline btn-sm" id="btn-pronto" onclick="abrirProjetoPronto()" title="Projeto Concluído" style="font-size:.75rem;padding:6px 12px;display:none;">🎉 Pronto</button>
+      <button class="btn btn-outline btn-sm" onclick="exportarREADME()" title="Exportar README para GitHub" style="font-size:.75rem;padding:6px 12px;">📄 README</button>
+      <button class="btn btn-outline btn-sm" onclick="abrirClientPitch()" title="Apresentar para cliente" style="font-size:.75rem;padding:6px 12px;">💼 Pitch</button>
       <div class="project-header-info">
         <div class="project-header-name" id="pv-name"></div>
         <div class="project-header-meta" id="pv-meta"></div>
@@ -1316,8 +1355,10 @@ function migrateProjects() {
     if (!p.flowArrows)  p.flowArrows  = [];
     if (!p.kanban)      p.kanban      = {todo:[],doing:[],done:[]};
     if (!p.ideas)       p.ideas       = [];
-    if (!p.githubRepo)  p.githubRepo  = '';
-    if (!p.activityLog) p.activityLog = [];
+    if (!p.githubRepo)    p.githubRepo    = '';
+    if (!p.activityLog)   p.activityLog   = [];
+    if (!p.checklist)     p.checklist     = [];
+    if (p.checklistShown === undefined) p.checklistShown = false;
   });
 }
 
@@ -2268,6 +2309,8 @@ function updateProgressFromFlow() {
   if (metaEl) metaEl.textContent = `Prioridade: ${p.priority} · ${pct}% concluído`;
   // Atualiza dashboard (sem re-renderizar tudo)
   renderDashboard();
+  // Dispara checklist ao atingir 85%+
+  checkProgressTriggers(p, pct);
 }
 
 /* ═══════════════════════════════════════════════
@@ -3496,6 +3539,485 @@ function githubAplicar() {
   toast('✅ Sugestões aplicadas! Fluxograma, Kanban e Progresso atualizados.');
 }
 
+
+/* ════════════════════════════════════════════════════════
+   📜 1. LOG / HISTÓRICO DE AÇÕES
+════════════════════════════════════════════════════════ */
+
+const LOG_ICONS = {
+  'Brainstorm':['💡','log-ai'], 'IA':['🤖','log-ai'], 'Kanban':['📋',''],
+  'Editor':['✍️',''], 'Fluxo':['🔀',''], 'Ferramenta':['🔧',''],
+  'GitHub':['🐙','log-ai'], 'Progresso':['📊','log-warn'],
+  'Ação':['⚡',''], 'default':['📌','']
+};
+
+function logAction(label, tipo) {
+  const p = getProject(); if (!p) return;
+  p.activityLog = p.activityLog || [];
+  const entry = { id: 'lg_'+Date.now(), label, tipo: tipo||'default', ts: new Date().toISOString() };
+  p.activityLog.unshift(entry);
+  if (p.activityLog.length > 100) p.activityLog = p.activityLog.slice(0,100);
+  save();
+}
+
+function abrirHistorico() {
+  const p = getProject(); if (!p) return;
+  const wrap = document.getElementById('log-timeline-wrap'); if (!wrap) return;
+  const log = p.activityLog || [];
+  if (!log.length) {
+    wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:2rem;opacity:.3;margin-bottom:10px;">📜</div><p>Nenhuma ação registrada ainda.</p></div>';
+  } else {
+    wrap.innerHTML = log.map((e, i) => {
+      const [icon, dotCls] = LOG_ICONS[e.tipo] || LOG_ICONS.default;
+      const dt = new Date(e.ts);
+      const tempo = dt.toLocaleDateString('pt-BR') + ' ' + dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      const hasMore = i < log.length - 1;
+      return `<div class="log-item">
+        ${hasMore ? '<div class="log-line"></div>' : ''}
+        <div class="log-dot ${dotCls}" style="position:relative;z-index:1;">${icon}</div>
+        <div class="log-content">
+          <div class="log-action">${esc(e.label)}</div>
+          <div class="log-ts">${tempo}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  openModal('modal-historico');
+}
+
+function limparLog() {
+  if (!confirm('Limpar todo o histórico deste projeto?')) return;
+  const p = getProject(); if (!p) return;
+  p.activityLog = []; save();
+  abrirHistorico(); toast('🗑 Histórico limpo');
+}
+
+// Override de pushLog para também registrar no log de ações
+const _origPushLog = pushLog;
+pushLog = function(label) {
+  _origPushLog(label);
+  // Detecta tipo pelo label
+  const tipo = Object.keys(LOG_ICONS).find(k => k !== 'default' && label.includes(k)) || 'Ação';
+  logAction(label, tipo);
+};
+
+/* ════════════════════════════════════════════════════════
+   🎉 2. PROJETO CONCLUÍDO — APRESENTAÇÃO PROFISSIONAL
+════════════════════════════════════════════════════════ */
+let _pitchData = {};
+
+function checkProgressTriggers(p, pct) {
+  // Botão "Pronto" aparece a partir de 100%
+  const btnPronto = document.getElementById('btn-pronto');
+  if (btnPronto) btnPronto.style.display = pct >= 100 ? 'inline-flex' : 'none';
+  // Checklist badge aparece a partir de 85%
+  checklistBadgeUpdate(p, pct);
+}
+
+function abrirProjetoPronto() {
+  const p = getProject(); if (!p) return;
+  _pitchData = {};
+  document.getElementById('pronto-loading').style.display = 'none';
+  document.getElementById('pronto-result').style.display  = 'none';
+  openModal('modal-pronto');
+  // Ativa a primeira tab
+  switchModalTab('pronto','onepager');
+}
+
+function switchModalTab(prefix, name) {
+  document.querySelectorAll(`[id^="${prefix}-tab-"]`).forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`#modal-${prefix} .modal-tab-btn`).forEach(btn => btn.classList.remove('active'));
+  const panel = document.getElementById(`${prefix}-tab-${name}`);
+  if (panel) panel.classList.add('active');
+  // Ativa o botão correto
+  const btns = document.querySelectorAll(`#modal-${prefix} .modal-tab-btn`);
+  const labels = ['onepager','linkedin','twitter','pitch','venda'];
+  const idx = labels.indexOf(name);
+  if (btns[idx]) btns[idx].classList.add('active');
+}
+
+async function gerarApresentacao() {
+  const p = getProject(); if (!p) return;
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure a API key em Configurações', 'error'); return; }
+
+  const btn = document.getElementById('btn-gerar-apres');
+  document.getElementById('pronto-loading').style.display = 'block';
+  document.getElementById('pronto-result').style.display  = 'none';
+  btn.disabled = true; btn.textContent = '⏳ Gerando…';
+
+  const ctx = buildProjectContext(p);
+  const endpoint = cfg.endpoint === 'openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+
+  const PROMPT = `Você é um copywriter sênior e estrategista de produto. Analise este projeto e gere materiais de apresentação profissional.
+
+PROJETO: ${ctx}
+
+Retorne SOMENTE JSON válido sem markdown:
+{
+  "onepager": "texto do one-pager profissional em português (3-4 parágrafos: o problema, a solução, diferenciais, próximos passos)",
+  "linkedin": "post completo para LinkedIn (tom inspirador, com emojis, hashtags ao final, máx 1300 chars)",
+  "twitter": "thread para Twitter/X (5-7 tweets numerados, direto ao ponto, com emojis)",
+  "pitch": "# Título\\n\\n## Problema\\n...\\n## Solução\\n...\\n## Diferencial\\n...\\n## Métricas\\n...\\n## Próximos Passos\\n...",
+  "venda": "estratégia completa: perfil do cliente ideal, proposta de valor em 1 frase, 3 argumentos de venda, objeções comuns + respostas, como precificar"
+}`;
+
+  try {
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({ model: cfg.model||'gpt-4o-mini', messages:[{role:'user',content:PROMPT}], max_tokens:2000 })
+    });
+    const data = await resp.json();
+    let txt = data.choices?.[0]?.message?.content?.trim()||'{}';
+    txt = txt.replace(/```json|```/g,'').trim();
+    _pitchData = JSON.parse(txt);
+
+    ['onepager','linkedin','twitter','pitch','venda'].forEach(k => {
+      const el = document.getElementById('pitch-'+k);
+      if (el) el.textContent = _pitchData[k] || '(não gerado)';
+    });
+    document.getElementById('pronto-loading').style.display = 'none';
+    document.getElementById('pronto-result').style.display  = 'block';
+    logAction('🎉 Gerou apresentação profissional do projeto', 'IA');
+    toast('🎉 Materiais de apresentação gerados!');
+  } catch(e) {
+    document.getElementById('pronto-loading').style.display = 'none';
+    toast('❌ Erro: ' + e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '✦ Gerar com IA';
+}
+
+function copiarPitch(key) {
+  const txt = _pitchData[key] || document.getElementById('pitch-'+key)?.textContent || '';
+  navigator.clipboard.writeText(txt).then(()=>toast('📋 Copiado!')).catch(()=>toast('Erro','error'));
+}
+
+/* ════════════════════════════════════════════════════════
+   📄 3. EXPORT README PARA GITHUB
+════════════════════════════════════════════════════════ */
+let _readmeContent = '';
+
+function exportarREADME() {
+  const p = getProject(); if (!p) return;
+  _readmeContent = '';
+  document.getElementById('readme-loading').style.display = 'none';
+  document.getElementById('readme-content').style.display = 'none';
+  openModal('modal-readme');
+}
+
+async function gerarREADME() {
+  const p = getProject(); if (!p) return;
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure a API key em Configurações', 'error'); return; }
+
+  const btn = document.getElementById('btn-gerar-readme');
+  document.getElementById('readme-loading').style.display = 'block';
+  document.getElementById('readme-content').style.display = 'none';
+  btn.disabled = true; btn.textContent = '⏳ Gerando…';
+
+  const ctx = buildProjectContext(p);
+  const endpoint = cfg.endpoint === 'openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+
+  const PROMPT = `Você é um desenvolvedor sênior criando um README.md profissional e atraente para GitHub.
+
+PROJETO:
+${ctx}
+
+Crie um README.md completo em Markdown com:
+1. Título + badges (shields.io — use placeholders realistas)
+2. Descrição curta e chamativa (1-2 linhas)
+3. Screenshot placeholder (imagem fictícia como placeholder)
+4. ✨ Features (lista com emojis)
+5. 🚀 Getting Started (instalação e uso)
+6. 🛠 Tech Stack (tecnologias detectadas ou inferidas)
+7. 📁 Estrutura do projeto (inferida)
+8. 🤝 Contributing
+9. 📄 License
+10. Footer com créditos
+
+Use emojis, seja visual e atraente. Retorne SOMENTE o Markdown puro, sem explicações.`;
+
+  try {
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({ model: cfg.model||'gpt-4o-mini', messages:[{role:'user',content:PROMPT}], max_tokens:2000 })
+    });
+    const data = await resp.json();
+    _readmeContent = data.choices?.[0]?.message?.content?.trim() || '';
+    document.getElementById('readme-loading').style.display = 'none';
+    const el = document.getElementById('readme-content');
+    el.textContent = _readmeContent;
+    el.style.display = 'block';
+    logAction('📄 Gerou README.md para GitHub', 'IA');
+    toast('📄 README gerado!');
+  } catch(e) {
+    document.getElementById('readme-loading').style.display = 'none';
+    toast('❌ Erro: ' + e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '✦ Gerar com IA';
+}
+
+function copiarREADME() {
+  if (!_readmeContent) { toast('Gere o README primeiro', 'error'); return; }
+  navigator.clipboard.writeText(_readmeContent).then(()=>toast('📋 README copiado!')).catch(()=>toast('Erro','error'));
+}
+
+function baixarREADME() {
+  if (!_readmeContent) { toast('Gere o README primeiro', 'error'); return; }
+  const p = getProject();
+  const blob = new Blob([_readmeContent], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'README.md';
+  a.click();
+  toast('⬇️ README.md baixado!');
+}
+
+/* ════════════════════════════════════════════════════════
+   🚀 4. LAUNCH CHECKLIST INTELIGENTE
+════════════════════════════════════════════════════════ */
+const DEFAULT_CHECKLIST = [
+  { id:'cl_deploy',  label:'Deploy em produção',        tag:'Infra',    done:false },
+  { id:'cl_readme',  label:'README.md criado',          tag:'Docs',     done:false },
+  { id:'cl_license', label:'Arquivo LICENSE adicionado',tag:'Legal',    done:false },
+  { id:'cl_env',     label:'Variáveis de ambiente (.env.example)', tag:'Config', done:false },
+  { id:'cl_tests',   label:'Testes básicos passando',   tag:'QA',       done:false },
+  { id:'cl_seo',     label:'SEO / meta tags configuradas', tag:'SEO',   done:false },
+  { id:'cl_privacy', label:'Política de Privacidade',   tag:'Legal',    done:false },
+  { id:'cl_domain',  label:'Domínio configurado',       tag:'Infra',    done:false },
+  { id:'cl_analytics',label:'Analytics instalado',     tag:'Growth',   done:false },
+  { id:'cl_demo',    label:'Link de demo público',      tag:'Marketing',done:false },
+  { id:'cl_social',  label:'Post nas redes sociais',    tag:'Marketing',done:false },
+  { id:'cl_backup',  label:'Backup / versionamento OK', tag:'Infra',    done:false },
+];
+
+function checklistBadgeUpdate(p, pct) {
+  const badge = document.getElementById('checklist-badge');
+  const cnt   = document.getElementById('checklist-badge-count');
+  if (!badge) return;
+  if (pct >= 85) {
+    // Inicializa checklist se vazio
+    if (!p.checklist || p.checklist.length === 0) {
+      p.checklist = DEFAULT_CHECKLIST.map(i => ({...i}));
+      save();
+    }
+    const pendentes = (p.checklist || []).filter(i => !i.done).length;
+    badge.classList.add('visible');
+    if (cnt) cnt.textContent = pendentes + ' pendente(s)';
+    if (pendentes === 0) badge.style.background = 'linear-gradient(135deg,var(--neon-g),var(--neon-c))';
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+function abrirChecklist() {
+  const p = getProject(); if (!p) return;
+  if (!p.checklist || p.checklist.length === 0) {
+    p.checklist = DEFAULT_CHECKLIST.map(i => ({...i}));
+    save();
+  }
+  renderChecklist();
+  openModal('modal-checklist');
+}
+
+function renderChecklist() {
+  const p = getProject(); if (!p) return;
+  const grid = document.getElementById('checklist-grid'); if (!grid) return;
+  const items = p.checklist || [];
+  const done  = items.filter(i => i.done).length;
+  const lbl   = document.getElementById('checklist-progress-lbl');
+  if (lbl) lbl.textContent = done + '/' + items.length + ' concluídos';
+
+  grid.innerHTML = items.map(item => `
+    <div class="checklist-item ${item.done?'done':''}" onclick="toggleChecklistItem('${item.id}')">
+      <div class="checklist-cb">${item.done ? '✓' : ''}</div>
+      <span class="checklist-label">${esc(item.label)}</span>
+      <span class="checklist-tag">${esc(item.tag||'')}</span>
+    </div>`).join('');
+}
+
+function toggleChecklistItem(id) {
+  const p = getProject(); if (!p) return;
+  const item = (p.checklist||[]).find(i => i.id === id); if (!item) return;
+  item.done = !item.done;
+  if (item.done) logAction('✅ Checklist: ' + item.label, 'Progresso');
+  save(); renderChecklist();
+  // Atualiza badge
+  checklistBadgeUpdate(p, p.progress||0);
+}
+
+function adicionarChecklistItem() {
+  const label = prompt('Nome do item personalizado:');
+  if (!label?.trim()) return;
+  const p = getProject(); if (!p) return;
+  p.checklist = p.checklist || [];
+  p.checklist.push({ id:'cl_custom_'+Date.now(), label: label.trim(), tag:'Custom', done: false });
+  save(); renderChecklist();
+  toast('✅ Item adicionado');
+}
+
+async function gerarChecklistIA() {
+  const p = getProject(); if (!p) return;
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure a API key', 'error'); return; }
+  const btn = document.getElementById('btn-checklist-ia');
+  btn.disabled = true; btn.textContent = '⏳ Gerando…';
+  const ctx = buildProjectContext(p);
+  const endpoint = cfg.endpoint==='openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+  try {
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({
+        model: cfg.model||'gpt-4o-mini',
+        messages:[{role:'user',content:`Baseado neste projeto: ${ctx}
+Retorne SOMENTE um JSON array com itens de checklist para lançamento específicos para este projeto:
+[{"label":"item específico","tag":"categoria"}]
+Máximo 6 itens específicos (além dos genéricos). Apenas JSON puro.`}],
+        max_tokens: 400
+      })
+    });
+    const data = await resp.json();
+    let txt = (data.choices?.[0]?.message?.content||'[]').replace(/```json|```/g,'').trim();
+    const novos = JSON.parse(txt);
+    p.checklist = p.checklist || [];
+    novos.forEach(n => {
+      if (!p.checklist.find(i=>i.label===n.label))
+        p.checklist.push({ id:'cl_ai_'+Date.now()+'_'+Math.random().toString(36).slice(2), label:n.label, tag:n.tag||'IA', done:false });
+    });
+    save(); renderChecklist(); toast('✦ Itens específicos adicionados!');
+  } catch(e) { toast('Erro: '+e.message,'error'); }
+  btn.disabled = false; btn.textContent = '✦ Sugerir com IA';
+}
+
+/* ════════════════════════════════════════════════════════
+   💼 5. AI CLIENT PITCH MODE
+════════════════════════════════════════════════════════ */
+let _clientPitchContent = '';
+
+function abrirClientPitch() {
+  const p = getProject(); if (!p) return;
+  _clientPitchContent = '';
+  document.getElementById('pitch-client-loading').style.display = 'none';
+  document.getElementById('pitch-client-content').style.display = 'none';
+  openModal('modal-pitch-client');
+}
+
+async function gerarClientPitch() {
+  const p = getProject(); if (!p) return;
+  const cfg = getConfig();
+  if (!cfg.apikey) { toast('Configure a API key', 'error'); return; }
+  const btn = document.getElementById('btn-client-pitch');
+  document.getElementById('pitch-client-loading').style.display = 'block';
+  document.getElementById('pitch-client-content').style.display = 'none';
+  btn.disabled = true; btn.textContent = '⏳ Gerando…';
+
+  const ctx = buildProjectContext(p);
+  const endpoint = cfg.endpoint==='openai'
+    ? 'https://api.openai.com/v1/chat/completions'
+    : 'https://models.inference.ai.azure.com/chat/completions';
+
+  const PROMPT = `Você é um consultor de negócios e vendas. Transforme as informações técnicas deste projeto em uma apresentação executiva para clientes e empresas.
+
+PROJETO TÉCNICO:
+${ctx}
+
+Gere um documento em português com:
+
+## 🎯 VISÃO EXECUTIVA
+[2-3 frases explicando o projeto em linguagem de negócios, sem jargão técnico]
+
+## 💡 O PROBLEMA QUE RESOLVEMOS
+[Qual dor do cliente/empresa este projeto endereça]
+
+## ✅ NOSSA SOLUÇÃO
+[O que entregamos, em linguagem de benefícios, não de features]
+
+## 📈 RESULTADOS ESPERADOS (ROI)
+[3-5 benefícios mensuráveis: tempo poupado, custo reduzido, receita gerada, etc.]
+
+## 🏆 POR QUE NOSSA ABORDAGEM
+[3 diferenciais competitivos em linguagem de negócios]
+
+## 📋 O QUE ESTÁ INCLUÍDO
+[Entregáveis em lista, como num contrato/proposta]
+
+## ⏱ CRONOGRAMA E MARCOS
+[Timeline baseada no fluxograma e kanban do projeto]
+
+## 💰 PRÓXIMOS PASSOS
+[Call-to-action claro para fechar negócio]
+
+Seja convincente, profissional e orientado a resultados. Use linguagem C-level.`;
+
+  try {
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.apikey},
+      body: JSON.stringify({ model: cfg.model||'gpt-4o-mini', messages:[{role:'user',content:PROMPT}], max_tokens:1800 })
+    });
+    const data = await resp.json();
+    _clientPitchContent = data.choices?.[0]?.message?.content?.trim() || '';
+    document.getElementById('pitch-client-loading').style.display = 'none';
+    const el = document.getElementById('pitch-client-content');
+    el.textContent = _clientPitchContent;
+    el.style.display = 'block';
+    logAction('💼 Gerou Client Pitch Mode', 'IA');
+    toast('💼 Pitch para cliente gerado!');
+  } catch(e) {
+    document.getElementById('pitch-client-loading').style.display = 'none';
+    toast('❌ Erro: ' + e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '✦ Gerar com IA';
+}
+
+function copiarPitchClient() {
+  if (!_clientPitchContent) { toast('Gere o pitch primeiro', 'error'); return; }
+  navigator.clipboard.writeText(_clientPitchContent).then(()=>toast('📋 Pitch copiado!')).catch(()=>toast('Erro','error'));
+}
+
+/* ════════════════════════════════════════════════════════
+   🛠 UTILITÁRIO: buildProjectContext
+════════════════════════════════════════════════════════ */
+function buildProjectContext(p) {
+  const kanbanTodo   = (p.kanban?.todo||[]).map(c=>c.title).join(', ');
+  const kanbanDoing  = (p.kanban?.doing||[]).map(c=>c.title).join(', ');
+  const kanbanDone   = (p.kanban?.done||[]).map(c=>c.title).join(', ');
+  const flowEtapas   = (p.flowBoxes||[]).map(b=>`${b.title}(${b.status})`).join(' → ');
+  const ideias       = (p.ideas||[]).slice(0,8).join('; ');
+  const editores     = (p.editors||[]).map(e=>e.title).join(', ');
+  const ferramentas  = (p.tools||[]).map(t=>t.name).join(', ');
+  return `Nome: ${p.name}
+Prioridade: ${p.priority} | Progresso: ${p.progress||0}%
+GitHub: ${p.githubRepo||'não vinculado'}
+Ideias/Brainstorm: ${ideias||'(vazio)'}
+Kanban - To-do: ${kanbanTodo||'(vazio)'} | Fazendo: ${kanbanDoing||'(vazio)'} | Feito: ${kanbanDone||'(vazio)'}
+Fluxograma: ${flowEtapas||'(vazio)'}
+Editores/Prompts: ${editores||'(vazio)'}
+Ferramentas: ${ferramentas||'(vazio)'}`;
+}
+
+/* ════════════════════════════════════════════════════════
+   INTEGRAÇÃO: openProject dispara triggers de progresso
+════════════════════════════════════════════════════════ */
+// Override de openProject para disparar checklist e botão pronto
+const _origOpenProject = openProject;
+openProject = function(id) {
+  _origOpenProject(id);
+  const p = projects.find(x => x.id === id);
+  if (p) {
+    setTimeout(() => checkProgressTriggers(p, p.progress||0), 100);
+  }
+};
+
 init();
 </script>
 
@@ -3592,6 +4114,127 @@ init();
       <button class="btn btn-primary" onclick="githubStart()">🔗 Vincular Repositório</button>
     </div>
   </div>
+</div>
+
+
+<!-- MODAL: Log / Histórico de Ações -->
+<div class="modal-bg" id="modal-historico">
+  <div class="modal" style="max-width:560px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h3 style="margin:0;">📜 Histórico de Ações</h3>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-danger btn-sm" onclick="limparLog()">🗑 Limpar</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-historico')">✕</button>
+      </div>
+    </div>
+    <div id="log-timeline-wrap" class="log-timeline"></div>
+  </div>
+</div>
+
+<!-- MODAL: Projeto Pronto — Apresentação Profissional -->
+<div class="modal-bg" id="modal-pronto">
+  <div class="modal" style="max-width:680px;max-height:92vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;">🎉 Projeto Concluído</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="gerarApresentacao()" id="btn-gerar-apres">✦ Gerar com IA</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-pronto')">✕</button>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:16px;">A IA gera materiais prontos para divulgar, vender e apresentar seu projeto.</p>
+    <div id="pronto-loading" style="display:none;text-align:center;padding:40px;">
+      <div class="spinner" style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;"></div>
+      <p style="color:var(--muted);">Gerando materiais de apresentação…</p>
+    </div>
+    <div id="pronto-result" style="display:none;">
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" onclick="switchModalTab('pronto','onepager')">📄 One-Pager</button>
+        <button class="modal-tab-btn" onclick="switchModalTab('pronto','linkedin')">💼 LinkedIn</button>
+        <button class="modal-tab-btn" onclick="switchModalTab('pronto','twitter')">🐦 Twitter/X</button>
+        <button class="modal-tab-btn" onclick="switchModalTab('pronto','pitch')">🎯 Pitch Deck</button>
+        <button class="modal-tab-btn" onclick="switchModalTab('pronto','venda')">💰 Estratégia</button>
+      </div>
+      <div id="pronto-tab-onepager" class="modal-tab-panel active">
+        <div class="pitch-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h4 style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin:0;">📄 One-Pager Profissional</h4><button class="pitch-copy-btn" onclick="copiarPitch('onepager')">📋 Copiar</button></div><pre class="pitch-content" id="pitch-onepager"></pre></div>
+      </div>
+      <div id="pronto-tab-linkedin" class="modal-tab-panel">
+        <div class="pitch-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h4 style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin:0;">💼 Copy LinkedIn</h4><button class="pitch-copy-btn" onclick="copiarPitch('linkedin')">📋 Copiar</button></div><pre class="pitch-content" id="pitch-linkedin"></pre></div>
+      </div>
+      <div id="pronto-tab-twitter" class="modal-tab-panel">
+        <div class="pitch-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h4 style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin:0;">🐦 Twitter/X Thread</h4><button class="pitch-copy-btn" onclick="copiarPitch('twitter')">📋 Copiar</button></div><pre class="pitch-content" id="pitch-twitter"></pre></div>
+      </div>
+      <div id="pronto-tab-pitch" class="modal-tab-panel">
+        <div class="pitch-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h4 style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin:0;">🎯 Pitch Deck (Markdown)</h4><button class="pitch-copy-btn" onclick="copiarPitch('pitch')">📋 Copiar</button></div><pre class="pitch-content" id="pitch-pitch"></pre></div>
+      </div>
+      <div id="pronto-tab-venda" class="modal-tab-panel">
+        <div class="pitch-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h4 style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--neon-p);font-family:var(--mono);margin:0;">💰 Estratégia de Posicionamento</h4><button class="pitch-copy-btn" onclick="copiarPitch('venda')">📋 Copiar</button></div><pre class="pitch-content" id="pitch-venda"></pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: README Generator -->
+<div class="modal-bg" id="modal-readme">
+  <div class="modal" style="max-width:660px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;">📄 README.md para GitHub</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="baixarREADME()">⬇️ Baixar .md</button>
+        <button class="btn btn-outline btn-sm" onclick="copiarREADME()">📋 Copiar</button>
+        <button class="btn btn-primary btn-sm" onclick="gerarREADME()" id="btn-gerar-readme">✦ Gerar com IA</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-readme')">✕</button>
+      </div>
+    </div>
+    <div id="readme-loading" style="display:none;text-align:center;padding:40px;">
+      <div class="spinner" style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;"></div>
+      <p style="color:var(--muted);">Gerando README profissional…</p>
+    </div>
+    <pre id="readme-content" style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:16px;font-size:.78rem;color:var(--text);line-height:1.7;white-space:pre-wrap;font-family:var(--mono);max-height:460px;overflow-y:auto;display:none;"></pre>
+  </div>
+</div>
+
+<!-- MODAL: Launch Checklist -->
+<div class="modal-bg" id="modal-checklist">
+  <div class="modal" style="max-width:520px;max-height:88vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h3 style="margin:0;">🚀 Launch Checklist</h3>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span id="checklist-progress-lbl" style="font-size:.75rem;color:var(--muted);font-family:var(--mono);"></span>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-checklist')">✕</button>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Itens que devs costumam esquecer antes do lançamento. Marque os concluídos.</p>
+    <div id="checklist-grid" class="checklist-grid"></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="adicionarChecklistItem()">＋ Item personalizado</button>
+      <button class="btn btn-primary btn-sm" onclick="gerarChecklistIA()" id="btn-checklist-ia">✦ Sugerir com IA</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Client Pitch Mode -->
+<div class="modal-bg" id="modal-pitch-client">
+  <div class="modal" style="max-width:660px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;">💼 Client Pitch Mode</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="copiarPitchClient()">📋 Copiar</button>
+        <button class="btn btn-primary btn-sm" onclick="gerarClientPitch()" id="btn-client-pitch">✦ Gerar com IA</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('modal-pitch-client')">✕</button>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Transforma o conteúdo técnico do projeto em linguagem de negócios — benefícios, ROI e valor para o cliente.</p>
+    <div id="pitch-client-loading" style="display:none;text-align:center;padding:40px;">
+      <div class="spinner" style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--neon-p);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;"></div>
+      <p style="color:var(--muted);">Traduzindo para linguagem de negócios…</p>
+    </div>
+    <pre id="pitch-client-content" style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:16px;font-size:.82rem;color:var(--text);line-height:1.75;white-space:pre-wrap;font-family:var(--font);max-height:460px;overflow-y:auto;display:none;"></pre>
+  </div>
+</div>
+
+<!-- Badge flutuante checklist -->
+<div class="checklist-badge" id="checklist-badge" onclick="abrirChecklist()">
+  🚀 Launch Checklist <span id="checklist-badge-count" style="background:rgba(255,255,255,.2);padding:1px 7px;border-radius:99px;font-size:.7rem;"></span>
 </div>
 
 <!-- MODO FOCO -->
